@@ -40,7 +40,7 @@ export default function LoginScreen() {
               }
               className="absolute right-4 top-4"
             >
-              <Text className="text-sky-500 font-medium">Visualizar</Text>
+              <Text className="text-app-blue font-medium">Visualizar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -48,7 +48,7 @@ export default function LoginScreen() {
         <Button title="Entrar" onPress={() => navigation.navigate('Register')} />
 
         <TouchableOpacity className="mt-4">
-          <Text className="text-sky-500 text-center font-medium">Esqueceu a senha?</Text>
+          <Text className="text-app-blue text-center font-medium">Esqueceu a senha?</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

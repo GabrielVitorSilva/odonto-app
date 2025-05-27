@@ -55,7 +55,7 @@ export default function Register() {
               onPress={() => setPasswordVisible(!passwordVisible)}
               className="absolute right-4 top-4"
             >
-              <Text className="text-sky-500 font-medium">Visualizar</Text>
+              <Text className="text-app-blue font-medium">Visualizar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -74,7 +74,7 @@ export default function Register() {
         <TouchableOpacity className="mt-2 p-4" 
           onPress={() => navigation.navigate('Login')}
         >
-          <Text className="text-sky-500 text-center text-xl font-medium">Já possui uma conta? Faça login</Text>
+          <Text className="text-app-blue text-center text-xl font-medium">Já possui uma conta? Faça login</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

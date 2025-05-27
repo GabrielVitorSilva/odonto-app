@@ -1,18 +1,17 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 
-export default function LoginScreen() {
+export default function Register() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigation = useNavigation();
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className="flex-1 bg-white  pt-10"
     >
-      <Text className="text-4xl font-bold text-center mb-32">Entrar</Text>
+      <Text className="text-4xl font-bold text-center mb-32">Cadastrar</Text>
 
       <View className="space-y-4 mx-4">
         <TextInput
@@ -33,9 +32,7 @@ export default function LoginScreen() {
             placeholderTextColor="#999"
           />
           <TouchableOpacity
-            onPress={() =>
-              setPasswordVisible(!passwordVisible)
-            }
+            onPress={() => setPasswordVisible(!passwordVisible)}
             className="absolute right-4 top-4"
           >
             <Text className="text-sky-500 font-medium">Visualizar</Text>
@@ -43,10 +40,7 @@ export default function LoginScreen() {
         </View>
       </View>
 
-      <TouchableOpacity className="bg-sky-500 py-4 rounded-full mt-32"
-        onPress={() =>
-          navigation.navigate('Register')
-        }>
+      <TouchableOpacity className="bg-sky-500 py-4 rounded-full mt-32">
         <Text className="text-white text-center font-semibold">Entrar</Text>
       </TouchableOpacity>
 

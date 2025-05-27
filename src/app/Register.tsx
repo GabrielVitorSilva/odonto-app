@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '@/components/Button';
+import api from '@/services/api';
 export default function Register() {
   const navigation = useNavigation();
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -9,6 +10,21 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [cpf, setCpf] = useState('');
+
+  async function handleRegister() {
+    try {
+      const response = await api.post('/register/client', {
+        name,
+        email,
+        password,
+        cpf,
+      });
+      console.log(response.data);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -69,7 +85,7 @@ export default function Register() {
           </Text>
         </TouchableOpacity>
 
-        <Button title="Cadastrar" onPress={() => navigation.navigate('Login')} />
+        <Button title="Cadastrar" onPress={() => handleRegister()} />
 
         <TouchableOpacity className="mt-2 p-4" 
           onPress={() => navigation.navigate('Login')}

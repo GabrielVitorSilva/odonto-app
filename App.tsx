@@ -4,6 +4,8 @@ import './global.css';
 import { useAppFonts } from './src/theme/fonts';
 import { View, ActivityIndicator } from 'react-native';
 import { colors } from './src/theme/colors';
+import { ToastProvider } from './src/contexts/ToastContext';
+
 export default function App() {
   const fontsLoaded = useAppFonts();
 
@@ -16,6 +18,8 @@ export default function App() {
   }
 
   return (
-    <Routes />
+    <ToastProvider>
+      <Routes />
+    </ToastProvider>
   );
 }

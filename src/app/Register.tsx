@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '@/components/Button';
+import { useToast } from '@/contexts/ToastContext';
 import api from '@/services/api';
+
 export default function Register() {
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -19,9 +22,10 @@ export default function Register() {
         password,
         cpf,
       });
-      console.log(response.data);
+      showToast('Cadastro realizado com sucesso!', 'success');
+      navigation.navigate('Login');
     } catch (error: any) {
-      console.log(error.response.data);
+      showToast(error.response?.data?.message || 'Erro ao realizar cadastro', 'error');
     }
   }
 

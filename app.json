@@ -1,5 +1,8 @@
 {
   "expo": {
+    "web": {
+      "bundler": "metro"
+    },
     "name": "odonto-app",
     "slug": "odonto-app",
     "version": "1.0.0"

@@ -12,6 +12,11 @@ module.exports = {
         'app-green': '#5DB075',
         'app-yellow': '#C3C028',
       },
+      fontFamily: {
+        'roboto': ['Roboto-Regular'],
+        'roboto-medium': ['Roboto-Medium'],
+        'roboto-bold': ['Roboto-Bold'],
+      },
     },
   },
   plugins: [],

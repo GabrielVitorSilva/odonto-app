@@ -12,16 +12,16 @@ export default function LoginScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        className="flex-1 bg-white  pt-10"
+        className="flex-1 bg-white pt-10"
       >
-        <Text className="text-4xl font-bold text-center mb-32">Entrar</Text>
+        <Text className="text-4xl font-roboto-bold text-center mb-32">Entrar</Text>
 
         <View className="space-y-4 mx-4">
           <TextInput
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
-            className="bg-gray-100 p-4 rounded-md text-base mb-4"
+            className="bg-gray-100 p-4 rounded-md text-base mb-4 font-roboto"
             placeholderTextColor="#999"
           />
 
@@ -31,7 +31,7 @@ export default function LoginScreen() {
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!passwordVisible}
-              className="bg-gray-100 p-4 rounded-md text-base pr-20"
+              className="bg-gray-100 p-4 rounded-md text-base pr-20 font-roboto"
               placeholderTextColor="#999"
             />
             <TouchableOpacity
@@ -40,7 +40,7 @@ export default function LoginScreen() {
               }
               className="absolute right-4 top-4"
             >
-              <Text className="text-app-blue font-medium">Visualizar</Text>
+              <Text className="text-app-blue font-roboto-medium">Visualizar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -48,7 +48,7 @@ export default function LoginScreen() {
         <Button title="Entrar" onPress={() => navigation.navigate('Register')} />
 
         <TouchableOpacity className="mt-4">
-          <Text className="text-app-blue text-center font-medium">Esqueceu a senha?</Text>
+          <Text className="text-app-blue text-center font-roboto-medium">Esqueceu a senha?</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

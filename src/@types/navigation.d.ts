@@ -2,6 +2,7 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   UseTerms: undefined;
+  HomeClient: undefined;
 }
 
 declare global {

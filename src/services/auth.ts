@@ -1,4 +1,4 @@
-import api from './api';
+import api from './api/api';
 import { LoginFormData } from '@/schemas/loginSchema';
 import { RegisterFormData } from '@/schemas/registerSchema';
 

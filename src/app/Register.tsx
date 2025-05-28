@@ -5,6 +5,7 @@ import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
 import { registerSchema, type RegisterFormData } from '@/schemas/registerSchema';
 import { authService } from '@/services/auth';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface FieldErrors {
   name?: string;
@@ -17,6 +18,7 @@ interface FieldErrors {
 export default function Register() {
   const navigation = useNavigation();
   const { showToast } = useToast();
+  const { signIn } = useAuth();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -48,7 +50,6 @@ export default function Register() {
 
     try {
       registerSchema.parse(formData);
-      // Se chegou aqui, o campo está válido
       setErrors(prev => {
         const newErrors = { ...prev };
         delete newErrors[field];
@@ -63,7 +64,6 @@ export default function Register() {
             [field]: fieldError.message
           }));
         } else {
-          // Se não encontrou erro para este campo, remove o erro
           setErrors(prev => {
             const newErrors = { ...prev };
             delete newErrors[field];
@@ -111,8 +111,12 @@ export default function Register() {
         cpf,
         terms: termsAccepted
       });
+      
+      const { token } = await authService.login({ email, password });
+      await signIn(token);
+      
       showToast('Cadastro realizado com sucesso!', 'success');
-      navigation.navigate('Login');
+      // TODO: Implementar navegação após login
     } catch (error: any) {
       if (error.response?.data?.message) {
         showToast(error.response.data.message, 'error');

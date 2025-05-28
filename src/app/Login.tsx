@@ -4,19 +4,8 @@ import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform
 import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
 import api from '@/services/api';
-import { z } from 'zod';
+import { loginSchema, type LoginFormData } from '@/schemas/loginSchema';
 
-const loginSchema = z.object({
-  email: z.string()
-    .min(1, 'Email é obrigatório')
-    .email('Email inválido')
-    .transform(val => val.trim().toLowerCase()),
-  password: z.string()
-    .min(1, 'Senha é obrigatória')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
 
 interface FieldErrors {
   email?: string;

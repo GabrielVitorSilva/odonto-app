@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
 import api from '@/services/api';
+import { registerSchema, type RegisterFormData } from '@/schemas/registerSchema';
 
 interface FieldErrors {
-  name: boolean;
-  email: boolean;
-  cpf: boolean;
-  password: boolean;
-  terms: boolean;
+  name?: string;
+  email?: string;
+  cpf?: string;
+  password?: string;
+  terms?: string;
 }
 
 export default function Register() {
@@ -22,24 +23,8 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [cpf, setCpf] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [errors, setErrors] = useState<FieldErrors>({
-    name: false,
-    email: false,
-    cpf: false,
-    password: false,
-    terms: false,
-  });
+  const [errors, setErrors] = useState<FieldErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-
-  function validateEmail(email: string) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  function validateCPF(cpf: string) {
-    const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-    return cpfRegex.test(cpf);
-  }
 
   function formatCPF(value: string) {
     const numbers = value.replace(/\D/g, '');
@@ -49,17 +34,69 @@ export default function Register() {
     return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6, 9)}-${numbers.slice(9, 11)}`;
   }
 
-  function validateFields() {
-    const newErrors = {
-      name: !name.trim(),
-      email: !email.trim() || !validateEmail(email),
-      cpf: !cpf.trim() || !validateCPF(cpf),
-      password: !password.trim() || password.length < 6,
-      terms: !termsAccepted,
+  function validateField(field: keyof RegisterFormData, value: any) {
+    if (!hasAttemptedSubmit) return;
+
+    const formData = {
+      name,
+      email,
+      cpf,
+      password,
+      terms: termsAccepted,
+      [field]: value
     };
 
-    setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error);
+    try {
+      registerSchema.parse(formData);
+      // Se chegou aqui, o campo está válido
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    } catch (error: any) {
+      if (error.errors) {
+        const fieldError = error.errors.find((err: any) => err.path[0] === field);
+        if (fieldError) {
+          setErrors(prev => ({
+            ...prev,
+            [field]: fieldError.message
+          }));
+        } else {
+          // Se não encontrou erro para este campo, remove o erro
+          setErrors(prev => {
+            const newErrors = { ...prev };
+            delete newErrors[field];
+            return newErrors;
+          });
+        }
+      }
+    }
+  }
+
+  function validateFields() {
+    try {
+      const formData = {
+        name,
+        email,
+        cpf,
+        password,
+        terms: termsAccepted
+      };
+
+      registerSchema.parse(formData);
+      setErrors({});
+      return true;
+    } catch (error: any) {
+      if (error.errors) {
+        const newErrors: FieldErrors = {};
+        error.errors.forEach((err: any) => {
+          newErrors[err.path[0] as keyof FieldErrors] = err.message;
+        });
+        setErrors(newErrors);
+      }
+      return false;
+    }
   }
 
   async function handleRegister() {
@@ -69,7 +106,7 @@ export default function Register() {
     try {
       const response = await api.post('/register/client', {
         name: name.trim(),
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password,
         cpf,
       });
@@ -87,124 +124,147 @@ export default function Register() {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        className="flex-1 bg-white pt-10"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      className="flex-1 bg-white"
+    >
+      <ScrollView 
+        className="flex-1"
+        contentContainerClassName="flex-grow"
+        keyboardShouldPersistTaps="handled"
       >
-        <Text className="text-4xl font-roboto-bold text-center mb-32">Cadastrar</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View className="flex-1 pt-10">
+            <Text className="text-4xl font-roboto-bold text-center mb-32">Cadastrar</Text>
 
-        <View className="space-y-4 mx-4">
-          <TextInput
-            placeholder="Nome completo"
-            value={name}
-            onChangeText={(text) => {
-              setName(text);
-              if (hasAttemptedSubmit) {
-                setErrors(prev => ({ ...prev, name: !text.trim() }));
-              }
-            }}
-            className={`bg-gray-100 p-4 rounded-2xl text-base mb-4 font-roboto ${
-              errors.name && hasAttemptedSubmit ? 'border-2 border-red-500' : ''
-            }`}
-            placeholderTextColor="#999"
-            autoCapitalize="words"
-          />
+            <View className="space-y-4 mx-4">
+              <View>
+                <TextInput
+                  placeholder="Nome completo"
+                  value={name}
+                  onChangeText={(text) => {
+                    setName(text);
+                    validateField('name', text);
+                  }}
+                  className={`bg-gray-100 p-4 rounded-2xl text-base mb-1 font-roboto ${
+                    errors.name ? 'border-2 border-red-500' : ''
+                  }`}
+                  placeholderTextColor="#999"
+                  autoCapitalize="words"
+                />
+                {errors.name && (
+                  <Text className="text-red-500 text-sm ml-2">{errors.name}</Text>
+                )}
+              </View>
 
-          <TextInput
-            placeholder="Email"
-            value={email}
-            onChangeText={(text) => {
-              setEmail(text);
-              if (hasAttemptedSubmit) {
-                setErrors(prev => ({ ...prev, email: !text.trim() || !validateEmail(text) }));
-              }
-            }}
-            className={`bg-gray-100 p-4 rounded-2xl text-base mb-4 font-roboto ${
-              errors.email && hasAttemptedSubmit ? 'border-2 border-red-500' : ''
-            }`}
-            placeholderTextColor="#999"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          /> 
-          
-          <TextInput
-            placeholder="CPF (000.000.000-00)"
-            value={cpf}
-            onChangeText={(text) => {
-              const formattedCpf = formatCPF(text);
-              setCpf(formattedCpf);
-              if (hasAttemptedSubmit) {
-                setErrors(prev => ({ ...prev, cpf: !formattedCpf.trim() || !validateCPF(formattedCpf) }));
-              }
-            }}
-            className={`bg-gray-100 p-4 rounded-2xl text-base mb-4 font-roboto ${
-              errors.cpf && hasAttemptedSubmit ? 'border-2 border-red-500' : ''
-            }`}
-            placeholderTextColor="#999"
-            keyboardType="numeric"
-            maxLength={14}
-          />
+              <View>
+                <TextInput
+                  placeholder="Email"
+                  value={email}
+                  onChangeText={(text) => {
+                    setEmail(text);
+                    validateField('email', text);
+                  }}
+                  className={`bg-gray-100 p-4 rounded-2xl text-base mb-1 font-roboto ${
+                    errors.email ? 'border-2 border-red-500' : ''
+                  }`}
+                  placeholderTextColor="#999"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+                {errors.email && (
+                  <Text className="text-red-500 text-sm ml-2">{errors.email}</Text>
+                )}
+              </View>
+              
+              <View>
+                <TextInput
+                  placeholder="CPF (000.000.000-00)"
+                  value={cpf}
+                  onChangeText={(text) => {
+                    const formattedCpf = formatCPF(text);
+                    setCpf(formattedCpf);
+                    validateField('cpf', formattedCpf);
+                  }}
+                  className={`bg-gray-100 p-4 rounded-2xl text-base mb-1 font-roboto ${
+                    errors.cpf ? 'border-2 border-red-500' : ''
+                  }`}
+                  placeholderTextColor="#999"
+                  keyboardType="numeric"
+                  maxLength={14}
+                />
+                {errors.cpf && (
+                  <Text className="text-red-500 text-sm ml-2">{errors.cpf}</Text>
+                )}
+              </View>
 
-          <View className="relative">
-            <TextInput
-              placeholder="Senha (mínimo 6 caracteres)"
-              value={password}
-              onChangeText={(text) => {
-                setPassword(text);
-                if (hasAttemptedSubmit) {
-                  setErrors(prev => ({ ...prev, password: !text.trim() || text.length < 6 }));
-                }
+              <View>
+                <View className="relative">
+                  <TextInput
+                    placeholder="Senha (mínimo 6 caracteres)"
+                    value={password}
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      validateField('password', text);
+                    }}
+                    secureTextEntry={!passwordVisible}
+                    className={`bg-gray-100 p-4 rounded-2xl text-base mb-1 font-roboto ${
+                      errors.password ? 'border-2 border-red-500' : ''
+                    }`}
+                    placeholderTextColor="#999"
+                  />
+                  <TouchableOpacity
+                    onPress={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute right-4 top-4"
+                  >
+                    <Text className="text-app-blue font-roboto-medium">
+                      {passwordVisible ? 'Ocultar' : 'Visualizar'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                {errors.password && (
+                  <Text className="text-red-500 text-sm ml-2">{errors.password}</Text>
+                )}
+              </View>
+            </View>
+
+            <TouchableOpacity 
+              className="mt-4 p-4" 
+              onPress={() => {
+                setTermsAccepted(!termsAccepted);
+                validateField('terms', !termsAccepted);
+                navigation.navigate('UseTerms');
               }}
-              secureTextEntry={!passwordVisible}
-              className={`bg-gray-100 p-4 rounded-2xl text-base mb-4 font-roboto ${
-                errors.password && hasAttemptedSubmit ? 'border-2 border-red-500' : ''
-              }`}
-              placeholderTextColor="#999"
-            />
-            <TouchableOpacity
-              onPress={() => setPasswordVisible(!passwordVisible)}
-              className="absolute right-4 top-4"
             >
-              <Text className="text-app-blue font-roboto-medium">
-                {passwordVisible ? 'Ocultar' : 'Visualizar'}
+              <Text className={`text-center font-roboto-medium underline ${
+                termsAccepted ? 'text-green-500' : errors.terms ? 'text-red-500' : 'text-gray-400'
+              }`}>
+                {termsAccepted ? '✓ Termos e condições aceitos' : 'Confirmo que li e aceito os termos e condições'}
               </Text>
+              {errors.terms && (
+                <Text className="text-red-500 text-sm text-center mt-1">{errors.terms}</Text>
+              )}
             </TouchableOpacity>
+
+            <View className="mt-4 mb-8">
+              <Button 
+                title="Cadastrar" 
+                onPress={handleRegister}
+                disabled={Object.keys(errors).length > 0}
+                className={Object.keys(errors).length > 0 ? 'opacity-50' : ''}
+              />
+
+              <TouchableOpacity className="p-2 mt-4" 
+                onPress={() => navigation.navigate('Login')}
+              >
+                <Text className="text-app-blue text-center text-xl font-roboto-medium">
+                  Já possui uma conta? Faça login
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-
-        <TouchableOpacity 
-          className="mt-4 p-4" 
-          onPress={() => {
-            setTermsAccepted(!termsAccepted);
-            if (hasAttemptedSubmit) {
-              setErrors(prev => ({ ...prev, terms: !termsAccepted }));
-            }
-            navigation.navigate('UseTerms');
-          }}
-        >
-          <Text className={`text-center font-roboto-medium underline ${
-            termsAccepted ? 'text-green-500' : errors.terms && hasAttemptedSubmit ? 'text-red-500' : 'text-gray-400'
-          }`}>
-            {termsAccepted ? '✓ Termos e condições aceitos' : 'Confirmo que li e aceito os termos e condições'}
-          </Text>
-        </TouchableOpacity>
-
-        <Button 
-          title="Cadastrar" 
-          onPress={handleRegister}
-          disabled={hasAttemptedSubmit && Object.values(errors).some(error => error)}
-          className={hasAttemptedSubmit && Object.values(errors).some(error => error) ? 'opacity-50' : ''}
-        />
-
-        <TouchableOpacity className="p-2" 
-          onPress={() => navigation.navigate('Login')}
-        >
-          <Text className="text-app-blue text-center text-xl font-roboto-medium">
-            Já possui uma conta? Faça login
-          </Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

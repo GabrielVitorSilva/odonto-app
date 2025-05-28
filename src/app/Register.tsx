@@ -3,8 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
-import api from '@/services/api';
 import { registerSchema, type RegisterFormData } from '@/schemas/registerSchema';
+import { authService } from '@/services/auth';
 
 interface FieldErrors {
   name?: string;
@@ -104,11 +104,12 @@ export default function Register() {
     if (!validateFields()) return;
 
     try {
-      const response = await api.post('/register/client', {
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
+      await authService.register({
+        name,
+        email,
         password,
         cpf,
+        terms: termsAccepted
       });
       showToast('Cadastro realizado com sucesso!', 'success');
       navigation.navigate('Login');

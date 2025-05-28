@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
-import api from '@/services/api';
 import { loginSchema, type LoginFormData } from '@/schemas/loginSchema';
-
+import { authService } from '@/services/auth';
 
 interface FieldErrors {
   email?: string;
@@ -83,11 +82,7 @@ export default function LoginScreen() {
     if (!validateFields()) return;
 
     try {
-      const response = await api.post('/sessions', {
-        email: email.trim(),
-        password,
-      });
-      console.log(response.data);
+      await authService.login({ email, password });
       showToast('Login realizado com sucesso!', 'success');
       // TODO: Implementar navegação após login
     } catch (error: any) {

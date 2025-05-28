@@ -1,3 +1,4 @@
+import ConsultationPage from "@/app/ConsultationPage";
 import HomeClient from "@/app/HomeClient";
 import Login from "@/app/Login";
 import Register from "@/app/Register";
@@ -13,6 +14,7 @@ export function StackRoutes() {
         headerShown: false,
       }}
     >
+      <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen name="HomeClient" component={HomeClient} />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="UseTerms" component={UseTerms} />

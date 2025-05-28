@@ -3,6 +3,7 @@ export type RootStackParamList = {
   Register: undefined;
   UseTerms: undefined;
   HomeClient: undefined;
+  ConsultationPage: undefined;
 }
 
 declare global {

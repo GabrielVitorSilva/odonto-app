@@ -12,7 +12,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async (config: any) => {
-   const token = await AsyncStorage.getItem('@auth:token')  
+   const token = await AsyncStorage.getItem('@odontoapp:token')  
    if (token && config.headers) {
      config.headers.Authorization = `Bearer ${JSON.parse(token)}`;
    }

@@ -27,14 +27,14 @@ export default function HomeClient() {
 
   return (
     <View className="w-full">
-      <View className="bg-[#38ABE2] pb-[150px] mb-[60px] relative">
-        <View className="flex-row items-center justify-between p-5">
+      <View className="bg-app-blue pb-[150px] mb-[60px] relative">
+        <View className="flex-row items-center justify-between p-5 relative">
           <TouchableOpacity>
-            <Text className="text-white w-15 text-2xl">Ajustes</Text>
+            <Text className="text-white text-2xl w-40">Ajustes</Text>
           </TouchableOpacity>
-          <Text className="text-white text-[30px] font-bold">Perfil</Text>
+          <Text className="text-white text-[30px] font-bold ">Perfil</Text>
           <TouchableOpacity>
-            <Text className="text-white w-15 text-2xl">Sair</Text>
+            <Text className="text-white text-2xl text-right w-40">Sair</Text>
           </TouchableOpacity>
         </View>
         <Image
@@ -43,11 +43,11 @@ export default function HomeClient() {
         />
       </View>
 
-      <Text className="text-center text-[20px] font-bold mb-[25px]">
+      <Text className="text-center text-3xl font-semibold mb-[25px]">
         Victoria Robertson
       </Text>
 
-      <Text className="text-[#38ABE2] ml-5 mb-5 text-[16px] font-bold">
+      <Text className="text-app-blue ml-5 mb-5 text-lg font-semibold">
         Lista de consultas
       </Text>
 

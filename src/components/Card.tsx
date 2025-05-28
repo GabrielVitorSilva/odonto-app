@@ -11,15 +11,15 @@ export default function Card({ name, description, date, status }: CardProps) {
   const statusStyle = {
     Confirmado: {
       bg: "bg-[#badec4]",
-      text: "text-[#5DB075]",
+      text: "text-app-green",
     },
     Pendente: {
       bg: "bg-[#eeedaa]",
-      text: "text-[#C3C028]",
+      text: "text-app-yellow",
     },
     Cancelado: {
       bg: "bg-[#f0a8a8]",
-      text: "text-[#E15050]",
+      text: "text-app-red",
     },
   }[status] || {
     bg: "bg-gray-200",
@@ -34,7 +34,7 @@ export default function Card({ name, description, date, status }: CardProps) {
       />
       <View className="flex-1">
         <View className="flex-row justify-between">
-          <Text className="font-bold">{name}</Text>
+          <Text className="font-semibold text-lg">{name}</Text>
           <Text className="text-[#BDBDBD]">{date}</Text>
         </View>
 

@@ -2,9 +2,13 @@ import api from './api';
 import { LoginFormData } from '@/schemas/loginSchema';
 import { RegisterFormData } from '@/schemas/registerSchema';
 
+interface AuthResponse {
+  token: string;
+}
+
 export const authService = {
-  async login(data: LoginFormData) {
-    const response = await api.post('/sessions', {
+  async login(data: LoginFormData): Promise<AuthResponse> {
+    const response = await api.post<AuthResponse>('/sessions', {
       email: data.email.trim(),
       password: data.password,
     });

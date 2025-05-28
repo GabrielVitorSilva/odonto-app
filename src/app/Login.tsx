@@ -5,6 +5,7 @@ import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
 import { loginSchema, type LoginFormData } from '@/schemas/loginSchema';
 import { authService } from '@/services/auth';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface FieldErrors {
   email?: string;
@@ -19,6 +20,7 @@ export default function LoginScreen() {
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const navigation = useNavigation();
   const { showToast } = useToast();
+  const { signIn } = useAuth();
 
   function validateField(field: keyof LoginFormData, value: any) {
     if (!hasAttemptedSubmit) return;
@@ -82,7 +84,8 @@ export default function LoginScreen() {
     if (!validateFields()) return;
 
     try {
-      await authService.login({ email, password });
+      const { token } = await authService.login({ email, password });
+      await signIn(token);
       showToast('Login realizado com sucesso!', 'success');
       // TODO: Implementar navegação após login
     } catch (error: any) {

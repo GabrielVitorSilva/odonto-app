@@ -4,7 +4,7 @@ import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 
 export default function HomeClient() {
-  const consultas = [
+  const consultations = [
     {
       name: "Clareamento",
       description: "lorem ipsum lorem ipsum lorem ipsum",
@@ -52,7 +52,7 @@ export default function HomeClient() {
       </Text>
 
       <FlatList
-        data={consultas}
+        data={consultations}
         renderItem={({ item }) => (
           <Card
             name={item.name}

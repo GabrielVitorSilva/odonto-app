@@ -70,7 +70,6 @@ export default function TreatmentsScreen() {
         </View>
       </View>
 
-      {/* Treatments List */}
       <FlatList
         data={treatments}
         renderItem={renderTreatmentItem}

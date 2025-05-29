@@ -7,7 +7,7 @@ type ConsultationPageProps = {
   date: string;
   hour: string;
   professionalName: string;
-}; // Para quando for fazer as paginas dinamicas
+};
 
 export default function ConsultationPage() {
   return (
@@ -23,25 +23,20 @@ export default function ConsultationPage() {
           <Text>
             lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum{" "}
           </Text>
-          {/* <Text className="text-3xl font-semibold my-3">{name}</Text> */}
-          {/* <Text>{description}</Text> */}
         </View>
 
         <View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Data</Text>
             <Text>16/05</Text>
-            {/* <Text>{date}</Text> */}
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Horário</Text>
             <Text>17:00</Text>
-            {/* <Text>{hour}</Text> */}
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Profissional</Text>
             <Text>Julio Guerra</Text>
-            {/* <Text>{professionalName}</Text> */}
           </View>
         </View>
         <Button

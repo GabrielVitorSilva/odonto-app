@@ -9,18 +9,21 @@ export default function HomeClient() {
       name: "Clareamento",
       description: "lorem ipsum lorem ipsum lorem ipsum",
       date: "12/03/2025",
+      hour: "12:00",
       status: "Pendente",
     },
     {
       name: "Clareamento",
       description: "lorem ipsum lorem ipsum lorem ipsum",
       date: "12/03/2025",
+      hour: "12:00",
       status: "Confirmado",
     },
     {
       name: "Clareamento",
       description: "lorem ipsum lorem ipsum lorem ipsum",
       date: "12/03/2025",
+      hour: "12:00",
       status: "Cancelado",
     },
   ];
@@ -58,7 +61,9 @@ export default function HomeClient() {
             name={item.name}
             description={item.description}
             date={item.date}
+            hour={item.hour}
             status={item.status}
+            type="Client"
           />
         )}
         className="w-full px-5 mx-auto"

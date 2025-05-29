@@ -7,6 +7,7 @@ import Register from "@/app/Authentication/Register";
 import UseTerms from "@/app/Authentication/UseTerms";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TreatmentsScreen from "@/app/Treatments";
+import HomeProf from "@/app/Professional/HomeProf";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,8 +18,9 @@ export function StackRoutes() {
         headerShown: false,
       }}
     >
+      <Stack.Screen name="HomeProf" component={HomeProf} />
       <Stack.Screen name="Treatments" component={TreatmentsScreen}/>
-      <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin}/>
+      <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin}/>  
       <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen name="HomeClient" component={HomeClient} />

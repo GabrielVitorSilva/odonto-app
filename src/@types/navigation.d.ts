@@ -7,6 +7,7 @@ export type RootStackParamList = {
   HomeAdmin: undefined;
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;
+  HomeProf: undefined;
 }
 
 declare global {

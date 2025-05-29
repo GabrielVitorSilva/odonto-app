@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import Card from "@/components/Card";
 
 interface Treatment {
   id: number;
@@ -36,22 +37,6 @@ export default function TreatmentsScreen() {
     }
   ];
 
-  const renderTreatmentItem = ({ item }: { item: Treatment }) => (
-    <TouchableOpacity className="flex-row items-center p-4 bg-white mx-4 mb-3">
-      <View className={`w-12 h-12 rounded-xl ${item.color} items-center justify-center mr-4`}>
-      </View>
-      
-      <View className="flex-1">
-        <Text className="text-gray-800 font-semibold text-base mb-1">
-          {item.title}
-        </Text>
-        <Text className="text-gray-500 text-sm leading-5">
-          {item.description}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
     <View className="flex-1 bg-gray-50">
       <View className="bg-white pt-12 pb-4 px-4 border-b border-gray-100">
@@ -71,10 +56,10 @@ export default function TreatmentsScreen() {
 
       <FlatList
         data={treatments}
-        renderItem={renderTreatmentItem}
+        renderItem={({item}) => <Card name={item.title} upperText={item.description} />}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        className="w-full px-5 mt-8 mx-auto"
       />
     </View>
   );

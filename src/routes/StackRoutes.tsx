@@ -1,3 +1,4 @@
+import ConsultationsPageAdmin from "@/app/ConsultationsPageAdmin";
 import ConsultationPage from "@/app/ConsultationPage";
 import HomeClient from "@/app/HomeClient";
 import HomeAdmin from "@/app/HomeAdmin";
@@ -15,6 +16,7 @@ export function StackRoutes() {
         headerShown: false,
       }}
     >
+      <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin}/>
       <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen name="HomeClient" component={HomeClient} />

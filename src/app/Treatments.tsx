@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 interface Treatment {
@@ -54,7 +54,6 @@ export default function TreatmentsScreen() {
 
   return (
     <View className="flex-1 bg-gray-50">
-      {/* Header */}
       <View className="bg-white pt-12 pb-4 px-4 border-b border-gray-100">
         <View className="flex-row items-center justify-between">
           <TouchableOpacity className="flex-row items-center">

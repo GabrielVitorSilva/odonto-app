@@ -61,12 +61,11 @@ export default function ConsultationsPageAdmin() {
           renderItem={({ item }) => (
             <Card
               name={item.name}
-              patientName={item.patient}
-              professionalName={item.professional}
+              upperText={`Paciente: ${item.patient}`}
+              lowerText={`Profissional: ${item.professional}`}
               date={item.date}
               hour={item.hour}
               status={item.status}
-              type="Admin"
             />
           )}
           className="w-full px-5 mx-auto"

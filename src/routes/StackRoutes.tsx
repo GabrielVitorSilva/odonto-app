@@ -1,5 +1,6 @@
 import ConsultationPage from "@/app/ConsultationPage";
 import HomeClient from "@/app/HomeClient";
+import HomeAdmin from "@/app/HomeAdmin";
 import Login from "@/app/Login";
 import Register from "@/app/Register";
 import UseTerms from "@/app/UseTerms";
@@ -14,6 +15,7 @@ export function StackRoutes() {
         headerShown: false,
       }}
     >
+      <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen name="HomeClient" component={HomeClient} />
       <Stack.Screen name="Register" component={Register} />

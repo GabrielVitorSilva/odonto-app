@@ -40,10 +40,6 @@ export default function HomeClient() {
             <Text className="text-white text-2xl text-right w-40">Sair</Text>
           </TouchableOpacity>
         </View>
-        <Image
-          source={require("../assets/tsunami.jpg")}
-          className="w-40 h-40 rounded-full border-[4px] border-white self-center absolute -bottom-[45px]"
-        />
       </View>
 
       <Text className="text-center text-3xl font-semibold mb-[25px]">

@@ -35,10 +35,7 @@ export default function Card({
 
   return (
     <View className="flex-row gap-4 mb-5">
-      <Image
-        source={require("../assets/tsunami.jpg")}
-        className="w-[50px] h-[50px] rounded"
-      />
+      <View className={`w-12 h-12 rounded-xl bg-app-blue items-center justify-center mr-4`}></View>
       <View className="flex-1">
         <View className="flex-row justify-between">
           <Text className="font-semibold text-lg">{name}</Text>

@@ -12,9 +12,8 @@ type ConsultationPageProps = {
 export default function ConsultationPage() {
   return (
     <View className="h-full">
-      <ImageBackground
-        source={require("../assets/tsunami.jpg")}
-        className="w-full h-72"
+      <View
+        className="w-full h-72 bg-app-blue"
       />
 
       <View className="px-5 flex-1 justify-between">

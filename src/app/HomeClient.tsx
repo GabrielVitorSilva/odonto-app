@@ -59,11 +59,11 @@ export default function HomeClient() {
         renderItem={({ item }) => (
           <Card
             name={item.name}
-            description={item.description}
+            upperText={`Procedimentos:`}
+            lowerText={`${item.description}`}
             date={item.date}
             hour={item.hour}
             status={item.status}
-            type="Client"
           />
         )}
         className="w-full px-5 mx-auto"

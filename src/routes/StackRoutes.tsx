@@ -1,10 +1,10 @@
-import ConsultationsPageAdmin from "@/app/ConsultationsPageAdmin";
+import ConsultationsPageAdmin from "@/app/Admin/ConsultationsPageAdmin";
 import ConsultationPage from "@/app/ConsultationPage";
-import HomeClient from "@/app/HomeClient";
-import HomeAdmin from "@/app/HomeAdmin";
-import Login from "@/app/Login";
-import Register from "@/app/Register";
-import UseTerms from "@/app/UseTerms";
+import HomeClient from "@/app//Patients/HomeClient";
+import HomeAdmin from "@/app/Admin/HomeAdmin";
+import Login from "@/app/Authentication/Login";
+import Register from "@/app/Authentication/Register";
+import UseTerms from "@/app/Authentication/UseTerms";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TreatmentsScreen from "@/app/Treatments";
 

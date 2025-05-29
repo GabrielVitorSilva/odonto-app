@@ -1,7 +1,15 @@
 import { View, TouchableOpacity, Text, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Menu, menuItem } from "@/components/Menu";
 
 export default function HomeAdmin() {
+  const menuItems: menuItem[] = [
+    { title: "Consultas", icon: "folder" },
+    { title: "Tratamentos", icon: "medkit" },
+    { title: "Cadastrar usuário", icon: "person-add" },
+    { title: "Odontólogos", icon: "medical" },
+    { title: "Clientes", icon: "person" },
+  ];
+
   return (
     <View>
       <View className="bg-app-blue pb-[150px] mb-[60px]">
@@ -18,36 +26,7 @@ export default function HomeAdmin() {
         Marina Dias
       </Text>
 
-      <View className="p-5">
-        <Text className="text-app-blue mb-5 text-center text-lg font-semibold pb-2 border-b-hairline border-b-gray-300">
-          Menu
-        </Text>
-
-        <TouchableOpacity className="flex-row gap-6 items-center mb-3">
-          <Ionicons name="folder" size={48} />
-          <Text className="font-bold">Consultas</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="flex-row gap-6 items-center mb-3">
-          <Ionicons name="medkit" size={48} />
-          <Text className="font-bold">Tratamentos</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="flex-row gap-6 items-center mb-3">
-          <Ionicons name="person-add" size={48} />
-          <Text className="font-bold">Cadastrar usuário</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="flex-row gap-6 items-center mb-3">
-          <Ionicons name="medical" size={48} />
-          <Text className="font-bold">Odontólogos</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="flex-row gap-6 items-center mb-3">
-          <Ionicons name="person" size={48} />
-          <Text className="font-bold">Clientes</Text>
-        </TouchableOpacity>
-      </View>
+      <Menu items={menuItems} />
     </View>
   );
 }

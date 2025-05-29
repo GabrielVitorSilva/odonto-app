@@ -8,6 +8,7 @@ import UseTerms from "@/app/Authentication/UseTerms";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TreatmentsScreen from "@/app/Treatments";
 import HomeProf from "@/app/Professional/HomeProf";
+import ConsultationsPageProf from "@/app/Professional/ConsultationsPageProf";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export function StackRoutes() {
         headerShown: false,
       }}
     >
+      <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf}/>
       <Stack.Screen name="HomeProf" component={HomeProf} />
       <Stack.Screen name="Treatments" component={TreatmentsScreen}/>
       <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin}/>  

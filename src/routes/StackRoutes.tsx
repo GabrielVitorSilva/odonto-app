@@ -6,6 +6,7 @@ import Login from "@/app/Login";
 import Register from "@/app/Register";
 import UseTerms from "@/app/UseTerms";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import TreatmentsScreen from "@/app/Treatments";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ export function StackRoutes() {
         headerShown: false,
       }}
     >
+      <Stack.Screen name="Treatments" component={TreatmentsScreen}/>
       <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin}/>
       <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />

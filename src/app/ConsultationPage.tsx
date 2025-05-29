@@ -1,5 +1,6 @@
-import { ImageBackground, View, Text } from "react-native";
+import { View, Text } from "react-native";
 import { Button } from "@/components/Button";
+import Header from "@/components/Header";
 
 type ConsultationPageProps = {
   name: string;
@@ -12,10 +13,7 @@ type ConsultationPageProps = {
 export default function ConsultationPage() {
   return (
     <View className="h-full">
-      <View
-        className="w-full h-72 bg-app-blue"
-      />
-
+      <Header className="bg-app-blue" contentColor="white" />
       <View className="px-5 flex-1 justify-between">
         <View>
           <Text className="text-3xl font-semibold my-3">Clareamento</Text>

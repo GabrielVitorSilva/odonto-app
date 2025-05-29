@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
-
+import { View, Text, FlatList } from "react-native";
+import Header from "@/components/Header";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 
@@ -30,19 +30,13 @@ export default function HomeClient() {
 
   return (
     <View className="w-full">
-      <View className="bg-app-blue pb-[150px] mb-[60px] relative">
-        <View className="flex-row items-center justify-between p-5 relative">
-          <TouchableOpacity>
-            <Text className="text-white text-2xl w-40">Ajustes</Text>
-          </TouchableOpacity>
-          <Text className="text-white text-[30px] font-bold ">Perfil</Text>
-          <TouchableOpacity>
-            <Text className="text-white text-2xl text-right w-40">Sair</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Text className="text-center text-3xl font-semibold mb-[25px]">
+      <Header
+        className="bg-app-blue pb-[150px]"
+        contentColor="white"
+        title="Perfil"
+        hasExit={true}
+      />
+      <Text className="text-center text-3xl font-semibold my-[25px]">
         Victoria Robertson
       </Text>
 

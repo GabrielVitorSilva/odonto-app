@@ -1,7 +1,7 @@
-import { TouchableOpacity, View, Text, FlatList } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import Card from "@/components/Card";
-import { Ionicons } from "@expo/vector-icons";
 import { Button } from "@/components/Button";
+import Header from "@/components/Header";
 
 export default function ConsultationsPageAdmin() {
   const consultations = [
@@ -45,11 +45,7 @@ export default function ConsultationsPageAdmin() {
 
   return (
     <View>
-      <View className=" bg-app-blue py-10 px-5">
-        <TouchableOpacity>
-          <Ionicons color={"white"} size={32} name="arrow-back" />
-        </TouchableOpacity>
-      </View>
+      <Header className="bg-app-blue" contentColor="white" />
       <View className="px-4">
         <View className="border rounded-3xl border-gray-300 py-4 my-8 ">
           <Text className="text-app-blue font-semibold text-center">

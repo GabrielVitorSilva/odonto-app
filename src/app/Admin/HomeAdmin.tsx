@@ -1,5 +1,6 @@
-import { View, TouchableOpacity, Text, Image } from "react-native";
+import { View, Text } from "react-native";
 import { Menu, menuItem } from "@/components/Menu";
+import Header from "@/components/Header";
 
 export default function HomeAdmin() {
   const menuItems: menuItem[] = [
@@ -12,17 +13,14 @@ export default function HomeAdmin() {
 
   return (
     <View>
-      <View className="bg-app-blue pb-[150px] mb-[60px]">
-        <View className="flex-row items-center justify-between p-5">
-          <Text className="text-white text-4xl font-bold w-30"></Text>
-          <Text className="text-white text-4xl font-bold ">Administrador</Text>
-          <TouchableOpacity>
-            <Text className="text-white text-2xl text-right w-30">Sair</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header
+        title="Administrador"
+        contentColor="white"
+        className="bg-app-blue pb-[150px]"
+        hasExit={true}
+      />
 
-      <Text className="text-center text-3xl font-semibold mb-[25px]">
+      <Text className="text-center text-3xl font-semibold my-[25px]">
         Marina Dias
       </Text>
 

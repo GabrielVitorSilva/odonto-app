@@ -23,6 +23,7 @@ export function StackRoutes() {
         headerShown: false,
       }}
     > 
+      <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin}/>
       <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin}/>
       <Stack.Screen name="SelectProfessionalAdmin" component={SelectProfessionalAdmin}/>
@@ -34,7 +35,6 @@ export function StackRoutes() {
       <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen name="HomeClient" component={HomeClient} />
-      <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="UseTerms" component={UseTerms} />
       <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>

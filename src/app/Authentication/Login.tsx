@@ -18,6 +18,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const { showToast } = useToast();
   const { signIn } = useAuth();
@@ -84,6 +85,7 @@ export default function LoginScreen() {
     if (!validateFields()) return;
 
     try {
+      setIsLoading(true);
       const { token } = await authService.login({ email, password });
       const { user } = await authService.profile(token);
       await signIn(token);
@@ -107,6 +109,9 @@ export default function LoginScreen() {
       } else {
         showToast('Erro ao realizar login. Tente novamente mais tarde.', 'error');
       }
+    }
+    finally {
+      setIsLoading(false);
     }
   }
 
@@ -179,6 +184,7 @@ export default function LoginScreen() {
               <Button 
                 title="Entrar" 
                 onPress={handleLogin}
+                isLoading={isLoading}
                 disabled={Object.keys(errors).length > 0}
                 className={Object.keys(errors).length > 0 ? 'opacity-50' : ''}
               />

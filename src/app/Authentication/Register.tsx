@@ -28,6 +28,7 @@ export default function Register() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function formatCPF(value: string) {
     const numbers = value.replace(/\D/g, '');
@@ -104,6 +105,7 @@ export default function Register() {
     setHasAttemptedSubmit(true);
     if (!validateFields()) return;
     try {
+      setIsLoading(true);
       await authService.register({
         name,
         email,
@@ -119,7 +121,7 @@ export default function Register() {
       if (user.role === Profile.CLIENT) {
         navigation.navigate('HomeClient');
       }
-      
+
       showToast('Cadastro realizado com sucesso!', 'success');
       // TODO: Implementar navegação após login
     } catch (error: any) {
@@ -130,6 +132,9 @@ export default function Register() {
       } else {
         showToast('Erro ao realizar cadastro. Tente novamente mais tarde.', 'error');
       }
+    }
+    finally {
+      setIsLoading(false);
     }
   }
 
@@ -263,6 +268,7 @@ export default function Register() {
                 onPress={handleRegister}
                 disabled={Object.keys(errors).length > 0}
                 className={Object.keys(errors).length > 0 ? 'opacity-50' : ''}
+                isLoading={isLoading}
               />
 
               <TouchableOpacity className="p-2 mt-4" 

@@ -1,5 +1,7 @@
 import { Text, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 type HeaderProps = {
   title?: string;
@@ -14,6 +16,10 @@ export default function Header({
   className,
   hasExit = false,
 }: HeaderProps) {
+
+  const { signOut } = useAuth(); 
+  const navigation = useNavigation()
+
   const font = `text-${contentColor}`;
   return (
     <View
@@ -22,7 +28,7 @@ export default function Header({
       }`}
     >
       {!hasExit ? (
-        <TouchableOpacity className="w-13">
+        <TouchableOpacity className="w-13" onPress={() => {navigation.goBack()}}>
           <Ionicons color={contentColor} size={32} name="arrow-back" />
         </TouchableOpacity>
       ) : (
@@ -33,7 +39,7 @@ export default function Header({
         <Text className={`text-3xl font-semibold ${font}`}>{title}</Text>
       )}
 
-      <TouchableOpacity className="w-13">
+      <TouchableOpacity className="w-13" onPress={() => signOut()}>
         <Text className={`text-xl ${font} `}>{hasExit && "Sair"}</Text>
       </TouchableOpacity>
     </View>

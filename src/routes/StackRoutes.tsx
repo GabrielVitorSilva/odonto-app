@@ -70,6 +70,7 @@ export function StackRoutes() {
               <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin} />
               <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin} />
               <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />
+              <Stack.Screen name="Treatments" component={TreatmentsScreen} />
             </>
           )}
 

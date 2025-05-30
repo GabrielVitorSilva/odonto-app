@@ -8,10 +8,13 @@ module.exports = {
     extend: {
       colors: {
         'app-blue': '#38ABE2',
-        'app-light-blue': '#77BBDA',
+        'app-light-blue': '#C7E3F0',
         'app-red': '#E15050',
+        'app-light-red': '#F5C2C2',
         'app-green': '#5DB075',
+        'app-light-green': '#DDEEE2',
         'app-yellow': '#C3C028',
+        'app-light-yellow': '#F9F8DC',
       },
       fontFamily: {
         'roboto': ['Roboto-Regular'],

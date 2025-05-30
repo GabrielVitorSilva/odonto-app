@@ -18,7 +18,7 @@ interface FieldErrors {
 export default function Register() {
   const navigation = useNavigation();
   const { showToast } = useToast();
-  const { signIn } = useAuth();
+  const { signIn, setProfile } = useAuth();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -116,6 +116,8 @@ export default function Register() {
       
       const { token } = await authService.login({ email, password });
       const { user } = await authService.profile(token);
+      setProfile({ user });
+
       await signIn(token);
 
       if (user.role === Profile.CLIENT) {

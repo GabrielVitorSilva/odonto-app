@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { Profile, ProfileResponse } from '@/services/auth';
 
 interface AuthContextData {
   token: string | null;
   signIn: (token: string) => Promise<void>;
+  profile: ProfileResponse | null;
+  setProfile: React.Dispatch<React.SetStateAction<ProfileResponse | null>>
   signOut: () => Promise<void>;
   isLoading: boolean;
 }
@@ -13,19 +16,27 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [profile, setProfile] = useState<ProfileResponse | null>(null);
 
   useEffect(() => {
-    loadStoredToken();
+    loadStoredData();
   }, []);
 
-  async function loadStoredToken() {
+  async function loadStoredData() {
     try {
-      const storedToken = await AsyncStorage.getItem('@OdontoApp:token');
+      const [storedToken, storedProfile] = await Promise.all([
+        AsyncStorage.getItem('@OdontoApp:token'),
+        AsyncStorage.getItem('@OdontoApp:profile')
+      ]);
+
       if (storedToken) {
         setToken(storedToken);
       }
+      if (storedProfile) {
+        setProfile(JSON.parse(storedProfile));
+      }
     } catch (error) {
-      console.error('Erro ao carregar token:', error);
+      console.error('Erro ao carregar dados:', error);
     } finally {
       setIsLoading(false);
     }
@@ -43,16 +54,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signOut() {
     try {
-      await AsyncStorage.removeItem('@OdontoApp:token');
+      await Promise.all([
+        AsyncStorage.removeItem('@OdontoApp:token'),
+        AsyncStorage.removeItem('@OdontoApp:profile')
+      ]);
       setToken(null);
+      setProfile(null);
     } catch (error) {
-      console.error('Erro ao remover token:', error);
+      console.error('Erro ao remover dados:', error);
       throw error;
     }
   }
 
+  const handleSetProfile: React.Dispatch<React.SetStateAction<ProfileResponse | null>> = async (newProfile) => {
+    try {
+      const profileToSave = typeof newProfile === 'function' ? newProfile(profile) : newProfile;
+      if (profileToSave) {
+        await AsyncStorage.setItem('@OdontoApp:profile', JSON.stringify(profileToSave));
+      } else {
+        await AsyncStorage.removeItem('@OdontoApp:profile');
+      }
+      setProfile(profileToSave);
+    } catch (error) {
+      console.error('Erro ao salvar perfil:', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ token, signIn, signOut, isLoading }}>
+    <AuthContext.Provider value={{ token, signIn, signOut, isLoading, profile, setProfile: handleSetProfile}}>
       {children}
     </AuthContext.Provider>
   );

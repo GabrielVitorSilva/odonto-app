@@ -21,7 +21,7 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const { showToast } = useToast();
-  const { signIn } = useAuth();
+  const { signIn, setProfile } = useAuth();
 
   function validateField(field: keyof LoginFormData, value: any) {
     if (!hasAttemptedSubmit) return;
@@ -89,7 +89,9 @@ export default function LoginScreen() {
       const { token } = await authService.login({ email, password });
       const { user } = await authService.profile(token);
       await signIn(token);
-
+      
+      setProfile({ user });
+      
       if (user.role === Profile.CLIENT) {
         navigation.navigate('HomeClient');
       }

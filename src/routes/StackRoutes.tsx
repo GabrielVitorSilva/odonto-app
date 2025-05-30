@@ -51,6 +51,8 @@ export function StackRoutes() {
           <Stack.Screen name="UseTerms" component={UseTerms} />
         </>
       )}
+      <Stack.Screen name="HomeClient" component={HomeClient} />
+
       <Stack.Screen
         name="BindProfessionalAdmin"
         component={BindProfessionalAdmin}
@@ -84,7 +86,6 @@ export function StackRoutes() {
         name="ConsultationsPageProf"
         component={ConsultationsPageProf}
       />
-      <Stack.Screen name="HomeClient" component={HomeClient} />
     </Stack.Navigator>
   );
 }

@@ -15,7 +15,7 @@ export default function Card({
   hour,
   upperText,
   lowerText,
-  status = "NaN",
+  status = "",
 }: CardProps) {
   const statusStyle =
     {

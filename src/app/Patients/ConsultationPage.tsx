@@ -1,39 +1,39 @@
 import { View, Text } from "react-native";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { RootStackParamList } from "@/@types/navigation";
 
-type ConsultationPageProps = {
-  name: string;
-  description: string;
-  date: string;
-  hour: string;
-  professionalName: string;
-};
+type ConsultationPageRouteProp = RouteProp<
+  RootStackParamList,
+  "ConsultationPage"
+>;
 
 export default function ConsultationPage() {
+  const route = useRoute<ConsultationPageRouteProp>();
+  const { name, date, hour, professionalName } = route.params;
+
   return (
     <View className="h-full">
       <Header className="bg-app-blue" contentColor="white" />
       <View className="px-5 flex-1 justify-between">
         <View>
-          <Text className="text-3xl font-semibold my-3">Clareamento</Text>
-          <Text>
-            lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum{" "}
-          </Text>
+          <Text className="text-3xl font-semibold my-3">{name}</Text>
+          <Text></Text>
         </View>
 
         <View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Data</Text>
-            <Text>16/05</Text>
+            <Text>{date}</Text>
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Horário</Text>
-            <Text>17:00</Text>
+            <Text>{hour}</Text>
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Profissional</Text>
-            <Text>Julio Guerra</Text>
+            <Text>{professionalName}</Text>
           </View>
         </View>
         <Button

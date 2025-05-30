@@ -5,6 +5,7 @@ type IoniconsName = React.ComponentProps<typeof Ionicons>["name"];
 export type menuItem = {
   title: string;
   icon: IoniconsName;
+  handlePress: () => void;
 };
 
 type MenuProps = {
@@ -23,6 +24,7 @@ export function Menu({ items }: MenuProps) {
           <TouchableOpacity
             key={index}
             className="flex-row gap-6 items-center mb-3"
+            onPress={item.handlePress}
           >
             <Ionicons name={item.icon} size={48} color="black" />
             <Text className="font-bold">{item.title}</Text>

@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
 import { loginSchema, type LoginFormData } from '@/schemas/loginSchema';
-import { authService } from '@/services/auth';
+import { authService, Profile } from '@/services/auth';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface FieldErrors {
@@ -18,6 +18,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const { showToast } = useToast();
   const { signIn } = useAuth();
@@ -84,8 +85,22 @@ export default function LoginScreen() {
     if (!validateFields()) return;
 
     try {
+      setIsLoading(true);
       const { token } = await authService.login({ email, password });
+      const { user } = await authService.profile(token);
       await signIn(token);
+
+      if (user.role === Profile.CLIENT) {
+        navigation.navigate('HomeClient');
+      }
+
+      if (user.role ===   Profile.PROFESSIONAL) {
+        navigation.navigate('HomeProf');
+      }
+
+      if (user.role ===   Profile.ADMIN) {
+        navigation.navigate('HomeAdmin');
+      }
       showToast('Login realizado com sucesso!', 'success');
       // TODO: Implementar navegação após login
     } catch (error: any) {
@@ -94,6 +109,9 @@ export default function LoginScreen() {
       } else {
         showToast('Erro ao realizar login. Tente novamente mais tarde.', 'error');
       }
+    }
+    finally {
+      setIsLoading(false);
     }
   }
 
@@ -166,6 +184,7 @@ export default function LoginScreen() {
               <Button 
                 title="Entrar" 
                 onPress={handleLogin}
+                isLoading={isLoading}
                 disabled={Object.keys(errors).length > 0}
                 className={Object.keys(errors).length > 0 ? 'opacity-50' : ''}
               />

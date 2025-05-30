@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
 import { registerSchema, type RegisterFormData } from '@/schemas/registerSchema';
-import { authService } from '@/services/auth';
+import { authService, Profile } from '@/services/auth';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface FieldErrors {
@@ -24,9 +24,11 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [cpf, setCpf] = useState('');
+  const [cpfClean, setCpfClean] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function formatCPF(value: string) {
     const numbers = value.replace(/\D/g, '');
@@ -102,19 +104,24 @@ export default function Register() {
   async function handleRegister() {
     setHasAttemptedSubmit(true);
     if (!validateFields()) return;
-
     try {
+      setIsLoading(true);
       await authService.register({
         name,
         email,
         password,
-        cpf,
+        cpf: cpfClean,
         terms: termsAccepted
       });
       
       const { token } = await authService.login({ email, password });
+      const { user } = await authService.profile(token);
       await signIn(token);
-      
+
+      if (user.role === Profile.CLIENT) {
+        navigation.navigate('HomeClient');
+      }
+
       showToast('Cadastro realizado com sucesso!', 'success');
       // TODO: Implementar navegação após login
     } catch (error: any) {
@@ -125,6 +132,9 @@ export default function Register() {
       } else {
         showToast('Erro ao realizar cadastro. Tente novamente mais tarde.', 'error');
       }
+    }
+    finally {
+      setIsLoading(false);
     }
   }
 
@@ -187,6 +197,7 @@ export default function Register() {
                   placeholder="CPF (000.000.000-00)"
                   value={cpf}
                   onChangeText={(text) => {
+                    setCpfClean(text.replace(/\D/g, ''));
                     const formattedCpf = formatCPF(text);
                     setCpf(formattedCpf);
                     validateField('cpf', formattedCpf);
@@ -257,6 +268,7 @@ export default function Register() {
                 onPress={handleRegister}
                 disabled={Object.keys(errors).length > 0}
                 className={Object.keys(errors).length > 0 ? 'opacity-50' : ''}
+                isLoading={isLoading}
               />
 
               <TouchableOpacity className="p-2 mt-4" 

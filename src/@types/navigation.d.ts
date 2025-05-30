@@ -3,7 +3,20 @@ export type RootStackParamList = {
   Register: undefined;
   UseTerms: undefined;
   HomeClient: undefined;
-  ConsultationPage: undefined;
+  ConsultationPage: {
+    name: string;
+    date: string;
+    hour: string;
+    professionalName: string;
+  };
+  ConsultationPageAdmin: {
+    name: string;
+    date: string;
+    hour: string;
+    status: string;
+    patientName: string;
+    professionalName: string;
+  };
   HomeAdmin: undefined;
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;
@@ -12,7 +25,7 @@ export type RootStackParamList = {
   SelectClientAdmin: undefined;
   SelectProfessionalAdmin: undefined;
   BindProfessionalAdmin: undefined;
-}
+};
 
 declare global {
   namespace ReactNavigation {

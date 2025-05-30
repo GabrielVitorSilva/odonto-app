@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 type CardProps = {
   name: string;
@@ -7,6 +7,7 @@ type CardProps = {
   upperText: string;
   lowerText?: string;
   status?: string;
+  handlePress?: () => void;
 };
 
 export default function Card({
@@ -16,6 +17,7 @@ export default function Card({
   upperText,
   lowerText,
   status = "",
+  handlePress = () => {},
 }: CardProps) {
   const statusStyle =
     {
@@ -34,12 +36,14 @@ export default function Card({
       Finalizado: {
         bg: "bg-app-light-blue",
         text: "text-app-blue",
-      }
+      },
     }[status] || {};
 
   return (
-    <View className="flex-row gap-4 mb-5">
-      <View className={`w-12 h-12 rounded-xl bg-app-blue items-center justify-center mr-4`}></View>
+    <TouchableOpacity className="flex-row gap-4 mb-5" onPress={handlePress}>
+      <View
+        className={`w-12 h-12 rounded-xl bg-app-blue items-center justify-center mr-4`}
+      ></View>
       <View className="flex-1">
         <View className="flex-row justify-between">
           <Text className="font-semibold text-lg">{name}</Text>
@@ -58,6 +62,6 @@ export default function Card({
         </View>
         {lowerText && <Text>{lowerText}</Text>}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }

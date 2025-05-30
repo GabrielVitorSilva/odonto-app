@@ -24,7 +24,7 @@ import { colors } from "@/theme/colors";
 const Stack = createNativeStackNavigator();
 
 export function StackRoutes() {
-  const { token, isLoading } = useAuth();
+  const { token, isLoading, profile } = useAuth();
 
   if (isLoading) {
     return (
@@ -44,48 +44,44 @@ export function StackRoutes() {
         headerShown: false,
       }}
     >
-      {!token && (
+      {!token ? (
         <>
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="UseTerms" component={UseTerms} />
         </>
-      )}
-      <Stack.Screen name="HomeClient" component={HomeClient} />
+      ) : (
+        <>
+          {profile?.user.role === "CLIENT" && (
+            <>
+              <Stack.Screen name="HomeClient" component={HomeClient} />
+              <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
+              <Stack.Screen name="Treatments" component={TreatmentsScreen} />
+            </>
+          )}
 
-      <Stack.Screen
-        name="BindProfessionalAdmin"
-        component={BindProfessionalAdmin}
-      />
-      <Stack.Screen
-        name="SelectDateHourAdmin"
-        component={SelectDateHourAdmin}
-      />
-      <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
-      <Stack.Screen
-        name="SelectProfessionalAdmin"
-        component={SelectProfessionalAdmin}
-      />
-      <Stack.Screen
-        name="RegisterNewUserAdmin"
-        component={RegisterNewUserAdmin}
-      />
-      <Stack.Screen
-        name="ConsultationsPageAdmin"
-        component={ConsultationsPageAdmin}
-      />
-      <Stack.Screen
-        name="ConsultationPageAdmin"
-        component={ConsultationPageAdmin}
-      />
-      <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
-      <Stack.Screen name="Treatments" component={TreatmentsScreen} />
-      <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
-      <Stack.Screen name="HomeProf" component={HomeProf} />
-      <Stack.Screen
-        name="ConsultationsPageProf"
-        component={ConsultationsPageProf}
-      />
+          {profile?.user.role === "ADMIN" && (
+            <>
+              <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
+              <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin} />
+              <Stack.Screen name="ConsultationPageAdmin" component={ConsultationPageAdmin} />
+              <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
+              <Stack.Screen name="SelectProfessionalAdmin" component={SelectProfessionalAdmin} />
+              <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin} />
+              <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin} />
+              <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />
+            </>
+          )}
+
+          {profile?.user.role === "PROFESSIONAL" && (
+            <>
+              <Stack.Screen name="HomeProf" component={HomeProf} />
+              <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf} />
+              <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
+            </>
+          )}
+        </>
+      )}
     </Stack.Navigator>
   );
 }

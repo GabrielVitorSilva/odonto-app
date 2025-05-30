@@ -1,3 +1,4 @@
+import React, { Fragment } from "react";
 import ConsultationsPageAdmin from "@/app/Admin/ConsultationsPageAdmin";
 import ConsultationPage from "@/app/Patients/ConsultationPage";
 import HomeClient from "@/app//Patients/HomeClient";
@@ -13,16 +14,41 @@ import SelectClientAdmin from "@/app/Admin/SelectClientAdmin";
 import SelectProfessionalAdmin from "@/app/Admin/SelectProfessionalAdmin";
 import BindProfessionalAdmin from "@/app/Admin/BindProfessionalAdmin";
 import SelectDateHourAdmin from "@/app/Admin/SelectDateHourAdmin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "@/contexts/AuthContext";
+import { ActivityIndicator, View } from "react-native";
+import { colors } from "@/theme/colors";
 
 const Stack = createNativeStackNavigator();
 
 export function StackRoutes() {
+  const { token, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator
+          size="large"
+          className="self-center"
+          color={colors.blue}
+        />
+      </View>
+    );
+  }
+
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
+      {!token && (
+        <>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="UseTerms" component={UseTerms} />
+        </>
+      )}
       <Stack.Screen
         name="BindProfessionalAdmin"
         component={BindProfessionalAdmin}
@@ -49,9 +75,6 @@ export function StackRoutes() {
       <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen name="HomeClient" component={HomeClient} />
-      <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="UseTerms" component={UseTerms} />
-      <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>
   );
 }

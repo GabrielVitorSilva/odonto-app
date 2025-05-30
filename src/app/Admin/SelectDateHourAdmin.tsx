@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Calendar } from "react-native-calendars";
+import BottomDrawer from "@/components/BottomDrawer";
 import { useState } from "react";
 import Header from "@/components/Header";
 import { LocaleConfig } from "react-native-calendars";
@@ -50,6 +51,7 @@ LocaleConfig.locales["pt"] = {
 LocaleConfig.defaultLocale = "pt";
 
 export default function SelectDateHourAdmin() {
+  const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const availableHours = ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
@@ -87,7 +89,7 @@ export default function SelectDateHourAdmin() {
             <TouchableOpacity
               key={hour}
               className={`py-2 px-4 ${
-                selectedHour === hour ? "bg-app-light-blue" : ""
+                selectedHour === hour ? "bg-app-light-blue rounded" : ""
               }`}
               onPress={() => setSelectedHour(hour)}
             >
@@ -97,7 +99,25 @@ export default function SelectDateHourAdmin() {
         </ScrollView>
       </View>
 
-      <Button className="mt-30" title="Agendar Consulta" onPress={() => {}} />
+      <Button className="mt-30" title="Agendar Consulta" onPress={() => {setShowDrawer(true)}} />
+        <BottomDrawer
+        title="Agendar consulta"
+        content={
+          <Text className="text-center mb-6">
+            Deseja realmente agendar uma{" "}
+            <Text className="text-app-blue font-semibold">Clareamento</Text>{" "}
+            para{" "}
+            <Text className="text-app-blue font-semibold">
+              Victoria Robertson
+            </Text>
+            ?
+          </Text>
+        }
+        handlePress={() => {}}
+        showDrawer={showDrawer}
+        setShowDrawer={setShowDrawer}
+        buttonTitle="Agendar agora"
+      />
     </View>
   );
 }

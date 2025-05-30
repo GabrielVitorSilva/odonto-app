@@ -59,27 +59,11 @@ export function StackRoutes() {
         name="SelectDateHourAdmin"
         component={SelectDateHourAdmin}
       />
+      <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
       <Stack.Screen
         name="SelectProfessionalAdmin"
         component={SelectProfessionalAdmin}
       />
-      <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
-      <Stack.Screen
-        name="ConsultationsPageProf"
-        component={ConsultationsPageProf}
-      />
-      <Stack.Screen name="HomeProf" component={HomeProf} />
-      <Stack.Screen name="Treatments" component={TreatmentsScreen} />
-      <Stack.Screen
-        name="ConsultationsPageAdmin"
-        component={ConsultationsPageAdmin}
-      />
-      <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
-      <Stack.Screen
-        name="ConsultationPageAdmin"
-        component={ConsultationPageAdmin}
-      />
-      <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen
         name="RegisterNewUserAdmin"
         component={RegisterNewUserAdmin}
@@ -88,19 +72,13 @@ export function StackRoutes() {
         name="ConsultationsPageAdmin"
         component={ConsultationsPageAdmin}
       />
-      <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
       <Stack.Screen
-        name="SelectProfessionalAdmin"
-        component={SelectProfessionalAdmin}
+        name="ConsultationPageAdmin"
+        component={ConsultationPageAdmin}
       />
-      <Stack.Screen
-        name="SelectDateHourAdmin"
-        component={SelectDateHourAdmin}
-      />
-      <Stack.Screen
-        name="BindProfessionalAdmin"
-        component={BindProfessionalAdmin}
-      />
+      <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
+      <Stack.Screen name="Treatments" component={TreatmentsScreen} />
+      <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
       <Stack.Screen name="HomeProf" component={HomeProf} />
       <Stack.Screen
         name="ConsultationsPageProf"

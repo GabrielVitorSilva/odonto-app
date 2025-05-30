@@ -65,9 +65,15 @@ export default function ConsultationsPageAdmin() {
               date={item.date}
               hour={item.hour}
               status={item.status}
-              handlePress={
-                () => {}
-                // navigation.navigate("ConsultationPageAdmin", {name: item.name, })
+              handlePress={() =>
+                navigation.navigate("ConsultationPageAdmin", {
+                  name: item.name,
+                  date: item.date,
+                  hour: item.hour,
+                  status: item.status,
+                  patientName: item.patient,
+                  professionalName: item.professional,
+                })
               }
             />
           )}

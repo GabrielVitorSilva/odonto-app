@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import ConsultationsPageAdmin from "@/app/Admin/ConsultationsPageAdmin";
 import ConsultationPage from "@/app/Patients/ConsultationPage";
+import ConsultationPageAdmin from "@/app/Admin/ConsultationPageAdmin";
 import HomeClient from "@/app//Patients/HomeClient";
 import HomeAdmin from "@/app/Admin/HomeAdmin";
 import Login from "@/app/Authentication/Login";
@@ -73,6 +74,10 @@ export function StackRoutes() {
         component={ConsultationsPageAdmin}
       />
       <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
+      <Stack.Screen
+        name="ConsultationPageAdmin"
+        component={ConsultationPageAdmin}
+      />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen name="HomeClient" component={HomeClient} />
     </Stack.Navigator>

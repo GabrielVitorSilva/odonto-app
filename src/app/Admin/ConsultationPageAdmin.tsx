@@ -45,11 +45,23 @@ export default function ConsultationPageAdmin() {
             <Text>{professionalName}</Text>
           </View>
         </View>
-        <Button
-          title="Cancelar Consulta"
-          onPress={() => {}}
-          className="bg-app-red mb-16"
-        />
+
+        <View>
+          {status === "Confirmado" && (
+            <Button
+              className="mt-4"
+              title="Marcar como finalizada"
+              onPress={() => {}}
+            />
+          )}
+          {status !== "Finalizado" && status !== "Cancelado" && (
+            <Button
+              title="Cancelar Consulta"
+              onPress={() => {}}
+              className="bg-app-red mb-16 mt-4"
+            />
+          )}
+        </View>
       </View>
     </View>
   );

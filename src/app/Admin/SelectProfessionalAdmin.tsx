@@ -5,8 +5,8 @@ import { View, Text } from "react-native";
 
 export default function SelectProfessionalAdmin() {
   const list = [
-    { name: "Victoria Robertson" },
-    { name: "Lucas Andrade" },
+    { name: "Alberes" },
+    { name: "Maria Santos" },
     { name: "Flávia Souza" },
     { name: "Thiago Monteiro" },
     { name: "Camila Duarte" },

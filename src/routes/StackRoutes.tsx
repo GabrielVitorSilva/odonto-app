@@ -11,6 +11,7 @@ import HomeProf from "@/app/Professional/HomeProf";
 import ConsultationsPageProf from "@/app/Professional/ConsultationsPageProf";
 import SelectClientAdmin from "@/app/Admin/SelectClientAdmin";
 import SelectProfessionalAdmin from "@/app/Admin/SelectProfessionalAdmin";
+import BindProfessionalAdmin from "@/app/Admin/BindProfessionalAdmin";
 import SelectDateHourAdmin from "@/app/Admin/SelectDateHourAdmin";
 
 const Stack = createNativeStackNavigator();
@@ -21,7 +22,8 @@ export function StackRoutes() {
       screenOptions={{
         headerShown: false,
       }}
-    >
+    > 
+      <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin}/>
       <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin}/>
       <Stack.Screen name="SelectProfessionalAdmin" component={SelectProfessionalAdmin}/>
       <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin}/>

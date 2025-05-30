@@ -11,6 +11,7 @@ export type RootStackParamList = {
   ConsultationsPageProf: undefined;
   SelectClientAdmin: undefined;
   SelectProfessionalAdmin: undefined;
+  BindProfessionalAdmin: undefined;
 }
 
 declare global {

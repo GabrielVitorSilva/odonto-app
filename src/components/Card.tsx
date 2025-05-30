@@ -20,17 +20,21 @@ export default function Card({
   const statusStyle =
     {
       Confirmado: {
-        bg: "bg-[#badec4]",
+        bg: "bg-app-light-green",
         text: "text-app-green",
       },
       Pendente: {
-        bg: "bg-[#eeedaa]",
+        bg: "bg-app-light-yellow",
         text: "text-app-yellow",
       },
       Cancelado: {
-        bg: "bg-[#f0a8a8]",
+        bg: "bg-app-light-red",
         text: "text-app-red",
       },
+      Finalizado: {
+        bg: "bg-app-light-blue",
+        text: "text-app-blue",
+      }
     }[status] || {};
 
   return (
@@ -46,7 +50,7 @@ export default function Card({
 
         <View className="flex-row justify-between mb-2 items-center">
           <Text>{upperText}</Text>
-          <View className={`rounded-[10px] px-1 py-[2px] ${statusStyle.bg}`}>
+          <View className={`rounded-xl px-4 py-[2px] ${statusStyle.bg}`}>
             {status && (
               <Text className={`font-bold ${statusStyle.text}`}>{status}</Text>
             )}

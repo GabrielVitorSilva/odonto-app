@@ -1,5 +1,5 @@
 import ConsultationsPageAdmin from "@/app/Admin/ConsultationsPageAdmin";
-import ConsultationPage from "@/app/ConsultationPage";
+import ConsultationPage from "@/app/Patients/ConsultationPage";
 import HomeClient from "@/app//Patients/HomeClient";
 import HomeAdmin from "@/app/Admin/HomeAdmin";
 import Login from "@/app/Authentication/Login";
@@ -9,6 +9,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TreatmentsScreen from "@/app/Treatments";
 import HomeProf from "@/app/Professional/HomeProf";
 import ConsultationsPageProf from "@/app/Professional/ConsultationsPageProf";
+import SelectClientAdmin from "@/app/Admin/SelectClientAdmin";
+import SelectProfessionalAdmin from "@/app/Admin/SelectProfessionalAdmin";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +21,8 @@ export function StackRoutes() {
         headerShown: false,
       }}
     >
+      <Stack.Screen name="SelectProfessionalAdmin" component={SelectProfessionalAdmin}/>
+      <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin}/>
       <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf}/>
       <Stack.Screen name="HomeProf" component={HomeProf} />
       <Stack.Screen name="Treatments" component={TreatmentsScreen}/>

@@ -22,15 +22,30 @@ export function StackRoutes() {
       screenOptions={{
         headerShown: false,
       }}
-    > 
-      <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin}/>
-      <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin}/>
-      <Stack.Screen name="SelectProfessionalAdmin" component={SelectProfessionalAdmin}/>
-      <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin}/>
-      <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf}/>
+    >
+      <Stack.Screen
+        name="BindProfessionalAdmin"
+        component={BindProfessionalAdmin}
+      />
+      <Stack.Screen
+        name="SelectDateHourAdmin"
+        component={SelectDateHourAdmin}
+      />
+      <Stack.Screen
+        name="SelectProfessionalAdmin"
+        component={SelectProfessionalAdmin}
+      />
+      <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
+      <Stack.Screen
+        name="ConsultationsPageProf"
+        component={ConsultationsPageProf}
+      />
       <Stack.Screen name="HomeProf" component={HomeProf} />
-      <Stack.Screen name="Treatments" component={TreatmentsScreen}/>
-      <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin}/>  
+      <Stack.Screen name="Treatments" component={TreatmentsScreen} />
+      <Stack.Screen
+        name="ConsultationsPageAdmin"
+        component={ConsultationsPageAdmin}
+      />
       <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
       <Stack.Screen name="HomeClient" component={HomeClient} />

@@ -1,14 +1,37 @@
 import { View, Text } from "react-native";
 import { Menu, menuItem } from "@/components/Menu";
+import { useNavigation } from "@react-navigation/native";
 import Header from "@/components/Header";
 
 export default function HomeAdmin() {
+  const navigation = useNavigation();
+
   const menuItems: menuItem[] = [
-    { title: "Consultas", icon: "folder" },
-    { title: "Tratamentos", icon: "medkit" },
-    { title: "Cadastrar usuário", icon: "person-add" },
-    { title: "Odontólogos", icon: "medical" },
-    { title: "Clientes", icon: "person" },
+    {
+      title: "Consultas",
+      icon: "folder",
+      handlePress: () => navigation.navigate("ConsultationsPageAdmin"),
+    },
+    {
+      title: "Tratamentos",
+      icon: "medkit",
+      handlePress: () => navigation.navigate("Treatments"),
+    },
+    {
+      title: "Cadastrar usuário",
+      icon: "person-add",
+      handlePress: () => {},
+    },
+    {
+      title: "Odontólogos",
+      icon: "medical",
+      handlePress: () => {},
+    },
+    {
+      title: "Clientes",
+      icon: "person",
+      handlePress: () => {},
+    },
   ];
 
   return (

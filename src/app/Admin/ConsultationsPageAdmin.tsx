@@ -2,8 +2,11 @@ import { View, Text, FlatList } from "react-native";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ConsultationsPageAdmin() {
+  const navigation = useNavigation();
+
   const consultations = [
     {
       id: 1,
@@ -62,13 +65,22 @@ export default function ConsultationsPageAdmin() {
               date={item.date}
               hour={item.hour}
               status={item.status}
+              handlePress={
+                () => {}
+                // navigation.navigate("ConsultationPageAdmin", {name: item.name, })
+              }
             />
           )}
           className="w-full px-5 mx-auto"
         />
       </View>
 
-      <Button title="Agendar Consulta" onPress={() => {}} />
+      <Button
+        title="Agendar Consulta"
+        onPress={() => {
+          navigation.navigate("SelectClientAdmin");
+        }}
+      />
     </View>
   );
 }

@@ -6,7 +6,38 @@ interface AuthResponse {
   token: string;
 }
 
+export enum Profile {
+  CLIENT = 'CLIENT',
+  ADMIN = 'ADMIN',
+  PROFESSIONAL = 'PROFESSIONAL',
+}
+
+export interface ProfileResponse {
+    user: {
+      id: string,
+      name: string,
+      email: string,
+      cpf: string,
+      phone: string,
+      role: Profile,
+    }
+  }
+
 export const authService = {
+  async profile(token: string): Promise<ProfileResponse>{
+    try {
+      const response = await api.post<ProfileResponse>('/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      return response.data;
+    } catch (error:any) {
+      console.error('Error fetching profile:', error?.response?.data);
+      throw error;
+    }
+  },
+
   async login(data: LoginFormData): Promise<AuthResponse> {
     const response = await api.post<AuthResponse>('/sessions', {
       email: data.email.trim(),

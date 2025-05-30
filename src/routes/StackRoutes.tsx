@@ -15,6 +15,7 @@ import SelectClientAdmin from "@/app/Admin/SelectClientAdmin";
 import SelectProfessionalAdmin from "@/app/Admin/SelectProfessionalAdmin";
 import BindProfessionalAdmin from "@/app/Admin/BindProfessionalAdmin";
 import SelectDateHourAdmin from "@/app/Admin/SelectDateHourAdmin";
+import RegisterNewUserAdmin from "@/app/Admin/RegisterNewUserAdmin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { ActivityIndicator, View } from "react-native";
@@ -79,6 +80,32 @@ export function StackRoutes() {
         component={ConsultationPageAdmin}
       />
       <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
+      <Stack.Screen
+        name="RegisterNewUserAdmin"
+        component={RegisterNewUserAdmin}
+      />
+      <Stack.Screen
+        name="ConsultationsPageAdmin"
+        component={ConsultationsPageAdmin}
+      />
+      <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
+      <Stack.Screen
+        name="SelectProfessionalAdmin"
+        component={SelectProfessionalAdmin}
+      />
+      <Stack.Screen
+        name="SelectDateHourAdmin"
+        component={SelectDateHourAdmin}
+      />
+      <Stack.Screen
+        name="BindProfessionalAdmin"
+        component={BindProfessionalAdmin}
+      />
+      <Stack.Screen name="HomeProf" component={HomeProf} />
+      <Stack.Screen
+        name="ConsultationsPageProf"
+        component={ConsultationsPageProf}
+      />
       <Stack.Screen name="HomeClient" component={HomeClient} />
     </Stack.Navigator>
   );

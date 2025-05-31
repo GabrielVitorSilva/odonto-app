@@ -125,7 +125,6 @@ export default function Register() {
       }
 
       showToast('Cadastro realizado com sucesso!', 'success');
-      // TODO: Implementar navegação após login
     } catch (error: any) {
       if (error.response?.data?.message) {
         showToast(error.response.data.message, 'error');

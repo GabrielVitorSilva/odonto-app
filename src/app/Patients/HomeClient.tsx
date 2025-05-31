@@ -6,7 +6,6 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function HomeClient() {
   const { profile } = useAuth()
-  console.log(profile);
   
   const consultations = [
     {

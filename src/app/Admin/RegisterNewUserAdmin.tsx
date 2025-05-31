@@ -10,7 +10,6 @@ const placeholderAdmin = require('../../assets/placeholder_administrador.png');
 export default function RegisterNewUserAdmin() {
 
   const handleUserTypePress = (userType: string) => {
-    console.log("Tipo de usuário selecionado:", userType);
   };
 
   return (

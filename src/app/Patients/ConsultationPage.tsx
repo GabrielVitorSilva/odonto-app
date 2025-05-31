@@ -1,17 +1,19 @@
 import { View, Text } from "react-native";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "@/@types/navigation";
+import { useRoute } from "@react-navigation/native";
 
-type ConsultationPageRouteProp = RouteProp<
-  RootStackParamList,
-  "ConsultationPage"
->;
+type RouteParams = {
+  name: string;
+  date: string;
+  hour: string;
+  status: string;
+  patientName: string;
+};
 
 export default function ConsultationPage() {
-  const route = useRoute<ConsultationPageRouteProp>();
-  const { name, date, hour, professionalName } = route.params;
+  const route = useRoute();
+  const { name, date, hour, status, patientName } = route.params as RouteParams;
 
   return (
     <View className="h-full">
@@ -21,7 +23,10 @@ export default function ConsultationPage() {
           <Text className="text-3xl font-semibold my-3">{name}</Text>
           <Text></Text>
         </View>
-
+        <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
+          <Text className="font-bold">Status</Text>
+          <Text>{status}</Text>
+        </View>
         <View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Data</Text>
@@ -32,15 +37,27 @@ export default function ConsultationPage() {
             <Text>{hour}</Text>
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
-            <Text className="font-bold">Profissional</Text>
-            <Text>{professionalName}</Text>
+            <Text className="font-bold">Paciente</Text>
+            <Text>{patientName}</Text>
           </View>
         </View>
-        <Button
-          title="Cancelar Consulta"
-          onPress={() => {}}
-          className="bg-app-red mb-16"
-        />
+
+        <View>
+          {status === "Confirmado" && (
+            <Button
+              className="mt-4"
+              title="Marcar como finalizada"
+              onPress={() => {}}
+            />
+          )}
+          {status !== "Finalizado" && status !== "Cancelado" && (
+            <Button
+              title="Cancelar Consulta"
+              onPress={() => {}}
+              className="bg-app-red mb-16 mt-4"
+            />
+          )}
+        </View>
       </View>
     </View>
   );

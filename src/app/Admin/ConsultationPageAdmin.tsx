@@ -1,18 +1,21 @@
 import { View, Text } from "react-native";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "@/@types/navigation";
+import { useRoute } from "@react-navigation/native";
 
-type ConsultationPageRouteProp = RouteProp<
-  RootStackParamList,
-  "ConsultationPageAdmin"
->;
+type RouteParams = {
+  name: string;
+  date: string;
+  hour: string;
+  status: string;
+  patientName: string;
+  professionalName: string;
+};
 
 export default function ConsultationPageAdmin() {
-  const route = useRoute<ConsultationPageRouteProp>();
+  const route = useRoute();
   const { name, date, hour, status, patientName, professionalName } =
-    route.params;
+    route.params as RouteParams;
 
   return (
     <View className="h-full">

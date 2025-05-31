@@ -50,39 +50,31 @@ export function StackRoutes() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="UseTerms" component={UseTerms} />
         </>
-      ) : (
+      ) : profile?.user.role === "CLIENT" ? (
         <>
-          {profile?.user.role === "CLIENT" && (
-            <>
-              <Stack.Screen name="HomeClient" component={HomeClient} />
-              <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
-              <Stack.Screen name="Treatments" component={TreatmentsScreen} />
-            </>
-          )}
-
-          {profile?.user.role === "ADMIN" && (
-            <>
-              <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
-              <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin} />
-              <Stack.Screen name="ConsultationPageAdmin" component={ConsultationPageAdmin} />
-              <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
-              <Stack.Screen name="SelectProfessionalAdmin" component={SelectProfessionalAdmin} />
-              <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin} />
-              <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin} />
-              <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />
-              <Stack.Screen name="Treatments" component={TreatmentsScreen} />
-            </>
-          )}
-
-          {profile?.user.role === "PROFESSIONAL" && (
-            <>
-              <Stack.Screen name="HomeProf" component={HomeProf} />
-              <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf} />
-              <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
-            </>
-          )}
+          <Stack.Screen name="HomeClient" component={HomeClient} />
+          <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
+          <Stack.Screen name="Treatments" component={TreatmentsScreen} />
         </>
-      )}
+      ) : profile?.user.role === "ADMIN" ? (
+        <>
+          <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
+          <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin} />
+          <Stack.Screen name="ConsultationPageAdmin" component={ConsultationPageAdmin} />
+          <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
+          <Stack.Screen name="SelectProfessionalAdmin" component={SelectProfessionalAdmin} />
+          <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin} />
+          <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin} />
+          <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />
+          <Stack.Screen name="Treatments" component={TreatmentsScreen} />
+        </>
+      ) : profile?.user.role === "PROFESSIONAL" ? (
+        <>
+          <Stack.Screen name="HomeProf" component={HomeProf} />
+          <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf} />
+          <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
+        </>
+      ) : null}
     </Stack.Navigator>
   );
 }

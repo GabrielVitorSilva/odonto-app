@@ -20,7 +20,9 @@ export default function HomeAdmin() {
     {
       title: "Cadastrar usuário",
       icon: "person-add",
-      handlePress: () => {},
+      handlePress: () => {
+        navigation.navigate("RegisterAnotherUser");
+      },
     },
     {
       title: "Odontólogos",

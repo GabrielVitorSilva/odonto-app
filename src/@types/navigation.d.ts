@@ -18,6 +18,7 @@ export type RootStackParamList = {
     professionalName: string;
   };
   HomeAdmin: undefined;
+  RegisterAnotherUser: undefined;
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;
   HomeProf: undefined;

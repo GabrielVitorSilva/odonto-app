@@ -91,7 +91,6 @@ export default function LoginScreen() {
       await signIn(token);
       
       setProfile({ user });
-      
       if (user.role === Profile.CLIENT) {
         navigation.navigate('HomeClient');
       }

@@ -20,6 +20,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { ActivityIndicator, View } from "react-native";
 import { colors } from "@/theme/colors";
+import RegisterAnotherUser from "@/app/Admin/RegisterAnotherUser";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +60,7 @@ export function StackRoutes() {
       ) : profile?.user.role === "ADMIN" ? (
         <>
           <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
+          <Stack.Screen name="RegisterAnotherUser" component={RegisterAnotherUser} />
           <Stack.Screen name="ConsultationsPageAdmin" component={ConsultationsPageAdmin} />
           <Stack.Screen name="ConsultationPageAdmin" component={ConsultationPageAdmin} />
           <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />

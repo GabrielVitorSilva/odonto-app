@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { Profile } from '@/services/auth';
 
 export const registerSchema = z.object({
   name: z.string()
@@ -14,7 +15,7 @@ export const registerSchema = z.object({
     .min(1, 'CPF é obrigatório')
     .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF deve estar no formato 000.000.000-00'),
   
-    password: z
+  password: z
     .string()
     .min(6, { message: 'A senha deve ter no mínimo 6 caracteres.' })
     .regex(/[A-Z]/, {
@@ -22,7 +23,15 @@ export const registerSchema = z.object({
     }),
   
   terms: z.boolean()
-    .refine(val => val === true, 'Você precisa aceitar os termos e condições')
+    .refine(val => val === true, 'Você precisa aceitar os termos e condições'),
+
+  phone: z.string()
+    .min(1, 'Telefone é obrigatório')
+    .regex(/^\(\d{2}\) \d{5}-\d{4}$/, 'Telefone deve estar no formato (00) 00000-0000'),
+
+  role: z.nativeEnum(Profile, {
+    errorMap: () => ({ message: 'Perfil inválido' })
+  })
 });
 
 export type RegisterFormData = z.infer<typeof registerSchema>; 

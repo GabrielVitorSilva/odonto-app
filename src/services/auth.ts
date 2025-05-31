@@ -6,22 +6,20 @@ interface AuthResponse {
   token: string;
 }
 
+interface ProfileResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: Profile;
+  };
+}
+
 export enum Profile {
   CLIENT = 'CLIENT',
   ADMIN = 'ADMIN',
   PROFESSIONAL = 'PROFESSIONAL',
 }
-
-export interface ProfileResponse {
-    user: {
-      id: string,
-      name: string,
-      email: string,
-      cpf: string,
-      phone: string,
-      role: Profile,
-    }
-  }
 
 export const authService = {
   async profile(token: string): Promise<ProfileResponse>{
@@ -52,6 +50,8 @@ export const authService = {
       email: data.email.trim().toLowerCase(),
       password: data.password,
       cpf: data.cpf,
+      phone: data.phone,
+      role: data.role
     });
     return response.data;
   }

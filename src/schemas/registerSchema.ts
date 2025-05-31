@@ -14,9 +14,12 @@ export const registerSchema = z.object({
     .min(1, 'CPF é obrigatório')
     .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF deve estar no formato 000.000.000-00'),
   
-  password: z.string()
-    .min(1, 'Senha é obrigatória')
-    .min(6, 'A senha deve ter pelo menos 6 caracteres'),
+    password: z
+    .string()
+    .min(6, { message: 'A senha deve ter no mínimo 6 caracteres.' })
+    .regex(/[A-Z]/, {
+      message: 'A senha deve conter pelo menos uma letra maiúscula.',
+    }),
   
   terms: z.boolean()
     .refine(val => val === true, 'Você precisa aceitar os termos e condições')

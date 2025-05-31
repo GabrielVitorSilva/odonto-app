@@ -219,7 +219,7 @@ export default function Register() {
               <View>
                 <View className="relative">
                   <TextInput
-                    placeholder="Senha (mínimo 6 caracteres)"
+                    placeholder="Senha (mín 6 e 1 maiúsculo)"
                     value={password}
                     onChangeText={(text) => {
                       setPassword(text);

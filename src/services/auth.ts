@@ -47,7 +47,18 @@ export const authService = {
   async register(data: RegisterFormData) {
     const response = await api.post('/register/client', {
       name: data.name.trim(),
-      email: data.email.trim().toLowerCase(),
+      email: data.email.trim(),
+      password: data.password,
+      cpf: data.cpf,
+      phone: data.phone,
+    });
+    return response.data;
+  },
+
+  async registerAnotherUser(data: RegisterFormData) {
+    const response = await api.post('/register', {
+      name: data.name.trim(),
+      email: data.email.trim(),
       password: data.password,
       cpf: data.cpf,
       phone: data.phone,

@@ -123,27 +123,18 @@ export default function RegisterAnotherUser() {
     if (!validateFields()) return;
     try {
       setIsLoading(true);
-      await authService.register({
+      await authService.registerAnotherUser({
         name,
         email,
         password,
         cpf: cpfClean,
         terms: termsAccepted,
-        phone: phone.replace(/\D/g, ''),
+        phone,
         role
       });
       
-      const { token } = await authService.login({ email, password });
-      const { user } = await authService.profile(token);
-      setProfile({ user });
-
-      await signIn(token);
-
-      if (user.role === Profile.CLIENT) {
-        navigation.navigate('HomeClient');
-      }
-
-      showToast('Cadastro realizado com sucesso!', 'success');
+      showToast('Novo usuário cadastrado com sucesso!', 'success');
+      navigation.navigate('HomeAdmin');
     } catch (error: any) {
       if (error.response?.data?.message) {
         showToast(error.response.data.message, 'error');

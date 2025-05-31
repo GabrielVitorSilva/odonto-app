@@ -7,6 +7,7 @@ import { registerSchema, type RegisterFormData } from '@/schemas/registerSchema'
 import { authService, Profile } from '@/services/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
 
 interface FieldErrors {
   name?: string;
@@ -161,6 +162,13 @@ export default function RegisterAnotherUser() {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className="flex-1 pt-10">
+            <TouchableOpacity 
+              className="absolute left-4 top-10 z-10"
+              onPress={() => navigation.goBack()}
+            >
+              <Ionicons name="arrow-back" size={24} color="#000" />
+            </TouchableOpacity>
+
             <Text className="text-4xl font-roboto-bold text-center mb-32">Cadastrar</Text>
 
             <View className="space-y-4 mx-4">

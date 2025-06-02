@@ -9,6 +9,7 @@ import Register from "@/app/Authentication/Register";
 import UseTerms from "@/app/Authentication/UseTerms";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TreatmentsScreen from "@/app/Treatments";
+import TreatmentsAdmin from "@/app/Admin/TreatmentsAdmin";
 import HomeProf from "@/app/Professional/HomeProf";
 import ConsultationsPageProf from "@/app/Professional/ConsultationsPageProf";
 import SelectClientAdmin from "@/app/Admin/SelectClientAdmin";
@@ -21,6 +22,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ActivityIndicator, View } from "react-native";
 import { colors } from "@/theme/colors";
 import RegisterAnotherUser from "@/app/Admin/RegisterAnotherUser";
+import TreatmentPageAdmin from "@/app/Admin/TreatmentPageAdmin";
 
 const Stack = createNativeStackNavigator();
 
@@ -68,7 +70,8 @@ export function StackRoutes() {
           <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin} />
           <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin} />
           <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />
-          <Stack.Screen name="Treatments" component={TreatmentsScreen} />
+          <Stack.Screen name="TreatmentsAdmin" component={TreatmentsAdmin} />
+          <Stack.Screen name="TreatmentPageAdmin" component={TreatmentPageAdmin} />
         </>
       ) : profile?.user.role === "PROFESSIONAL" ? (
         <>

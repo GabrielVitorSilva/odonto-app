@@ -15,7 +15,7 @@ export default function HomeAdmin() {
     {
       title: "Tratamentos",
       icon: "medkit",
-      handlePress: () => navigation.navigate("Treatments"),
+      handlePress: () => navigation.navigate("TreatmentsAdmin"),
     },
     {
       title: "Cadastrar usuário",

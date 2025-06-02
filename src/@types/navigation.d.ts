@@ -21,10 +21,13 @@ export type RootStackParamList = {
   RegisterAnotherUser: undefined;
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;
+  TreatmentsAdmin: undefined;
+  TreatmentPageAdmin: undefined;
   HomeProf: undefined;
   ConsultationsPageProf: undefined;
   SelectClientAdmin: undefined;
   SelectProfessionalAdmin: undefined;
+  SelectDateHourAdmin: undefined;
   BindProfessionalAdmin: undefined;
 };
 

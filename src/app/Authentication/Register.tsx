@@ -117,7 +117,7 @@ export default function Register() {
       const { token } = await authService.login({ email, password });
       const { user } = await authService.profile(token);
       setProfile({ user });
-
+ 
       await signIn(token);
 
       if (user.role === Profile.CLIENT) {

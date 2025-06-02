@@ -23,6 +23,7 @@ import { ActivityIndicator, View } from "react-native";
 import { colors } from "@/theme/colors";
 import RegisterAnotherUser from "@/app/Admin/RegisterAnotherUser";
 import TreatmentPageAdmin from "@/app/Admin/TreatmentPageAdmin";
+import ViewPatientsProfile from "@/app/Admin/ViewPatientsProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -72,6 +73,7 @@ export function StackRoutes() {
           <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />
           <Stack.Screen name="TreatmentsAdmin" component={TreatmentsAdmin} />
           <Stack.Screen name="TreatmentPageAdmin" component={TreatmentPageAdmin} />
+          <Stack.Screen name="ViewPatientsProfile" component={ViewPatientsProfile} />
         </>
       ) : profile?.user.role === "PROFESSIONAL" ? (
         <>

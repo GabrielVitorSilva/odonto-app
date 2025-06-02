@@ -1,9 +1,12 @@
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { PersonList } from "@/components/PersonList";
+import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
 
 export default function SelectProfessionalAdmin() {
+  const navigation = useNavigation()
+
   const list = [
     { name: "Alberes" },
     { name: "Maria Santos" },
@@ -23,7 +26,7 @@ export default function SelectProfessionalAdmin() {
           <PersonList list={list} />
         </View>
       </View>
-      <Button className="mb-5" title="Selecionar" onPress={() => {}} />
+      <Button className="mb-5" title="Selecionar" onPress={() => navigation.navigate("SelectDateHourAdmin")} />
     </View>
   );
 }

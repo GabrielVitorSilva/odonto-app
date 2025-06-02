@@ -1,7 +1,10 @@
 import Header from '@/components/Header';
 import * as React from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { useState } from 'react';
+import { Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 import { Button } from '@/components/Button';
+import BottomDrawer from '@/components/BottomDrawer';
 import { useNavigation } from '@react-navigation/native';
 
 type RouteParams = {
@@ -10,13 +13,29 @@ type RouteParams = {
 }
 
 export default function TreatmentPageAdmin() {
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [lastSelected, setLastSelected] = useState("");
+
   const navigation = useNavigation()
   
   const bindedEmployees = [
     {name: "Maria Santos"},
     {name: "Flávia Souza"}
-  ]
-  
+  ];
+
+  const content = (
+    <Text className="text-center">
+      Deseja realmente desvincular{" "}
+      <Text className="text-app-blue font-semibold">{lastSelected}</Text> com{" "}
+      <Text className="text-app-blue font-semibold">Clareamento</Text>?
+    </Text>
+  );
+
+  function handlePress(name: string) {
+    setShowDrawer(true);
+    setLastSelected(name)
+  }
+
   return (
     <View className='flex-1'>  
       <Header className='bg-app-blue' contentColor='white' />
@@ -29,13 +48,25 @@ export default function TreatmentPageAdmin() {
               data={bindedEmployees}
               renderItem={({ item, index }) => (
                 <View
-                  className={`py-5 px-8 rounded-xl`}
+                  className='py-5 px-8 rounded-xl flex-row justify-between'
                 >
                   <Text className="text-xl">{item.name}</Text>
+                  <TouchableOpacity onPress={() => handlePress(item.name)}>
+                    <Ionicons name='remove-circle-outline' size={28} color={'black'} />
+                  </TouchableOpacity>
                 </View>
               )}
         />
-
+        {showDrawer && 
+          <BottomDrawer
+            content={content}
+            title='Desvincular funcionário'
+            buttonTitle='Desvincular agora'
+            handlePress={() => {}}
+            showDrawer={showDrawer}
+            setShowDrawer={setShowDrawer}
+          />
+        }
         <Button title='Vincular Odontologo' onPress={() => {navigation.navigate("BindProfessionalAdmin")}} className='mb-14' />
       </View>
     </View>

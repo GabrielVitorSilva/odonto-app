@@ -99,8 +99,14 @@ export default function SelectDateHourAdmin() {
         </ScrollView>
       </View>
 
-      <Button className="mt-30" title="Agendar Consulta" onPress={() => {setShowDrawer(true)}} />
-        <BottomDrawer
+      <Button
+        className="mt-30"
+        title="Agendar Consulta"
+        onPress={() => {
+          setShowDrawer(true);
+        }}
+      />
+      <BottomDrawer
         title="Agendar consulta"
         content={
           <Text className="text-center mb-6">

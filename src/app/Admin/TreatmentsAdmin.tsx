@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { FlatList, View } from 'react-native';
-import Header from '@/components/Header';
-import Card from '@/components/Card';
-import { useNavigation } from '@react-navigation/native';
+import * as React from "react";
+import { FlatList, View } from "react-native";
+import Header from "@/components/Header";
+import Card from "@/components/Card";
+import { useNavigation } from "@react-navigation/native";
 
 export default function TreatmentsAdmin() {
   const navigation = useNavigation();
@@ -37,15 +37,24 @@ export default function TreatmentsAdmin() {
       color: "bg-blue-100",
     },
   ];
-  
+
   return (
-  <View className="flex-1 bg-gray-50">
+    <View className="flex-1 bg-gray-50">
       <Header title="Tratamentos" />
 
       <FlatList
         data={treatments}
         renderItem={({ item }) => (
-          <Card name={item.title} upperText={item.description} handlePress={() => navigation.navigate("TreatmentPageAdmin")} />
+          <Card
+            name={item.title}
+            upperText={item.description}
+            handlePress={() =>
+              navigation.navigate("TreatmentPageAdmin", {
+                name: item.title,
+                description: item.description,
+              })
+            }
+          />
         )}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
@@ -53,4 +62,4 @@ export default function TreatmentsAdmin() {
       />
     </View>
   );
-};
+}

@@ -22,7 +22,10 @@ export type RootStackParamList = {
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;
   TreatmentsAdmin: undefined;
-  TreatmentPageAdmin: undefined;
+  TreatmentPageAdmin: {
+    name: string;
+    description: string;
+  };
   HomeProf: undefined;
   ConsultationsPageProf: undefined;
   SelectClientAdmin: undefined;

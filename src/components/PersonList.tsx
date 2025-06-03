@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 export type Person = {
@@ -7,21 +7,39 @@ export type Person = {
 
 type PersonListProps = {
   list: Person[];
+  multiselection?: boolean;
+  removableElements?: boolean;
+  selected: String[];
+  setSelected: React.Dispatch<React.SetStateAction<String[]>>;
 };
 
-export function PersonList({ list }: PersonListProps) {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+export function PersonList({
+  list,
+  multiselection = false,
+  removableElements = false,
+  selected,
+  setSelected,
+}: PersonListProps) {
+  function handlePress(name: string) {
+    selected.indexOf(name) != -1
+      ? setSelected((prevSelected) =>
+          prevSelected.filter((elem) => elem != name)
+        )
+      : selected.length > 0 && multiselection
+      ? setSelected((prevSelected) => [...prevSelected, name])
+      : setSelected([name]);
+  }
 
   return (
     <FlatList
       data={list}
-      renderItem={({ item, index }) => (
+      renderItem={({ item }) => (
         <TouchableOpacity
           className={`py-5 px-8 rounded-xl ${
-            index == selectedIndex ? "bg-app-light-blue" : ""
+            selected.indexOf(item.name) != -1 ? "bg-app-light-blue" : ""
           }`}
           onPress={() => {
-            setSelectedIndex(index);
+            handlePress(item.name);
           }}
         >
           <Text className="text-xl">{item.name}</Text>

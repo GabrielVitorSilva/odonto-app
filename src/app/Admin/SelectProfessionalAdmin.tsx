@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { PersonList } from "@/components/PersonList";
@@ -5,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
 
 export default function SelectProfessionalAdmin() {
+  const [selected, setSelected] = useState<String[]>([]);
   const navigation = useNavigation();
 
   const list = [
@@ -27,7 +29,11 @@ export default function SelectProfessionalAdmin() {
         </Text>
 
         <View className="flex-1">
-          <PersonList list={list} />
+          <PersonList
+            list={list}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </View>
       </View>
       <Button

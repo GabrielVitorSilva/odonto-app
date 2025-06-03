@@ -7,6 +7,7 @@ import BottomDrawer from "@/components/BottomDrawer";
 
 export default function BindProfessionalAdmin() {
   const [showDrawer, setShowDrawer] = useState(false);
+  const [selected, setSelected] = useState<String[]>([]);
 
   const list = [
     { name: "Alberes" },
@@ -23,8 +24,8 @@ export default function BindProfessionalAdmin() {
   const content = (
     <Text className="text-center">
       Deseja realmente vincular{" "}
-      <Text className="text-app-blue font-semibold">estes odontólogos</Text> com o{" "}
-      <Text className="text-app-blue font-semibold">tratamento</Text>?
+      <Text className="text-app-blue font-semibold">estes odontólogos</Text> com
+      o <Text className="text-app-blue font-semibold">tratamento</Text>?
     </Text>
   );
 
@@ -35,12 +36,16 @@ export default function BindProfessionalAdmin() {
         <Text className="text-center text-3xl font-semibold">Odontólogos</Text>
 
         <View className="flex-1">
-          <PersonList list={list} />
+          <PersonList
+            list={list}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </View>
       </View>
 
       <Button
-        className="mb-5"
+        className="mb-16"
         title="Vincular Tratamento"
         onPress={() => setShowDrawer(true)}
       />

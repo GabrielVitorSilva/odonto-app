@@ -62,7 +62,13 @@ export default function TreatmentsAdmin() {
         className="w-full px-5 mt-8 mx-auto"
       />
 
-      <Button className="mb-16" title="Cadastrar Tratamento" onPress={() => navigation.navigate("RegisterNewTreatment")} />
+      <Button
+        className="mb-16"
+        title="Cadastrar Tratamento"
+        onPress={() =>
+          navigation.navigate("RegisterNewTreatment", { professionals: [] })
+        }
+      />
     </View>
   );
 }

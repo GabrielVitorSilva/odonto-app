@@ -23,8 +23,8 @@ export default function BindProfessionalAdmin() {
   const content = (
     <Text className="text-center">
       Deseja realmente vincular{" "}
-      <Text className="text-app-blue font-semibold">Alberes</Text> com{" "}
-      <Text className="text-app-blue font-semibold">Clareamento</Text>?
+      <Text className="text-app-blue font-semibold">estes odontólogos</Text> com o{" "}
+      <Text className="text-app-blue font-semibold">tratamento</Text>?
     </Text>
   );
 

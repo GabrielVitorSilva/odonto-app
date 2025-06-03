@@ -4,10 +4,14 @@ import Header from "@/components/Header";
 import { PersonList } from "@/components/PersonList";
 import { View, Text } from "react-native";
 import BottomDrawer from "@/components/BottomDrawer";
+import { useNavigation } from "@react-navigation/native";
 
 export default function BindProfessionalAdmin() {
   const [showDrawer, setShowDrawer] = useState(false);
   const [selected, setSelected] = useState<String[]>([]);
+  const [noSelected, setNoSelected] = useState(false);
+
+  const navigation = useNavigation();
 
   const list = [
     { name: "Alberes" },
@@ -17,8 +21,18 @@ export default function BindProfessionalAdmin() {
     { name: "Camila Duarte" },
   ];
 
-  const handleVincular = () => {
-    setShowDrawer(false);
+  const handleBind = () => {
+    if (selected.length > 0) {
+      setShowDrawer(true);
+    } else {
+      setNoSelected(true);
+    }
+  };
+
+  const handleConfirmation = () => {
+    navigation.navigate("RegisterNewTreatment", {
+      professionals: [...selected],
+    });
   };
 
   const content = (
@@ -38,23 +52,27 @@ export default function BindProfessionalAdmin() {
         <View className="flex-1">
           <PersonList
             list={list}
+            multiselection
             selected={selected}
             setSelected={setSelected}
           />
         </View>
       </View>
 
-      <Button
-        className="mb-16"
-        title="Vincular Tratamento"
-        onPress={() => setShowDrawer(true)}
-      />
+      <View className="mb-16">
+        <Button title="Vincular Tratamento" onPress={handleBind} />
+        {noSelected && (
+          <Text className="text-lg text-app-red text-center mt-3">
+            Selecione pelo menos um Odontólogo
+          </Text>
+        )}
+      </View>
 
       <BottomDrawer
         title="Vincular Funcionário?"
         content={content}
         buttonTitle="Vincular agora"
-        handlePress={handleVincular}
+        handlePress={handleConfirmation}
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
       />

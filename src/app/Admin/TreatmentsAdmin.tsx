@@ -2,6 +2,7 @@ import * as React from "react";
 import { FlatList, View } from "react-native";
 import Header from "@/components/Header";
 import Card from "@/components/Card";
+import { Button } from "@/components/Button";
 import { useNavigation } from "@react-navigation/native";
 
 export default function TreatmentsAdmin() {
@@ -60,6 +61,8 @@ export default function TreatmentsAdmin() {
         showsVerticalScrollIndicator={false}
         className="w-full px-5 mt-8 mx-auto"
       />
+
+      <Button className="mb-16" title="Cadastrar Tratamento" onPress={() => navigation.navigate("RegisterNewTreatment")} />
     </View>
   );
 }

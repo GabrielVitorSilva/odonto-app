@@ -17,6 +17,7 @@ import SelectProfessionalAdmin from "@/app/Admin/SelectProfessionalAdmin";
 import BindProfessionalAdmin from "@/app/Admin/BindProfessionalAdmin";
 import SelectDateHourAdmin from "@/app/Admin/SelectDateHourAdmin";
 import RegisterNewUserAdmin from "@/app/Admin/RegisterNewUserAdmin";
+import RegisterNewTreatment from "@/app/Admin/RegisterNewTreatment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { ActivityIndicator, View } from "react-native";
@@ -71,6 +72,7 @@ export function StackRoutes() {
           <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin} />
           <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin} />
           <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />
+          <Stack.Screen name="RegisterNewTreatment" component={RegisterNewTreatment} />
           <Stack.Screen name="TreatmentsAdmin" component={TreatmentsAdmin} />
           <Stack.Screen name="TreatmentPageAdmin" component={TreatmentPageAdmin} />
           <Stack.Screen name="ViewPatientsProfile" component={ViewPatientsProfile} />

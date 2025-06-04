@@ -15,7 +15,7 @@ import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 
 type RouteParams = {
-  professionals: String[];
+  professionals: string[];
 };
 
 export default function RegisterNewTreatment() {

@@ -20,7 +20,7 @@ export type RootStackParamList = {
   HomeAdmin: undefined;
   RegisterAnotherUser: undefined;
   RegisterNewTreatment: {
-    professionals: String[];
+    professionals: string[];
   };
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;
@@ -28,6 +28,7 @@ export type RootStackParamList = {
   TreatmentPageAdmin: {
     name: string;
     description: string;
+    professionals: string[];
   };
   HomeProf: undefined;
   ConsultationsPageProf: undefined;

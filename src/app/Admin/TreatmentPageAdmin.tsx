@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "@/components/Button";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
@@ -43,10 +44,7 @@ export default function TreatmentPageAdmin() {
 
   function ProfessionalsEmpty() {
     return (
-      <View className="gap-4 mt-10 items-center">
-        <Ionicons className="" name="medical" size={64} color={"#cecece"} />
-        <Text className="text-gray-400 text-lg">Não há Funcionários vinculados</Text>
-      </View>
+      <ListEmptyComponent iconName="medical" text="Não há funcionários vinculados ainda" />
     )
   }
 

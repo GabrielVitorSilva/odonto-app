@@ -2,13 +2,21 @@ import * as React from "react";
 import { FlatList, View } from "react-native";
 import Header from "@/components/Header";
 import Card from "@/components/Card";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { Button } from "@/components/Button";
 import { useNavigation } from "@react-navigation/native";
 
 export default function TreatmentsAdmin() {
   const navigation = useNavigation();
 
-  const treatments = [
+  type Treatment = {
+    id: number;
+    title: string;
+    description: string;
+    color: string;
+  }
+
+  const treatments:Treatment[] = [
     {
       id: 1,
       title: "Clareamento",
@@ -39,12 +47,17 @@ export default function TreatmentsAdmin() {
     },
   ];
 
+  function TreatmentsEmpty(){
+    return <ListEmptyComponent iconName="medkit" text="Não há tratamentos cadastrados ainda" />
+  }
+
   return (
     <View className="flex-1 bg-gray-50">
       <Header title="Tratamentos" handleGoBack={() => navigation.navigate("HomeAdmin")} />
 
       <FlatList
         data={treatments}
+        ListEmptyComponent={TreatmentsEmpty}
         renderItem={({ item }) => (
           <Card
             name={item.title}

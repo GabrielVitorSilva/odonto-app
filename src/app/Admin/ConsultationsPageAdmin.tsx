@@ -3,11 +3,22 @@ import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useNavigation } from "@react-navigation/native";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
 
 export default function ConsultationsPageAdmin() {
   const navigation = useNavigation();
 
-  const consultations = [
+  type Consultation = {
+    id: number;
+    name: string;
+    patient: string;
+    professional: string;
+    status: string;
+    date: string;
+    hour: string;
+  }
+
+  const consultations: Consultation[] = [
     {
       id: 1,
       name: "Clareamento",
@@ -46,10 +57,14 @@ export default function ConsultationsPageAdmin() {
     },
   ];
 
+  function ConsultationsEmpty(){
+    return (<ListEmptyComponent iconName="clipboard" text="Não há consultas ainda" />);
+  }
+
   return (
-    <View>
+    <View className="flex-1">
       <Header className="bg-app-blue" contentColor="white" />
-      <View className="px-4">
+      <View className="px-4 flex-1">
         <View className="border rounded-3xl border-gray-300 py-4 my-8 ">
           <Text className="text-app-blue font-semibold text-center">
             Atendimentos
@@ -57,6 +72,7 @@ export default function ConsultationsPageAdmin() {
         </View>
         <FlatList
           data={consultations}
+          ListEmptyComponent={ConsultationsEmpty}
           renderItem={({ item }) => (
             <Card
               name={item.name}
@@ -77,7 +93,7 @@ export default function ConsultationsPageAdmin() {
               }
             />
           )}
-          className="w-full px-5 mx-auto"
+          className="w-full px-5 mx-auto flex-1"
         />
       </View>
 
@@ -86,6 +102,7 @@ export default function ConsultationsPageAdmin() {
         onPress={() => {
           navigation.navigate("SelectClientAdmin");
         }}
+        className="mb-16"
       />
     </View>
   );

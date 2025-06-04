@@ -5,10 +5,30 @@ import { PersonList } from "@/components/PersonList";
 import { View, Text } from "react-native";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import { RootStackParamList } from "@/@types/navigation";
+
+type RouteParams =
+  | {
+      alreadyBound: string[];
+      returnTo: {
+        screen: 'RegisterNewTreatment';
+      };
+    }
+  | {
+      alreadyBound: string[];
+      returnTo: {
+        screen: 'TreatmentPageAdmin';
+        params: RootStackParamList['TreatmentPageAdmin'];
+      };
+    };
 
 export default function BindProfessionalAdmin() {
+  const route = useRoute();
+  const { alreadyBound, returnTo } = route.params as RouteParams;
+
   const [showDrawer, setShowDrawer] = useState(false);
-  const [selected, setSelected] = useState<String[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
   const [noSelected, setNoSelected] = useState(false);
 
   const navigation = useNavigation();
@@ -20,6 +40,7 @@ export default function BindProfessionalAdmin() {
     { name: "Thiago Monteiro" },
     { name: "Camila Duarte" },
   ];
+  const updatedList = list.filter(elem => alreadyBound.indexOf(elem.name) == -1)
 
   const handleBind = () => {
     if (selected.length > 0) {
@@ -30,10 +51,18 @@ export default function BindProfessionalAdmin() {
   };
 
   const handleConfirmation = () => {
+  if (returnTo.screen === "RegisterNewTreatment") {
     navigation.navigate("RegisterNewTreatment", {
-      professionals: [...selected],
+      professionals: [...alreadyBound, ...selected],
     });
-  };
+  } else if (returnTo.screen === "TreatmentPageAdmin") {
+    navigation.navigate("TreatmentPageAdmin", {
+      ...returnTo.params,
+      professionals: [...alreadyBound, ...selected],
+    });
+  }
+};
+
 
   const content = (
     <Text className="text-center">
@@ -51,7 +80,7 @@ export default function BindProfessionalAdmin() {
 
         <View className="flex-1">
           <PersonList
-            list={list}
+            list={updatedList}
             multiselection
             selected={selected}
             setSelected={setSelected}

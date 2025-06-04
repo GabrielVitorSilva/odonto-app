@@ -35,7 +35,13 @@ export type RootStackParamList = {
   SelectClientAdmin: undefined;
   SelectProfessionalAdmin: undefined;
   SelectDateHourAdmin: undefined;
-  BindProfessionalAdmin: undefined;
+  BindProfessionalAdmin: {
+    alreadyBound: string[];
+    returnTo: {
+        screen: keyof RootStackParamList;
+        params?: RootStackParamList[keyof RootStackParamList];
+    }
+  };
 };
 
 declare global {

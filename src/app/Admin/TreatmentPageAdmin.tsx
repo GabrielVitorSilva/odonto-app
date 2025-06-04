@@ -10,18 +10,18 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 type RouteParams = {
   name: string;
   description: string;
+  professionals: string[];
 };
 
 export default function TreatmentPageAdmin() {
+  const route = useRoute();
+  const { name, description, professionals } = route.params as RouteParams;
+  
   const [showDrawer, setShowDrawer] = useState(false);
   const [lastSelected, setLastSelected] = useState("");
-
-  const route = useRoute();
-  const { name, description } = route.params as RouteParams;
+  const [boundProfessionals, setBoundProfessionals] = useState(professionals);
 
   const navigation = useNavigation();
-
-  const bindedEmployees = [{ name: "Maria Santos" }, { name: "Flávia Souza" }];
 
   const content = (
     <Text className="text-center">
@@ -47,11 +47,11 @@ export default function TreatmentPageAdmin() {
           Funcionários Vinculados
         </Text>
         <FlatList
-          data={bindedEmployees}
+          data={boundProfessionals}
           renderItem={({ item, index }) => (
             <View className="py-5 px-8 rounded-xl flex-row justify-between">
-              <Text className="text-xl">{item.name}</Text>
-              <TouchableOpacity onPress={() => handlePress(item.name)}>
+              <Text className="text-xl">{item}</Text>
+              <TouchableOpacity onPress={() => handlePress(item)}>
                 <Ionicons
                   name="remove-circle-outline"
                   size={28}
@@ -74,7 +74,7 @@ export default function TreatmentPageAdmin() {
         <Button
           title="Vincular Odontologo"
           onPress={() => {
-            navigation.navigate("BindProfessionalAdmin");
+            navigation.navigate("BindProfessionalAdmin", {alreadyBound: boundProfessionals, returnTo: {screen: "TreatmentPageAdmin", params: {name, description, professionals}}});
           }}
           className="mb-14"
         />

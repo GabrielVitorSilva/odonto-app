@@ -28,7 +28,7 @@ export default function RegisterNewTreatment() {
 
   return (
     <View className="flex-1 bg-white">
-      <Header />
+      <Header handleGoBack={() => navigation.navigate("TreatmentsAdmin")} />
 
       <View className="px-4 flex-1">
         <Text className="text-3xl font-semibold mb-14 text-center">
@@ -47,7 +47,7 @@ export default function RegisterNewTreatment() {
           multiline
         />
 
-        {professionals.length > 0 && (
+        {boundProfessionals.length > 0 && (
           <View className="">
             <Text className="text-xl font-semibold">
               Profissionais Vinculados
@@ -57,7 +57,7 @@ export default function RegisterNewTreatment() {
               renderItem={({ item, index }) => (
                 <View className="py-5 px-8 rounded-xl flex-row justify-between">
                   <Text className="text-xl">{item}</Text>
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity onPress={() => {setBoundProfessionals(prevState => prevState.filter(name => name != item))}}>
                     <Ionicons
                       name="remove-circle-outline"
                       size={28}
@@ -72,7 +72,7 @@ export default function RegisterNewTreatment() {
 
         <TouchableOpacity
           className="flex-row items-center"
-          onPress={() => navigation.navigate("BindProfessionalAdmin")}
+          onPress={() => navigation.navigate("BindProfessionalAdmin", {alreadyBound: boundProfessionals, returnTo: {screen: "RegisterNewTreatment"}})}
         >
           <Ionicons name="add" color={"#38ABE2"} size={32} />
           <Text className="text-app-blue font-semibold text-lg ml-2">

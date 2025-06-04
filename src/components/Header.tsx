@@ -8,6 +8,7 @@ type HeaderProps = {
   contentColor?: string;
   className?: string;
   hasExit?: boolean;
+  handleGoBack?: (() => void) | null;
 };
 
 export default function Header({
@@ -15,10 +16,12 @@ export default function Header({
   contentColor = "black",
   className,
   hasExit = false,
+  handleGoBack = null,
 }: HeaderProps) {
+  const { signOut } = useAuth();
 
-  const { signOut } = useAuth(); 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+
 
   const font = `text-${contentColor}`;
   return (
@@ -28,7 +31,7 @@ export default function Header({
       }`}
     >
       {!hasExit ? (
-        <TouchableOpacity className="w-13" onPress={() => {navigation.goBack()}}>
+        <TouchableOpacity className="w-13" onPress={handleGoBack ? handleGoBack : () => {navigation.goBack()}}>
           <Ionicons color={contentColor} size={32} name="arrow-back" />
         </TouchableOpacity>
       ) : (

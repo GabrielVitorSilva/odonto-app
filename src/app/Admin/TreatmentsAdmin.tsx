@@ -41,7 +41,7 @@ export default function TreatmentsAdmin() {
 
   return (
     <View className="flex-1 bg-gray-50">
-      <Header title="Tratamentos" />
+      <Header title="Tratamentos" handleGoBack={() => navigation.navigate("HomeAdmin")} />
 
       <FlatList
         data={treatments}
@@ -53,6 +53,7 @@ export default function TreatmentsAdmin() {
               navigation.navigate("TreatmentPageAdmin", {
                 name: item.title,
                 description: item.description,
+                professionals: [],
               })
             }
           />

@@ -52,12 +52,12 @@ export default function ConsultationPageAdmin() {
         <View>
           {status === "Confirmado" && (
             <Button
-              className="mt-4"
+              className="mt-4 mb-16"
               title="Marcar como finalizada"
               onPress={() => {}}
             />
           )}
-          {status !== "Finalizado" && status !== "Cancelado" && (
+          {status === "Pendente" && (
             <Button
               title="Cancelar Consulta"
               onPress={() => {}}

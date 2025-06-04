@@ -8,15 +8,13 @@ export type Person = {
 type PersonListProps = {
   list: Person[];
   multiselection?: boolean;
-  removableElements?: boolean;
-  selected: String[];
-  setSelected: React.Dispatch<React.SetStateAction<String[]>>;
+  selected: string[];
+  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export function PersonList({
   list,
   multiselection = false,
-  removableElements = false,
   selected,
   setSelected,
 }: PersonListProps) {

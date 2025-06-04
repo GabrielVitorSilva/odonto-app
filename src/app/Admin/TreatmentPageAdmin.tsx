@@ -41,6 +41,15 @@ export default function TreatmentPageAdmin() {
     setShowDrawer(false);
   }
 
+  function ProfessionalsEmpty() {
+    return (
+      <View className="gap-4 mt-10 items-center">
+        <Ionicons className="" name="medical" size={64} color={"#cecece"} />
+        <Text className="text-gray-400 text-lg">Não há Funcionários vinculados</Text>
+      </View>
+    )
+  }
+
   return (
     <View className="flex-1">
       <Header className="bg-app-blue" contentColor="white" handleGoBack={() => navigation.navigate("TreatmentsAdmin")} />
@@ -53,6 +62,7 @@ export default function TreatmentPageAdmin() {
         </Text>
         <FlatList
           data={boundProfessionals}
+          ListEmptyComponent={ProfessionalsEmpty}
           renderItem={({ item, index }) => (
             <View className="py-5 px-8 rounded-xl flex-row justify-between">
               <Text className="text-xl">{item}</Text>

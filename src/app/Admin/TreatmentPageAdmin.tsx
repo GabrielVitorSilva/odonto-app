@@ -36,9 +36,14 @@ export default function TreatmentPageAdmin() {
     setLastSelected(name);
   }
 
+  function handleDebindConfirmarion(){
+    setBoundProfessionals(prevState => prevState.filter(name => name != lastSelected));
+    setShowDrawer(false);
+  }
+
   return (
     <View className="flex-1">
-      <Header className="bg-app-blue" contentColor="white" />
+      <Header className="bg-app-blue" contentColor="white" handleGoBack={() => navigation.navigate("TreatmentsAdmin")} />
       <View className="flex-1 px-4 py-4">
         <Text className="text-3xl font-semibold mb-4">{name}</Text>
         <Text>{description}</Text>
@@ -66,7 +71,7 @@ export default function TreatmentPageAdmin() {
             content={content}
             title="Desvincular funcionário"
             buttonTitle="Desvincular agora"
-            handlePress={() => {}}
+            handlePress={handleDebindConfirmarion}
             showDrawer={showDrawer}
             setShowDrawer={setShowDrawer}
           />

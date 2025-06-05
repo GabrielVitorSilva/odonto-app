@@ -28,6 +28,7 @@ import TreatmentPageAdmin from "@/app/Admin/TreatmentPageAdmin";
 import ViewPatientsProfile from "@/app/Admin/ViewPatientsProfile";
 import ProfessionalsPageAdmin from "@/app/Admin/ProfessionalsPageAdmin";
 import ViewProfessionalsProfile from "@/app/Admin/ViewProfessionalsProfile";
+import SelectDatePatient from "@/app/Patients/SelectDatePatient";
 
 const Stack = createNativeStackNavigator();
 
@@ -60,6 +61,7 @@ export function StackRoutes() {
         </>
       ) : profile?.user.role === "CLIENT" ? (
         <>
+          <Stack.Screen name="SelectDatePatient" component={SelectDatePatient} />
           <Stack.Screen name="HomeClient" component={HomeClient} />
           <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
           <Stack.Screen name="Treatments" component={TreatmentsScreen} />
@@ -85,6 +87,7 @@ export function StackRoutes() {
         </>
       ) : profile?.user.role === "PROFESSIONAL" ? (
         <>
+
           <Stack.Screen name="HomeProf" component={HomeProf} />
           <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf} />
           <Stack.Screen name="ConsultationPage" component={ConsultationPage} />

@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { PersonList } from "@/components/PersonList";
 import { View, Text } from "react-native";
 import BottomDrawer from "@/components/BottomDrawer";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "@/@types/navigation";
 import { treatmentsService } from "@/services/treatments";
@@ -29,9 +29,11 @@ export default function BindProfessionalAdmin() {
     setProfessionals(data);
   }
 
-  useEffect(() => {
-    fetchProfessionals();
-  },[])
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfessionals();
+    }, [])
+  );
 
   const handleBind = () => {
     if (selectedIds.length > 0) {
@@ -44,7 +46,7 @@ export default function BindProfessionalAdmin() {
   const handleConfirmation = async () => {
     try {      
       await treatmentsService.addProfessionalFromTreatment(treatment_id, selectedIds);
-      navigation.goBack();
+      navigation.goBack(); 
     } catch (error) {
       console.error('Erro ao vincular profissionais:', error);
     }

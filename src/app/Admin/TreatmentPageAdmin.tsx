@@ -42,6 +42,16 @@ export default function TreatmentPageAdmin() {
     }
   }
 
+  useEffect(() => {
+    loadProfessionals();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadProfessionals();
+    }, [])
+  );
+
   async function handleRemoveProfessional(userId: string, treatmentId: string) { 
     try {
       const { user } = await treatmentsService.getUser(userId);
@@ -51,12 +61,6 @@ export default function TreatmentPageAdmin() {
       console.error('Erro ao remover profissional:', error);
     }
   }
-
-  useFocusEffect(
-    useCallback(() => {
-      loadProfessionals();
-    }, [])
-  );
 
   const content = (
     <Text className="text-center">

@@ -78,9 +78,11 @@ export const treatmentsService = {
   },
   async addProfessionalFromTreatment(treatmentId: string, userIds: string[]): Promise<void> {
     try {
-      const promises = userIds.map(userId => 
-        api.post<void>(`/treatments/${treatmentId}/professionals/${userId}`)
-      );
+      const promises = userIds.map(async (userId) => {
+        const userData = await this.getUser(userId);
+        const professionalId = userData.user.Professional.id;
+        return api.post<void>(`/treatments/${treatmentId}/professionals/${professionalId}`);
+      });
       
       await Promise.all(promises);
       return;
@@ -91,7 +93,7 @@ export const treatmentsService = {
   },
   async removeProfessionalFromTreatment(userId: string, treatmentId: string): Promise<void> {
     try {
-      const response = await api.delete<void>(`/treatments/${treatmentId}/professionals/${userId}`);
+      await api.delete<void>(`/treatments/${treatmentId}/professionals/${userId}`);
 
       return;
     } catch (error: any) {

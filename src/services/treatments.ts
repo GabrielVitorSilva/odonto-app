@@ -70,6 +70,19 @@ export const treatmentsService = {
       throw error;
     }
   },
+  async addProfessionalFromTreatment(treatmentId: string, userIds: string[]): Promise<void> {
+    try {
+      const promises = userIds.map(userId => 
+        api.post<void>(`/treatments/${treatmentId}/professionals/${userId}`)
+      );
+      
+      await Promise.all(promises);
+      return;
+    } catch (error: any) {
+      console.error('Erro ao vincular profissionais:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
   async removeProfessionalFromTreatment(userId: string, treatmentId: string): Promise<void> {
     try {
       const response = await api.delete<void>(`/treatments/${treatmentId}/professionals/${userId}`);

@@ -37,11 +37,7 @@ export type RootStackParamList = {
   SelectProfessionalAdmin: undefined;
   SelectDateHourAdmin: undefined;
   BindProfessionalAdmin: {
-    alreadyBound: string[];
-    returnTo: {
-        screen: keyof RootStackParamList;
-        params?: RootStackParamList[keyof RootStackParamList];
-    }
+    treatment_id: string;
   };
 };
 

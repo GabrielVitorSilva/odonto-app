@@ -27,7 +27,7 @@ export default function TreatmentPageAdmin() {
   const [showDrawer, setShowDrawer] = useState(false);
   const [lastSelected, setLastSelected] = useState<Professional | null>(null);
   const [boundProfessionals, setBoundProfessionals] = useState<Professional[]>([]);
-
+  const [userNameSelected, setUserNameSelected] = useState('')
   const navigation = useNavigation();
 
   async function loadProfessionals() {
@@ -121,11 +121,7 @@ export default function TreatmentPageAdmin() {
           title="Vincular Odontologo"
           onPress={() => {
             navigation.navigate("BindProfessionalAdmin", {
-              alreadyBound: boundProfessionals.map(p => p.id),
-              returnTo: {
-                screen: "TreatmentPageAdmin",
-                params: {name, description, professionals}
-              }
+              treatment_id,
             });
           }}
           className="mb-14"

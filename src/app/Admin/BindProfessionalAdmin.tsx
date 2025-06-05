@@ -10,27 +10,16 @@ import { RootStackParamList } from "@/@types/navigation";
 import { treatmentsService } from "@/services/treatments";
 import type { IUser, ProfessionalUser } from "@/services/types/treatments";
 
-type RouteParams =
-  | {
-      alreadyBound: string[];
-      returnTo: {
-        screen: 'RegisterNewTreatment';
-      };
-    }
-  | {
-      alreadyBound: string[];
-      returnTo: {
-        screen: 'TreatmentPageAdmin';
-        params: RootStackParamList['TreatmentPageAdmin'];
-      };
-    };
+type RouteParams = {
+  treatment_id: string;
+}
 
 export default function BindProfessionalAdmin() {
   const route = useRoute();
-  const { alreadyBound, returnTo } = route.params as RouteParams;
-
+  const { treatment_id } = route.params as RouteParams;
   const [showDrawer, setShowDrawer] = useState(false);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selectedNames, setSelectedNames] = useState<string[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [noSelected, setNoSelected] = useState(false);
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
   const navigation = useNavigation();
@@ -45,26 +34,24 @@ export default function BindProfessionalAdmin() {
   },[])
 
   const handleBind = () => {
-    if (selected.length > 0) {
+    if (selectedIds.length > 0) {
       setShowDrawer(true);
     } else {
       setNoSelected(true);
     }
   };
 
-  const handleConfirmation = () => {
-  if (returnTo.screen === "RegisterNewTreatment") {
-    navigation.navigate("RegisterNewTreatment", {
-      professionals: [...alreadyBound, ...selected],
-    });
-  } else if (returnTo.screen === "TreatmentPageAdmin") {
-    navigation.navigate("TreatmentPageAdmin", {
-      ...returnTo.params,
-      professionals: [...alreadyBound, ...selected],
-    });
-  }
-};
-
+  const handleConfirmation = async () => {
+    try {
+      console.log('Selected IDs:', selectedIds);
+      console.log('treatment_id:', treatment_id);
+      
+      await treatmentsService.addProfessionalFromTreatment(treatment_id, selectedIds);
+      navigation.goBack();
+    } catch (error) {
+      console.error('Erro ao vincular profissionais:', error);
+    }
+  };
 
   const content = (
     <Text className="text-center">
@@ -73,6 +60,15 @@ export default function BindProfessionalAdmin() {
       o <Text className="text-app-blue font-semibold">tratamento</Text>?
     </Text>
   );
+
+  const handleSelection = (value: string[] | ((prevState: string[]) => string[])) => {
+    const names = typeof value === 'function' ? value(selectedNames) : value;
+    setSelectedNames(names);
+    const ids = professionals
+      .filter(prof => names.includes(prof.name))
+      .map(prof => prof.id);
+    setSelectedIds(ids);
+  };
 
   return (
     <View className="flex-1">
@@ -84,8 +80,8 @@ export default function BindProfessionalAdmin() {
           <PersonList
             list={professionals}
             multiselection
-            selected={selected}
-            setSelected={setSelected}
+            selected={selectedNames}
+            setSelected={handleSelection}
           />
         </View>
       </View>

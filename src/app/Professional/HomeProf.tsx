@@ -4,8 +4,8 @@ import Header from "@/components/Header";
 
 export default function HomeProf() {
   const menuItems: menuItem[] = [
-    { title: "Consultas", icon: "folder" },
-    { title: "Tratamentos", icon: "medkit" },
+    { title: "Consultas", icon: "folder", handlePress: () => {}},
+    { title: "Tratamentos", icon: "medkit", handlePress: () => {} },
   ];
 
   return (

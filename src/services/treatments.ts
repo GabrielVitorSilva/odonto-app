@@ -1,4 +1,5 @@
 import api from './api/api';
+import type { IUser } from './types/treatments';
 
 export interface Professional {
   id: string;
@@ -26,7 +27,6 @@ export const treatmentsService = {
   async listAllTreatments(): Promise<TreatmentsResponse>{
     try {
       const response = await api.get<TreatmentsResponse>('/treatments');
-      console.log('Resposta da API:', response.data);
       
       if (!response.data || !response.data.treatments) {
         throw new Error('Dados de tratamentos inválidos ou vazios');
@@ -38,5 +38,21 @@ export const treatmentsService = {
       throw error;
     }
   },
+  async listProfessionalAvailablesToTreatment(userIds: string[]): Promise<IUser[]>{
+    try {
+      if (!userIds || !Array.isArray(userIds)) {
+        return [];
+      }
 
+      const data = await Promise.all(userIds.map(async (id) => {
+        const response = await api.get<IUser>(`/users/${id}`);
+        return response.data;
+      }));
+      
+      return data;
+    } catch (error:any) {
+      console.error('Erro ao buscar usuários:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
 }; 

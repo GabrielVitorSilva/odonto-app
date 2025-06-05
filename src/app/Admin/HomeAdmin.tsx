@@ -27,7 +27,7 @@ export default function HomeAdmin() {
     {
       title: "Odontólogos",
       icon: "medical",
-      handlePress: () => {},
+      handlePress: () => navigation.navigate("ProfessionalsPageAdmin"),
     },
     {
       title: "Clientes",

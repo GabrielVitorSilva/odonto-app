@@ -26,6 +26,8 @@ import { colors } from "@/theme/colors";
 import RegisterAnotherUser from "@/app/Admin/RegisterAnotherUser";
 import TreatmentPageAdmin from "@/app/Admin/TreatmentPageAdmin";
 import ViewPatientsProfile from "@/app/Admin/ViewPatientsProfile";
+import ProfessionalsPageAdmin from "@/app/Admin/ProfessionalsPageAdmin";
+import ViewProfessionalsProfile from "@/app/Admin/ViewProfessionalsProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -75,9 +77,11 @@ export function StackRoutes() {
           <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />
           <Stack.Screen name="RegisterNewTreatment" component={RegisterNewTreatment} />
           <Stack.Screen name="PatientsPageAdmin" component={PatientsPageAdmin} />
+          <Stack.Screen name="ProfessionalsPageAdmin" component={ProfessionalsPageAdmin} />
           <Stack.Screen name="TreatmentsAdmin" component={TreatmentsAdmin} />
           <Stack.Screen name="TreatmentPageAdmin" component={TreatmentPageAdmin} />
           <Stack.Screen name="ViewPatientsProfile" component={ViewPatientsProfile} />
+          <Stack.Screen name="ViewProfessionalsProfile" component={ViewProfessionalsProfile} />
         </>
       ) : profile?.user.role === "PROFESSIONAL" ? (
         <>

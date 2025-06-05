@@ -24,8 +24,12 @@ export type RootStackParamList = {
   };
   PatientsPageAdmin: undefined;
   ViewPatientsProfile: {
-    name: string
+    name: string;
   };
+  ProfessionalsPageAdmin: undefined;
+  ViewProfessionalsProfile: {
+    name: string;
+  }
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;
   TreatmentsAdmin: undefined;

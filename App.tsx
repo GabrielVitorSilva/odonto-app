@@ -21,7 +21,7 @@ export default function App() {
   return (
     <AuthProvider>
       <ToastProvider>
-        <Routes />
+          <Routes />
       </ToastProvider>
     </AuthProvider>
   );

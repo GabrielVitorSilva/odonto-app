@@ -4,6 +4,7 @@ module.exports = {
     "./App.{js,jsx,ts,tsx}",
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
+  
   theme: {
     extend: {
       colors: {
@@ -20,6 +21,9 @@ module.exports = {
         'roboto': ['Roboto-Regular'],
         'roboto-medium': ['Roboto-Medium'],
         'roboto-bold': ['Roboto-Bold'],
+      },
+      padding: {
+        'vertical-10': '10%',
       },
     },
   },

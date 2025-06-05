@@ -42,10 +42,7 @@ export default function BindProfessionalAdmin() {
   };
 
   const handleConfirmation = async () => {
-    try {
-      console.log('Selected IDs:', selectedIds);
-      console.log('treatment_id:', treatment_id);
-      
+    try {      
       await treatmentsService.addProfessionalFromTreatment(treatment_id, selectedIds);
       navigation.goBack();
     } catch (error) {

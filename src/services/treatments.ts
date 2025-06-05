@@ -61,9 +61,6 @@ export const treatmentsService = {
   async listProfessionals(): Promise<ProfessionalUser[]> {
     try {
       const response = await api.get<ProfessionalsResponse>(`/professionals`);
-      console.log(response.data.professionals);
-      
-
       return response.data.professionals;
     } catch (error: any) {
       console.error('Erro ao buscar profissionais:', error?.response?.data || error.message);
@@ -86,7 +83,6 @@ export const treatmentsService = {
   async removeProfessionalFromTreatment(userId: string, treatmentId: string): Promise<void> {
     try {
       const response = await api.delete<void>(`/treatments/${treatmentId}/professionals/${userId}`);
-      console.log('treatments', response.data);
 
       return;
     } catch (error: any) {

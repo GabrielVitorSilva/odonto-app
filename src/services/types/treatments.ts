@@ -28,3 +28,19 @@ export interface ProfessionalsResponse {
   professionals: ProfessionalUser[];
   total: number;
 }
+
+export interface IGetUser {
+  user: {
+    id: string,
+    name: string,
+    email: string,
+    cpf: string,
+    phone: string,
+    role: string,
+    createdAt: string,
+    updatedAt: string,
+    Professional: {
+      id: string
+    }
+  }
+}

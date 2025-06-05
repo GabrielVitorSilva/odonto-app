@@ -1,5 +1,5 @@
 import api from './api/api';
-import type { IUser, ProfessionalsResponse, ProfessionalUser } from './types/treatments';
+import type { IGetUser, IUser, ProfessionalsResponse, ProfessionalUser } from './types/treatments';
 import { Profile } from './auth';
 
 export interface Professional {
@@ -62,6 +62,15 @@ export const treatmentsService = {
     try {
       const response = await api.get<ProfessionalsResponse>(`/professionals`);
       return response.data.professionals;
+    } catch (error: any) {
+      console.error('Erro ao buscar profissionais:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
+  async getUser(id:string): Promise<IGetUser> {
+    try {
+      const response = await api.get<IGetUser>(`/users/${id}`);
+      return response.data
     } catch (error: any) {
       console.error('Erro ao buscar profissionais:', error?.response?.data || error.message);
       throw error;

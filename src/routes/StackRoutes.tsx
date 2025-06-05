@@ -29,6 +29,7 @@ import ViewPatientsProfile from "@/app/Admin/ViewPatientsProfile";
 import ProfessionalsPageAdmin from "@/app/Admin/ProfessionalsPageAdmin";
 import ViewProfessionalsProfile from "@/app/Admin/ViewProfessionalsProfile";
 import SelectDatePatient from "@/app/Patients/SelectDatePatient";
+import HomeClientEnd from "@/app/Patients/HomeClientEnd";
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,7 @@ export function StackRoutes() {
         </>
       ) : profile?.user.role === "CLIENT" ? (
         <>
+          <Stack.Screen name="HomeClienteEnd" component={HomeClientEnd} />
           <Stack.Screen name="SelectDatePatient" component={SelectDatePatient} />
           <Stack.Screen name="HomeClient" component={HomeClient} />
           <Stack.Screen name="ConsultationPage" component={ConsultationPage} />

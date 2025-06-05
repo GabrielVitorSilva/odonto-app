@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { PersonList } from "@/components/PersonList";
@@ -7,6 +7,8 @@ import BottomDrawer from "@/components/BottomDrawer";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "@/@types/navigation";
+import { treatmentsService } from "@/services/treatments";
+import type { IUser, ProfessionalUser } from "@/services/types/treatments";
 
 type RouteParams =
   | {
@@ -30,17 +32,17 @@ export default function BindProfessionalAdmin() {
   const [showDrawer, setShowDrawer] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [noSelected, setNoSelected] = useState(false);
-
+  const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
   const navigation = useNavigation();
 
-  const list = [
-    { name: "Alberes" },
-    { name: "Maria Santos" },
-    { name: "Flávia Souza" },
-    { name: "Thiago Monteiro" },
-    { name: "Camila Duarte" },
-  ];
-  const updatedList = list.filter(elem => alreadyBound.indexOf(elem.name) == -1)
+  async function fetchProfessionals() {
+    const data = await treatmentsService.listProfessionals()
+    setProfessionals(data);
+  }
+
+  useEffect(() => {
+    fetchProfessionals();
+  },[])
 
   const handleBind = () => {
     if (selected.length > 0) {
@@ -80,7 +82,7 @@ export default function BindProfessionalAdmin() {
 
         <View className="flex-1">
           <PersonList
-            list={updatedList}
+            list={professionals}
             multiselection
             selected={selected}
             setSelected={setSelected}

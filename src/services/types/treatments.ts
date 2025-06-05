@@ -10,3 +10,21 @@ export interface IUser{
     role: Profile,
   }
 }
+
+export interface ProfessionalUser {
+  id: string;
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string | null;
+  role: Profile;
+  professionalId: string;
+  createdAt: string;
+  updatedAt: string;
+  password: string;
+}
+
+export interface ProfessionalsResponse {
+  professionals: ProfessionalUser[];
+  total: number;
+}

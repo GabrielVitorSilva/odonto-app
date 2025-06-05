@@ -32,7 +32,7 @@ export default function HomeAdmin() {
     {
       title: "Clientes",
       icon: "person",
-      handlePress: () => {},
+      handlePress: () => navigation.navigate("PatientsPageAdmin"),
     },
   ];
 

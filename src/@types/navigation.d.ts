@@ -22,6 +22,10 @@ export type RootStackParamList = {
   RegisterNewTreatment: {
     professionals: string[];
   };
+  PatientsPageAdmin: undefined;
+  ViewPatientsProfile: {
+    name: string
+  };
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;
   TreatmentsAdmin: undefined;

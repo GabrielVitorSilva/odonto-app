@@ -1,12 +1,10 @@
+
+import type { ProfessionalUser } from "@/services/types/treatments";
 import React from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
-export type Person = {
-  name: string;
-};
-
 type PersonListProps = {
-  list: Person[];
+  list: ProfessionalUser[];
   multiselection?: boolean;
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
@@ -31,18 +29,24 @@ export function PersonList({
   return (
     <FlatList
       data={list}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          className={`py-5 px-8 rounded-xl ${
-            selected.indexOf(item.name) != -1 ? "bg-app-light-blue" : ""
-          }`}
-          onPress={() => {
-            handlePress(item.name);
-          }}
-        >
-          <Text className="text-xl">{item.name}</Text>
-        </TouchableOpacity>
-      )}
+      renderItem={({ item }) => {
+        if (!item?.name) {
+          return null;
+        }
+        
+        return (
+          <TouchableOpacity
+            className={`py-5 px-8 rounded-xl ${
+              selected.indexOf(item.name) != -1 ? "bg-app-light-blue" : ""
+            }`}
+            onPress={() => {
+              handlePress(item.name);
+            }}
+          >
+            <Text className="text-xl">{item.name}</Text>
+          </TouchableOpacity>
+        );
+      }}
     />
   );
 }

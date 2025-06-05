@@ -72,9 +72,9 @@ export default function RegisterNewTreatment() {
 
         <TouchableOpacity
           className="flex-row items-center"
-          onPress={() => navigation.navigate("BindProfessionalAdmin", {alreadyBound: boundProfessionals, returnTo: {screen: "RegisterNewTreatment"}})}
+          onPress={() => navigation.navigate("BindProfessionalAdmin", {treatment_id: ""})} 
         >
-          <Ionicons name="add" color={"#38ABE2"} size={32} />
+          <Ionicons name="add" color={"#38ABE2"} size={32} /> 
           <Text className="text-app-blue font-semibold text-lg ml-2">
             Vincular Tratamento a Funcionário
           </Text>

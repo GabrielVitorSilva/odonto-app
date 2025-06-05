@@ -1,68 +1,56 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { PersonList } from "@/components/PersonList";
 import { View, Text } from "react-native";
 import BottomDrawer from "@/components/BottomDrawer";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "@/@types/navigation";
+import { treatmentsService } from "@/services/treatments";
+import type { IUser, ProfessionalUser } from "@/services/types/treatments";
 
-type RouteParams =
-  | {
-      alreadyBound: string[];
-      returnTo: {
-        screen: 'RegisterNewTreatment';
-      };
-    }
-  | {
-      alreadyBound: string[];
-      returnTo: {
-        screen: 'TreatmentPageAdmin';
-        params: RootStackParamList['TreatmentPageAdmin'];
-      };
-    };
+type RouteParams = {
+  treatment_id: string;
+}
 
 export default function BindProfessionalAdmin() {
   const route = useRoute();
-  const { alreadyBound, returnTo } = route.params as RouteParams;
-
+  const { treatment_id } = route.params as RouteParams;
   const [showDrawer, setShowDrawer] = useState(false);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selectedNames, setSelectedNames] = useState<string[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [noSelected, setNoSelected] = useState(false);
-
+  const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
   const navigation = useNavigation();
 
-  const list = [
-    { name: "Alberes" },
-    { name: "Maria Santos" },
-    { name: "Flávia Souza" },
-    { name: "Thiago Monteiro" },
-    { name: "Camila Duarte" },
-  ];
-  const updatedList = list.filter(elem => alreadyBound.indexOf(elem.name) == -1)
+  async function fetchProfessionals() {
+    const data = await treatmentsService.listProfessionals()
+    setProfessionals(data);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfessionals();
+    }, [])
+  );
 
   const handleBind = () => {
-    if (selected.length > 0) {
+    if (selectedIds.length > 0) {
       setShowDrawer(true);
     } else {
       setNoSelected(true);
     }
   };
 
-  const handleConfirmation = () => {
-  if (returnTo.screen === "RegisterNewTreatment") {
-    navigation.navigate("RegisterNewTreatment", {
-      professionals: [...alreadyBound, ...selected],
-    });
-  } else if (returnTo.screen === "TreatmentPageAdmin") {
-    navigation.navigate("TreatmentPageAdmin", {
-      ...returnTo.params,
-      professionals: [...alreadyBound, ...selected],
-    });
-  }
-};
-
+  const handleConfirmation = async () => {
+    try {      
+      await treatmentsService.addProfessionalFromTreatment(treatment_id, selectedIds);
+      navigation.goBack(); 
+    } catch (error) {
+      console.error('Erro ao vincular profissionais:', error);
+    }
+  };
 
   const content = (
     <Text className="text-center">
@@ -72,6 +60,15 @@ export default function BindProfessionalAdmin() {
     </Text>
   );
 
+  const handleSelection = (value: string[] | ((prevState: string[]) => string[])) => {
+    const names = typeof value === 'function' ? value(selectedNames) : value;
+    setSelectedNames(names);
+    const ids = professionals
+      .filter(prof => names.includes(prof.name))
+      .map(prof => prof.id);
+    setSelectedIds(ids);
+  };
+
   return (
     <View className="flex-1">
       <Header />
@@ -80,10 +77,10 @@ export default function BindProfessionalAdmin() {
 
         <View className="flex-1">
           <PersonList
-            list={updatedList}
+            list={professionals}
             multiselection
-            selected={selected}
-            setSelected={setSelected}
+            selected={selectedNames}
+            setSelected={handleSelection}
           />
         </View>
       </View>

@@ -1,51 +1,28 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { FlatList, View } from "react-native";
 import Header from "@/components/Header";
 import Card from "@/components/Card";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { Button } from "@/components/Button";
 import { useNavigation } from "@react-navigation/native";
+import { treatmentsService, Treatment } from "@/services/treatments";
 
 export default function TreatmentsAdmin() {
   const navigation = useNavigation();
-
-  type Treatment = {
-    id: number;
-    title: string;
-    description: string;
-    color: string;
-  }
-
-  const treatments:Treatment[] = [
-    {
-      id: 1,
-      title: "Clareamento",
-      description:
-        "Procedimentos: lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      color: "bg-orange-100",
-    },
-    {
-      id: 2,
-      title: "Limpeza",
-      description:
-        "Procedimentos: lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      color: "bg-gray-800",
-    },
-    {
-      id: 3,
-      title: "Implante",
-      description:
-        "Procedimentos: lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      color: "bg-pink-100",
-    },
-    {
-      id: 4,
-      title: "Manutenção",
-      description:
-        "Procedimentos: lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      color: "bg-blue-100",
-    },
-  ];
+  const [treatments, setTreatments] = React.useState<Treatment[]>([]);
+  
+  useEffect(() => {
+    async function loadTreatments() {
+      try {
+        const response = await treatmentsService.listAllTreatments();
+        setTreatments(response.treatments);
+      } catch (error) {
+        console.error('Erro ao carregar tratamentos:', error);
+      }
+    }
+    
+    loadTreatments();
+  }, []);
 
   function TreatmentsEmpty(){
     return <ListEmptyComponent iconName="medkit" text="Não há tratamentos cadastrados ainda" />
@@ -60,18 +37,19 @@ export default function TreatmentsAdmin() {
         ListEmptyComponent={TreatmentsEmpty}
         renderItem={({ item }) => (
           <Card
-            name={item.title}
+            name={item.name}
             upperText={item.description}
             handlePress={() =>
               navigation.navigate("TreatmentPageAdmin", {
-                name: item.title,
+                name: item.name, 
+                treatment_id: item.id,
                 description: item.description,
-                professionals: [],
+                professionals: item.professionals.map(p => p.userId),
               })
             }
           />
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         className="w-full px-5 mt-8 mx-auto"
       />

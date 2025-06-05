@@ -41,7 +41,8 @@ export default function TreatmentsAdmin() {
             upperText={item.description}
             handlePress={() =>
               navigation.navigate("TreatmentPageAdmin", {
-                name: item.name,
+                name: item.name, 
+                treatment_id: item.id,
                 description: item.description,
                 professionals: item.professionals.map(p => p.userId),
               })

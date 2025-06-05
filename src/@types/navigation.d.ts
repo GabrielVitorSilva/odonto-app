@@ -28,6 +28,7 @@ export type RootStackParamList = {
   TreatmentPageAdmin: {
     name: string;
     description: string;
+    treatment_id: string;
     professionals: string[];
   };
   HomeProf: undefined;

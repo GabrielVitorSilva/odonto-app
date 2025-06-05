@@ -55,4 +55,15 @@ export const treatmentsService = {
       throw error;
     }
   },
+  async removeProfessionalFromTreatment(userId: string, treatmentId: string): Promise<void>{
+    try {
+      const response = await api.delete<void>(`/treatments/${treatmentId}/professionals/${userId}`);
+      console.log('treatments',response.data);
+      
+      return;
+    } catch (error:any) {
+      console.error('Erro ao buscar tratamentos:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
 }; 

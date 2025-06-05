@@ -12,47 +12,67 @@ import { treatmentsService } from "@/services/treatments";
 type RouteParams = {
   name: string;
   description: string;
+  treatment_id: string;
   professionals: string[];
+};
+
+type Professional = {
+  id: string;
+  name: string;
 };
 
 export default function TreatmentPageAdmin() {
   const route = useRoute();
-  const { name, description, professionals } = route.params as RouteParams;
-  
+  const { name, description, professionals, treatment_id  } = route.params as RouteParams;
   const [showDrawer, setShowDrawer] = useState(false);
-  const [lastSelected, setLastSelected] = useState("");
-  const [boundProfessionals, setBoundProfessionals] = useState(professionals);
+  const [lastSelected, setLastSelected] = useState<Professional | null>(null);
+  const [boundProfessionals, setBoundProfessionals] = useState<Professional[]>([]);
 
   const navigation = useNavigation();
 
   async function loadProfessionals() {
     try {
       const professionalsAvailable = await treatmentsService.listProfessionalAvailablesToTreatment(professionals);
-      setBoundProfessionals(professionalsAvailable.map(userSelected => userSelected.user.name));
+      setBoundProfessionals(professionalsAvailable.map(userSelected => ({
+        id: userSelected.user.id,
+        name: userSelected.user.name
+      })));
     } catch (error) {
       console.error('Erro ao carregar profissionais:', error);
+    }
+  }
+
+  async function handleRemoveProfessional(userId: string, treatmentId: string) {    
+    try {
+      await treatmentsService.removeProfessionalFromTreatment(userId, treatmentId);
+      setBoundProfessionals(prevState => prevState.filter(prof => prof.id !== userId));
+    } catch (error) {
+      console.error('Erro ao remover profissional:', error);
     }
   }
 
   useEffect(() => {
     loadProfessionals();
   }, []);
+
   const content = (
     <Text className="text-center">
       Deseja realmente desvincular{" "}
-      <Text className="text-app-blue font-semibold">{lastSelected}</Text> com{" "}
+      <Text className="text-app-blue font-semibold">{lastSelected?.name}</Text> com{" "}
       <Text className="text-app-blue font-semibold">{name}</Text>?
     </Text>
   );
 
-  function handlePress(name: string) {
+  function handlePress(professional: Professional) {
     setShowDrawer(true);
-    setLastSelected(name);
+    setLastSelected(professional);
   }
 
   function handleDebindConfirmarion(){
-    setBoundProfessionals(prevState => prevState.filter(name => name != lastSelected));
-    setShowDrawer(false);
+    if (lastSelected) {
+      handleRemoveProfessional(lastSelected.id, treatment_id);
+      setShowDrawer(false);
+    }
   }
 
   function ProfessionalsEmpty() {
@@ -74,10 +94,10 @@ export default function TreatmentPageAdmin() {
         <FlatList
           data={boundProfessionals}
           ListEmptyComponent={ProfessionalsEmpty}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <View className="py-5 px-8 rounded-xl flex-row justify-between">
-              <Text className="text-xl">{item}</Text>
-              <TouchableOpacity onPress={() => handlePress(item.toString())}>
+              <Text className="text-xl">{item.name}</Text>
+              <TouchableOpacity onPress={() => handlePress(item)}>
                 <Ionicons
                   name="remove-circle-outline"
                   size={28}
@@ -100,7 +120,13 @@ export default function TreatmentPageAdmin() {
         <Button
           title="Vincular Odontologo"
           onPress={() => {
-            navigation.navigate("BindProfessionalAdmin", {alreadyBound: boundProfessionals, returnTo: {screen: "TreatmentPageAdmin", params: {name, description, professionals}}});
+            navigation.navigate("BindProfessionalAdmin", {
+              alreadyBound: boundProfessionals.map(p => p.id),
+              returnTo: {
+                screen: "TreatmentPageAdmin",
+                params: {name, description, professionals}
+              }
+            });
           }}
           className="mb-14"
         />

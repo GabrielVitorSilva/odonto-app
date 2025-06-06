@@ -8,7 +8,7 @@ import Login from "@/app/Authentication/Login";
 import Register from "@/app/Authentication/Register";
 import UseTerms from "@/app/Authentication/UseTerms";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import TreatmentsScreen from "@/app/Treatments";
+import TreatmentsProf from "@/app/Professional/TreatmentsProf";
 import TreatmentsAdmin from "@/app/Admin/TreatmentsAdmin";
 import HomeProf from "@/app/Professional/HomeProf";
 import ConsultationsPageProf from "@/app/Professional/ConsultationsPageProf";
@@ -29,7 +29,11 @@ import ViewPatientsProfile from "@/app/Admin/ViewPatientsProfile";
 import ProfessionalsPageAdmin from "@/app/Admin/ProfessionalsPageAdmin";
 import ViewProfessionalsProfile from "@/app/Admin/ViewProfessionalsProfile";
 import SelectDatePatient from "@/app/Patients/SelectDatePatient";
-import HomeClientEnd from "@/app/Patients/HomeClientEnd";
+import ConsultationPageProf from "@/app/Professional/ConsultationPageProf";
+import TreatmentPageProf from "@/app/Professional/TreatmentPageProf";
+import SelectTreatmentProf from "@/app/Professional/SelectTreatmentProf";
+import SelectDateHourProf from "@/app/Professional/SelectDateHourProf";
+import SelectPatientProf from "@/app/Professional/SelectPatientProf";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,11 +66,9 @@ export function StackRoutes() {
         </>
       ) : profile?.user.role === "CLIENT" ? (
         <>
-          <Stack.Screen name="HomeClienteEnd" component={HomeClientEnd} />
           <Stack.Screen name="SelectDatePatient" component={SelectDatePatient} />
           <Stack.Screen name="HomeClient" component={HomeClient} />
           <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
-          <Stack.Screen name="Treatments" component={TreatmentsScreen} />
         </>
       ) : profile?.user.role === "ADMIN" ? (
         <>
@@ -89,10 +91,14 @@ export function StackRoutes() {
         </>
       ) : profile?.user.role === "PROFESSIONAL" ? (
         <>
-
           <Stack.Screen name="HomeProf" component={HomeProf} />
           <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf} />
-          <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
+          <Stack.Screen name="ConsultationPageProf" component={ConsultationPageProf} />
+          <Stack.Screen name="TreatmentPageProf" component={TreatmentPageProf} />
+          <Stack.Screen name="TreatmentsProf" component={TreatmentsProf} />
+          <Stack.Screen name="SelectTreatmentProf" component={SelectTreatmentProf} />
+          <Stack.Screen name="SelectDateHourProf" component={SelectDateHourProf} />
+          <Stack.Screen name="SelectPatientProf" component={SelectPatientProf} />
         </>
       ) : null}
     </Stack.Navigator>

@@ -26,7 +26,7 @@ export default function Header({
   const font = `text-${contentColor}`;
   return (
     <View
-      className={`flex-row items-center justify-between w-ful pt-20 px-5 ${
+      className={`flex-row items-center justify-between w-ful pb-5 pt-20 px-5 ${
         className || ""
       }`}
     >

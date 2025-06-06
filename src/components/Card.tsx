@@ -8,6 +8,7 @@ type CardProps = {
   lowerText?: string;
   status?: string;
   handlePress?: () => void;
+  className?: string;
 };
 
 export default function Card({
@@ -18,6 +19,7 @@ export default function Card({
   lowerText,
   status = "",
   handlePress = () => {},
+  className,
 }: CardProps) {
   const statusStyle =
     {
@@ -40,7 +42,10 @@ export default function Card({
     }[status] || {};
 
   return (
-    <TouchableOpacity className="flex-row gap-4 mb-5" onPress={handlePress}>
+    <TouchableOpacity
+      className={`flex-row gap-4 mb-5 ${className || " "}`}
+      onPress={handlePress}
+    >
       <View
         className={`w-12 h-12 rounded-xl bg-app-blue items-center justify-center mr-4`}
       ></View>

@@ -43,14 +43,7 @@ export default function ConsultationPage() {
         </View>
 
         <View>
-          {status === "Confirmado" && (
-            <Button
-              className="mt-4"
-              title="Marcar como finalizada"
-              onPress={() => {}}
-            />
-          )}
-          {status !== "Finalizado" && status !== "Cancelado" && (
+          {status == "Pendente" && (
             <Button
               title="Cancelar Consulta"
               onPress={() => {}}

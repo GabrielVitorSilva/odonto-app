@@ -5,6 +5,7 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import { LocaleConfig } from "react-native-calendars";
 import { Button } from "@/components/Button";
+import { Picker } from "@react-native-picker/picker";
 
 LocaleConfig.locales["pt"] = {
   monthNames: [
@@ -52,12 +53,20 @@ LocaleConfig.defaultLocale = "pt";
 
 export default function SelectDateHourAdmin() {
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
+  const [selectedHour, setSelectedHour] = useState<string | null>("08:00");
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const availableHours = ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
+  const availableHours = [
+    "08:00",
+    "10:00",
+    "12:00",
+    "14:00",
+    "16:00",
+    "18:00",
+    "20:00",
+  ];
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-gray-100">
       <Header className="bg-app-blue" contentColor="white" />
       <Calendar
         current={new Date().toISOString().split("T")[0]}
@@ -84,19 +93,18 @@ export default function SelectDateHourAdmin() {
         </Text>
         <Text className="mb-4">Selecione um horário:</Text>
 
-        <ScrollView className="bg-violet-50 rounded-md max-h-40">
+        <Picker
+          selectedValue={selectedHour}
+          onValueChange={(value) => {
+            setSelectedHour(value);
+          }}
+          style={{ height: 50, backgroundColor: "#f3f4f6" }}
+          itemStyle={{ backgroundColor: "#f3f4f6" }}
+        >
           {availableHours.map((hour) => (
-            <TouchableOpacity
-              key={hour}
-              className={`py-2 px-4 ${
-                selectedHour === hour ? "bg-app-light-blue rounded" : ""
-              }`}
-              onPress={() => setSelectedHour(hour)}
-            >
-              <Text className="text-lg">{hour}</Text>
-            </TouchableOpacity>
+            <Picker.Item label={hour} value={hour} />
           ))}
-        </ScrollView>
+        </Picker>
       </View>
 
       <Button

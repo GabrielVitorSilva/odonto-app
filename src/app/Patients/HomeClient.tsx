@@ -34,7 +34,7 @@ export default function HomeClient() {
   return (
     <View className="w-full">
       <Header
-        className="bg-app-blue pb-[150px]"
+        className="bg-app-blue pb-24"
         contentColor="white"
         title="Perfil"
         hasExit={true}

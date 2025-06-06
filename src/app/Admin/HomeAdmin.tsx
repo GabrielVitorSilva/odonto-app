@@ -30,18 +30,18 @@ export default function HomeAdmin() {
       handlePress: () => navigation.navigate("ProfessionalsPageAdmin"),
     },
     {
-      title: "Clientes",
+      title: "Pacientes",
       icon: "person",
       handlePress: () => navigation.navigate("PatientsPageAdmin"),
     },
   ];
 
   return (
-    <View>
+    <View className="flex-1">
       <Header
         title="Administrador"
         contentColor="white"
-        className="bg-app-blue pb-[150px]"
+        className="bg-app-blue pb-24"
         hasExit={true}
       />
 
@@ -50,6 +50,7 @@ export default function HomeAdmin() {
       </Text>
 
       <Menu items={menuItems} />
+
     </View>
   );
 }

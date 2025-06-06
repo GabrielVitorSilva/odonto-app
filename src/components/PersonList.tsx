@@ -4,7 +4,7 @@ import React from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 type PersonListProps = {
-  list: ProfessionalUser[];
+  list: ProfessionalUser[] | {name: string}[];
   multiselection?: boolean;
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;

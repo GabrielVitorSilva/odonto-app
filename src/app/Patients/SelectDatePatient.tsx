@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 import { Calendar } from "react-native-calendars";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useState } from "react";
@@ -52,9 +52,7 @@ LocaleConfig.defaultLocale = "pt";
 
 export default function SelectDatePatient() {
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const availableHours = ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
 
   return (
     <View className="flex-1">

@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
 
 export default function SelectClientAdmin() {
-  const [selected, setSelected] = useState<String[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
   const navigation = useNavigation();
 
   const list = [

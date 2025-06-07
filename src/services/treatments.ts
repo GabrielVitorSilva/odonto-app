@@ -1,5 +1,5 @@
 import api from './api/api';
-import type { IGetUser, IUser, ProfessionalsResponse, ProfessionalUser } from './types/treatments';
+import type { createTreatmentRequest, createTreatmentResponse, IGetUser, IUser, ProfessionalsResponse, ProfessionalUser } from './types/treatments';
 import { Profile } from './auth';
 
 export interface Professional {
@@ -27,9 +27,30 @@ export interface TreatmentsResponse {
 
 
 export const treatmentsService = {
+  async createTreatment({description, name, professionalIds}:createTreatmentRequest): Promise<createTreatmentResponse> {
+    try {
+      const response = await api.post<createTreatmentResponse>('/treatments',{
+        name,
+        description,
+        durationMinutes: 60,
+        price: 1,
+        professionalIds: professionalIds || null,
+      });
+
+      if (!response.data || !response.data.treatment) {
+        throw new Error('Dados de tratamentos inválidos ou vazios');
+      }
+
+      return response.data;
+    } catch (error: any) {
+      console.error('Erro ao buscar tratamentos:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
+
   async listAllTreatments(): Promise<TreatmentsResponse> {
     try {
-      const response = await api.get<TreatmentsResponse>('/treatments');
+      const response = await api.get<TreatmentsResponse>('/treatments',);
 
       if (!response.data || !response.data.treatments) {
         throw new Error('Dados de tratamentos inválidos ou vazios');

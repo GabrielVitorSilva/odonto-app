@@ -1,5 +1,22 @@
 import type { Profile } from "../auth";
 
+export interface createTreatmentRequest {
+  name: string,
+  description: string,
+  professionalIds: string[] | null,
+}
+
+export interface createTreatmentResponse {
+  treatment: {
+    id: string,
+    name: string,
+    description: string,
+    durationMinutes: number,
+    price: number,
+    professionalIds: string[] | null,
+  }
+}
+
 export interface IUser{
   user: {
     id: string,

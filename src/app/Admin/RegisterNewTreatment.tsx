@@ -13,6 +13,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
+import { treatmentsService } from "@/services/treatments";
+import { useToast } from "@/contexts/ToastContext";
 
 type RouteParams = {
   professionals: string[];
@@ -21,11 +23,21 @@ type RouteParams = {
 export default function RegisterNewTreatment() {
   const route = useRoute();
   const { professionals } = route.params as RouteParams;
-  console.log("Professionals:", professionals);
-  
   const [boundProfessionals, setBoundProfessionals] = useState(professionals);
-
+  const {showToast} = useToast()
   const navigation = useNavigation();
+
+  async function handleCreate() {
+    const response = await treatmentsService.createTreatment({
+      name: "Tratamento Teste",
+      description: "Descrição do Tratamento Teste",
+      professionalIds: boundProfessionals,
+    })
+    if(response){
+      showToast('Tratamento cadastrado com sucesso!', 'success');
+      navigation.goBack();
+    }
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -71,7 +83,7 @@ export default function RegisterNewTreatment() {
           </View>
         )}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className="flex-row items-center"
           onPress={() => navigation.navigate("BindProfessionalAdmin", {treatment_id: ""})} 
         >
@@ -79,9 +91,9 @@ export default function RegisterNewTreatment() {
           <Text className="text-app-blue font-semibold text-lg ml-2">
             Vincular Tratamento a Funcionário
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-      <Button title="Confirmar" onPress={() => {}} className="mb-16" />
+      <Button title="Confirmar" onPress={() => {handleCreate()}} className="mb-16" />
     </View>
   );
 }

@@ -29,7 +29,7 @@ export default function TreatmentsAdmin() {
   }
 
   return (
-    <View className="flex-1 bg-gray-50">
+    <View className="flex-1 bg-gray-50"> 
       <Header title="Tratamentos" handleGoBack={() => navigation.navigate("HomeAdmin")} />
 
       <FlatList

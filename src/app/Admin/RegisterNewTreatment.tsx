@@ -21,7 +21,8 @@ type RouteParams = {
 export default function RegisterNewTreatment() {
   const route = useRoute();
   const { professionals } = route.params as RouteParams;
-
+  console.log("Professionals:", professionals);
+  
   const [boundProfessionals, setBoundProfessionals] = useState(professionals);
 
   const navigation = useNavigation();

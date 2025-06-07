@@ -5,6 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Header from "@/components/Header";
 import { Button } from "@/components/Button";
@@ -47,64 +50,88 @@ export default function RegisterNewTreatment() {
   }
 
   return (
-    <View className="flex-1 bg-white">
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-white"
+    >
       <Header handleGoBack={() => navigation.navigate("TreatmentsAdmin")} />
 
-      <View className="px-4 flex-1">
-        <Text className="text-3xl font-semibold mb-14 text-center">
-          Cadastrar Tratamento
-        </Text>
-        <TextInput
-          className="bg-gray-100 p-4 rounded-2xl text-base mb-3 font-roboto"
-          placeholder="Nome"
-          placeholderTextColor="#999"
-          value={name}
-          onChangeText={setName}
-        />
-        <TextInput
-          className="bg-gray-100 p-4 rounded-2xl text-base mb-10 font-roboto h-40"
-          style={{ textAlignVertical: "top" }}
-          placeholder="Descrição"
-          placeholderTextColor="#999"
-          multiline
-          value={description}
-          onChangeText={setDescription}
-        />
-
-        {boundProfessionals.length > 0 && (
-          <View className="">
-            <Text className="text-xl font-semibold">
-              Profissionais Vinculados
-            </Text>
-            <FlatList
-              data={boundProfessionals}
-              renderItem={({ item, index }) => (
-                <View className="py-5 px-8 rounded-xl flex-row justify-between">
-                  <Text className="text-xl">{item}</Text>
-                  <TouchableOpacity onPress={() => {setBoundProfessionals(prevState => prevState.filter(name => name != item))}}>
-                    <Ionicons
-                      name="remove-circle-outline"
-                      size={28}
-                      color={"black"}
-                    />
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
-          </View>
-        )}
-
-        {/* <TouchableOpacity
-          className="flex-row items-center"
-          onPress={() => navigation.navigate("BindProfessionalAdmin", {treatment_id: ""})} 
-        >
-          <Ionicons name="add" color={"#38ABE2"} size={32} /> 
-          <Text className="text-app-blue font-semibold text-lg ml-2">
-            Vincular Tratamento a Funcionário
+      <ScrollView 
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
+        <View className="px-4 flex-1">
+          <Text className="text-3xl font-semibold mb-8 text-center">
+            Cadastrar Tratamento
           </Text>
-        </TouchableOpacity> */}
+
+          <View className="space-y-4">
+            <View>
+              <Text className="text-base font-medium mb-2 text-gray-700">Nome do Tratamento</Text>
+              <TextInput
+                className="bg-gray-100 p-4 rounded-2xl text-base font-roboto border border-gray-200"
+                placeholder="Digite o nome do tratamento"
+                placeholderTextColor="#999"
+                value={name}
+                onChangeText={setName}
+              />
+            </View>
+
+            <View>
+              <Text className="text-base font-medium mb-2 text-gray-700">Descrição</Text>
+              <TextInput
+                className="bg-gray-100 p-4 rounded-2xl text-base font-roboto h-40 border border-gray-200"
+                style={{ textAlignVertical: "top" }}
+                placeholder="Digite a descrição do tratamento"
+                placeholderTextColor="#999"
+                multiline
+                value={description}
+                onChangeText={setDescription}
+              />
+            </View>
+
+            {boundProfessionals.length > 0 && (
+              <View className="mt-4">
+                <Text className="text-xl font-semibold mb-4">
+                  Profissionais Vinculados
+                </Text>
+                <FlatList
+                  data={boundProfessionals}
+                  scrollEnabled={false}
+                  renderItem={({ item }) => (
+                    <View className="py-4 px-6 rounded-xl flex-row justify-between items-center bg-gray-50 mb-2">
+                      <Text className="text-lg">{item}</Text>
+                      <TouchableOpacity 
+                        onPress={() => {
+                          setBoundProfessionals(prevState => 
+                            prevState.filter(name => name != item)
+                          )
+                        }}
+                        className="p-2"
+                      >
+                        <Ionicons
+                          name="remove-circle-outline"
+                          size={28}
+                          color={"#EF4444"}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                />
+              </View>
+            )}
+          </View>
+        </View>
+      </ScrollView>
+
+      <View className="px-4 pb-8 pt-4 bg-white">
+        <Button 
+          title="Confirmar" 
+          onPress={handleCreate} 
+          className="w-full"
+        />
       </View>
-      <Button title="Confirmar" onPress={() => {handleCreate()}} className="mb-16" />
-    </View>
+    </KeyboardAvoidingView>
   );
 }

@@ -8,6 +8,8 @@ import { Button } from "@/components/Button";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "@/contexts/AuthContext";
+import { consultationService } from "@/services/consultations";
+import { useToast } from "@/contexts/ToastContext";
 
 LocaleConfig.locales["pt"] = {
   monthNames: [
@@ -55,9 +57,7 @@ LocaleConfig.defaultLocale = "pt";
 
 export default function SelectDateHourAdmin() {
   const {clientSelected, professionalSelected, treatmentSelected} = useAuth();
-  console.log("Client Selected: ", clientSelected);
-  console.log("Professional Selected: ", professionalSelected);
-  console.log("Treatment Selected: ", treatmentSelected);
+  const { showToast } = useToast()
   const navigation = useNavigation();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedHour, setSelectedHour] = useState<string | null>("08:00");
@@ -71,6 +71,17 @@ export default function SelectDateHourAdmin() {
     "18:00",
     "20:00",
   ];
+
+  async function handleSchedule(){
+    const schedule = await consultationService.scheduleConsult({
+      clientId: clientSelected?.clientId || "",
+      professionalId: professionalSelected?.professionalId || "",
+      treatmentId: treatmentSelected?.id || "",
+      dateTime: `${selectedDay}T${selectedHour}:00.000Z`
+    })
+    showToast('Consulta agendada com sucesso!', 'success');
+    navigation.navigate("HomeAdmin");
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -125,16 +136,16 @@ export default function SelectDateHourAdmin() {
         title="Agendar consulta"
         content={
           <Text className="text-center mb-6">
-            Deseja realmente agendar uma{" "}
-            <Text className="text-app-blue font-semibold">Clareamento</Text>{" "}
+            Deseja realmente agendar {``}
+            <Text className="text-app-blue font-semibold">{`(${treatmentSelected?.name})`}</Text>{" "}
             para{" "}
             <Text className="text-app-blue font-semibold">
-              Victoria Robertson
+            {`${clientSelected?.name}`}
             </Text>
             ?
           </Text>
         }
-        handlePress={() => {}}
+        handlePress={() => {handleSchedule()}}
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
         buttonTitle="Agendar agora"

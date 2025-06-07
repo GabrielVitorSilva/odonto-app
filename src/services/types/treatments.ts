@@ -53,7 +53,7 @@ export interface ClientUser {
   cpf: string;
   phone: string | null;
   role: Profile;
-  professionalId: string;
+  clientId: string;
   createdAt: string;
   updatedAt: string;
   password: string;

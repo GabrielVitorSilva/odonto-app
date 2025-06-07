@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import { LocaleConfig } from "react-native-calendars";
 import { Button } from "@/components/Button";
 import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
 
 LocaleConfig.locales["pt"] = {
   monthNames: [
@@ -52,6 +53,7 @@ LocaleConfig.locales["pt"] = {
 LocaleConfig.defaultLocale = "pt";
 
 export default function SelectDateHourAdmin() {
+  const navigation = useNavigation();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedHour, setSelectedHour] = useState<string | null>("08:00");
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -66,8 +68,8 @@ export default function SelectDateHourAdmin() {
   ];
 
   return (
-    <View className="flex-1 bg-gray-100">
-      <Header className="bg-app-blue" contentColor="white" />
+    <View className="flex-1 bg-white">
+      <Text className="text-4xl text-center mt-6 mb-4">Selecione data e hora</Text>
       <Calendar
         current={new Date().toISOString().split("T")[0]}
         onDayPress={(day) => setSelectedDay(day.dateString)}
@@ -108,7 +110,7 @@ export default function SelectDateHourAdmin() {
       </View>
 
       <Button
-        className="mt-30"
+        className="mt-8"
         title="Agendar Consulta"
         onPress={() => {
           setShowDrawer(true);

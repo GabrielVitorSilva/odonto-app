@@ -44,6 +44,7 @@ export type RootStackParamList = {
   SelectClientAdmin: undefined;
   SelectProfessionalAdmin: undefined;
   SelectDateHourAdmin: undefined;
+  SelectTreatmentAdmin: undefined;
   BindProfessionalAdmin: {
     treatment_id: string;
   };

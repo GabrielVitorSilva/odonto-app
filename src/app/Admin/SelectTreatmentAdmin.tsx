@@ -1,30 +1,32 @@
 import { useCallback, useState } from "react";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { PersonList } from "@/components/PersonList";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
-import { treatmentsService } from "@/services/treatments";
-import type { ProfessionalUser } from "@/services/types/treatments";
+import { treatmentsService, type Treatment } from "@/services/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
 
-export default function SelectProfessionalAdmin() {
-  const { setProfessionalSelected } = useAuth();
+export default function SelectTreatmentAdmin() {
+  const { setTreatmentSelected } = useAuth();
   
   const [selected, setSelected] = useState<{name: string; id: string}>({ name: "", id: "" });
   const navigation = useNavigation();
 
-  const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
-
-  async function fetchProfessionals() {    
-    const data = await treatmentsService.listProfessionals()
-    setProfessionals(data);
+  const [treatments, setTreatments] = useState<Treatment[]>([]);
+  
+  async function loadTreatments() {
+    try {
+      const response = await treatmentsService.listAllTreatments();
+      setTreatments(response.treatments);
+    } catch (error) {
+      console.error('Erro ao carregar tratamentos:', error);
+    }
   }
 
   useFocusEffect(
     useCallback(() => {
-      fetchProfessionals();
+      loadTreatments();
     }, [])
   );
 
@@ -33,15 +35,15 @@ export default function SelectProfessionalAdmin() {
       <Header />
       <View className="flex-1 px-4 py-4">
         <Text className="text-center text-3xl font-semibold">
-          Selecione o Odontólogo
+          Selecione o Tratamento
         </Text>
         <Text className="text-app-blue font-semibold text-lg my-8">
-          Lista de Odontólogos
+          Lista de Tratamentos
         </Text>
 
         <View className="flex-1">
         <SingleSelectList
-            list={professionals}
+            list={treatments}
             selected={selected}
             setSelected={setSelected}
           />
@@ -51,9 +53,9 @@ export default function SelectProfessionalAdmin() {
         className="mb-5"
         title="Selecionar"
         onPress={() => {
-          const selectedClient = professionals.find(p => p.id === selected.id);
-          setProfessionalSelected(selectedClient || null);
-          navigation.navigate("SelectTreatmentAdmin")
+          const treatmentSelected = treatments.find(p => p.id === selected.id);
+          setTreatmentSelected(treatmentSelected || null);
+          navigation.navigate("SelectDateHourAdmin")
         }}
       />
     </View>

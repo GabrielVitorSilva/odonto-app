@@ -54,9 +54,10 @@ LocaleConfig.locales["pt"] = {
 LocaleConfig.defaultLocale = "pt";
 
 export default function SelectDateHourAdmin() {
-  const {clientSelected, professionalSelected} = useAuth();
+  const {clientSelected, professionalSelected, treatmentSelected} = useAuth();
   console.log("Client Selected: ", clientSelected);
   console.log("Professional Selected: ", professionalSelected);
+  console.log("Treatment Selected: ", treatmentSelected);
   const navigation = useNavigation();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedHour, setSelectedHour] = useState<string | null>("08:00");

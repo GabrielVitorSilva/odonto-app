@@ -34,6 +34,7 @@ import TreatmentPageProf from "@/app/Professional/TreatmentPageProf";
 import SelectTreatmentProf from "@/app/Professional/SelectTreatmentProf";
 import SelectDateHourProf from "@/app/Professional/SelectDateHourProf";
 import SelectPatientProf from "@/app/Professional/SelectPatientProf";
+import SelectTreatmentAdmin from "@/app/Admin/SelectTreatmentAdmin";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +79,7 @@ export function StackRoutes() {
           <Stack.Screen name="ConsultationPageAdmin" component={ConsultationPageAdmin} />
           <Stack.Screen name="SelectClientAdmin" component={SelectClientAdmin} />
           <Stack.Screen name="SelectProfessionalAdmin" component={SelectProfessionalAdmin} />
+          <Stack.Screen name="SelectTreatmentAdmin" component={SelectTreatmentAdmin} />
           <Stack.Screen name="BindProfessionalAdmin" component={BindProfessionalAdmin} />
           <Stack.Screen name="SelectDateHourAdmin" component={SelectDateHourAdmin} />
           <Stack.Screen name="RegisterNewUserAdmin" component={RegisterNewUserAdmin} />

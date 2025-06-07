@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Profile, ProfileResponse } from '@/services/auth';
 import type { ClientUser, ProfessionalUser } from '@/services/types/treatments';
+import type { Treatment } from '@/services/treatments';
 
 interface AuthContextData {
   token: string | null;
@@ -9,9 +10,11 @@ interface AuthContextData {
   profile: ProfileResponse | null;
   setProfile: React.Dispatch<React.SetStateAction<ProfileResponse | null>>
   clientSelected: ClientUser | null;
-  setClientSelected: React.Dispatch<React.SetStateAction<ProfessionalUser | null>>
-  professionalSelected: ClientUser | null;
+  setClientSelected: React.Dispatch<React.SetStateAction<ClientUser | null>>
+  professionalSelected: ProfessionalUser | null;
   setProfessionalSelected: React.Dispatch<React.SetStateAction<ProfessionalUser | null>>
+  treatmentSelected: Treatment | null;
+  setTreatmentSelected: React.Dispatch<React.SetStateAction<Treatment | null>>
   signOut: () => Promise<void>;
   isLoading: boolean;
 }
@@ -24,6 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<ProfileResponse | null>(null);
   const [clientSelected, setClientSelected] = useState<ClientUser | null>(null);
   const [professionalSelected, setProfessionalSelected] = useState<ProfessionalUser | null>(null);
+  const [treatmentSelected, setTreatmentSelected] = useState<Treatment | null>(null);
 
   useEffect(() => {
     loadStoredData();
@@ -98,7 +102,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clientSelected,
       setClientSelected,
       professionalSelected,
-      setProfessionalSelected
+      setProfessionalSelected,
+      treatmentSelected, 
+      setTreatmentSelected
     }}>
       {children}
     </AuthContext.Provider>

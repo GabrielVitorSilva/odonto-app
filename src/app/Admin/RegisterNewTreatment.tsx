@@ -34,10 +34,6 @@ export default function RegisterNewTreatment() {
       showToast('Por favor, preencha todos os campos', 'error');
       return;
     }
-    console.log({
-      name: name.trim(),
-      description: description.trim(),
-    });
     
     const response = await treatmentsService.createTreatment({
       name: name.trim(),

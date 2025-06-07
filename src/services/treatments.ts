@@ -34,7 +34,7 @@ export const treatmentsService = {
         description,
         durationMinutes: 60,
         price: 1,
-        professionalIds: professionalIds || null,
+        professionalIds: professionalIds || [],
       });
 
       if (!response.data || !response.data.treatment) {

@@ -24,14 +24,25 @@ export default function RegisterNewTreatment() {
   const route = useRoute();
   const { professionals } = route.params as RouteParams;
   const [boundProfessionals, setBoundProfessionals] = useState(professionals);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const {showToast} = useToast()
   const navigation = useNavigation();
 
   async function handleCreate() {
+    if (!name.trim() || !description.trim()) {
+      showToast('Por favor, preencha todos os campos', 'error');
+      return;
+    }
+    console.log({
+      name: name.trim(),
+      description: description.trim(),
+    });
+    
     const response = await treatmentsService.createTreatment({
-      name: "Tratamento Teste",
-      description: "Descrição do Tratamento Teste",
-      professionalIds: boundProfessionals,
+      name: name.trim(),
+      description: description.trim(),
+      professionalIds: [],
     })
     if(response){
       showToast('Tratamento cadastrado com sucesso!', 'success');
@@ -51,6 +62,8 @@ export default function RegisterNewTreatment() {
           className="bg-gray-100 p-4 rounded-2xl text-base mb-3 font-roboto"
           placeholder="Nome"
           placeholderTextColor="#999"
+          value={name}
+          onChangeText={setName}
         />
         <TextInput
           className="bg-gray-100 p-4 rounded-2xl text-base mb-10 font-roboto h-40"
@@ -58,6 +71,8 @@ export default function RegisterNewTreatment() {
           placeholder="Descrição"
           placeholderTextColor="#999"
           multiline
+          value={description}
+          onChangeText={setDescription}
         />
 
         {boundProfessionals.length > 0 && (

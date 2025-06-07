@@ -1,19 +1,29 @@
-import * as React from "react";
+import  React, { useCallback, useState } from "react";
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import Header from "@/components/Header";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import type { ProfessionalUser } from "@/services/types/treatments";
+import { treatmentsService } from "@/services/treatments";
 
 export default function ProfessionalsPageAdmin() {
   const navigation = useNavigation();
+  const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
 
-  const professionals = [
-    "Alberes",
-    "Maria Santos",
-    "Flávia Souza",
-    "Thiago Monteiro",
-    "Camila Duarte",
-  ];
+  async function fetchProfessionals() {
+    console.log('aqui');
+    
+    const data = await treatmentsService.listProfessionals()
+    console.log("Professionals data:", data);
+    
+    setProfessionals(data);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfessionals();
+    }, [])
+  );
 
   function handlePress(name: string) {
     navigation.navigate("ViewProfessionalsProfile", { name });
@@ -33,10 +43,10 @@ export default function ProfessionalsPageAdmin() {
       <Header />
       <View className="px-5">
         <Text className="text-center text-3xl font-semibold mb-5">
-          Pacientes
+          Odontólogos
         </Text>
         <Text className="text-lg text-app-blue font-semibold mb-3">
-          Lista de Clientes
+          Lista de Odontólogos
         </Text>
 
         <FlatList
@@ -45,9 +55,9 @@ export default function ProfessionalsPageAdmin() {
           renderItem={({ item }) => (
             <TouchableOpacity
               className="py-5 px-8"
-              onPress={() => handlePress(item)}
+              // onPress={() => handlePress(item)}
             >
-              <Text className="text-lg">{item}</Text>
+              <Text className="text-lg">{item.name}</Text>
             </TouchableOpacity>
           )}
         />

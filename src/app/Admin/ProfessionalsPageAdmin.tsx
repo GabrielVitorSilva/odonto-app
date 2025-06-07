@@ -10,12 +10,8 @@ export default function ProfessionalsPageAdmin() {
   const navigation = useNavigation();
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
 
-  async function fetchProfessionals() {
-    console.log('aqui');
-    
+  async function fetchProfessionals() {    
     const data = await treatmentsService.listProfessionals()
-    console.log("Professionals data:", data);
-    
     setProfessionals(data);
   }
 
@@ -55,7 +51,7 @@ export default function ProfessionalsPageAdmin() {
           renderItem={({ item }) => (
             <TouchableOpacity
               className="py-5 px-8"
-              // onPress={() => handlePress(item)}
+              onPress={() => handlePress(item.name)}
             >
               <Text className="text-lg">{item.name}</Text>
             </TouchableOpacity>

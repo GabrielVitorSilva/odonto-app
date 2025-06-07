@@ -7,18 +7,19 @@ import { View, Text } from "react-native";
 import { treatmentsService } from "@/services/treatments";
 import type { ProfessionalUser } from "@/services/types/treatments";
 import { useAuth } from "@/contexts/AuthContext";
+import { SingleSelectList } from "@/components/SingleSelectList";
 
 export default function SelectProfessionalAdmin() {
-  const {clientSelected} = useAuth();
+  const { setProfessionalSelected } = useAuth();
   
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<{name: string; id: string}>({ name: "", id: "" });
   const navigation = useNavigation();
 
-  const [patients, setPatients] = useState<ProfessionalUser[]>([]);
+  const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
 
   async function fetchProfessionals() {    
     const data = await treatmentsService.listProfessionals()
-    setPatients(data);
+    setProfessionals(data);
   }
 
   useFocusEffect(
@@ -39,8 +40,8 @@ export default function SelectProfessionalAdmin() {
         </Text>
 
         <View className="flex-1">
-          <PersonList
-            list={patients}
+        <SingleSelectList
+            list={professionals}
             selected={selected}
             setSelected={setSelected}
           />
@@ -49,7 +50,11 @@ export default function SelectProfessionalAdmin() {
       <Button
         className="mb-5"
         title="Selecionar"
-        onPress={() => navigation.navigate("SelectDateHourAdmin")}
+        onPress={() => {
+          const selectedClient = professionals.find(p => p.id === selected.id);
+          setProfessionalSelected(selectedClient || null);
+          navigation.navigate("SelectDateHourAdmin")
+        }}
       />
     </View>
   );

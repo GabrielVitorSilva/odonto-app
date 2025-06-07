@@ -7,6 +7,7 @@ import { LocaleConfig } from "react-native-calendars";
 import { Button } from "@/components/Button";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "@/contexts/AuthContext";
 
 LocaleConfig.locales["pt"] = {
   monthNames: [
@@ -53,6 +54,9 @@ LocaleConfig.locales["pt"] = {
 LocaleConfig.defaultLocale = "pt";
 
 export default function SelectDateHourAdmin() {
+  const {clientSelected, professionalSelected} = useAuth();
+  console.log("Client Selected: ", clientSelected);
+  console.log("Professional Selected: ", professionalSelected);
   const navigation = useNavigation();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedHour, setSelectedHour] = useState<string | null>("08:00");

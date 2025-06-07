@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Profile, ProfileResponse } from '@/services/auth';
-import type { ClientUser } from '@/services/types/treatments';
+import type { ClientUser, ProfessionalUser } from '@/services/types/treatments';
 
 interface AuthContextData {
   token: string | null;
@@ -9,7 +9,9 @@ interface AuthContextData {
   profile: ProfileResponse | null;
   setProfile: React.Dispatch<React.SetStateAction<ProfileResponse | null>>
   clientSelected: ClientUser | null;
-  setClientSelected: React.Dispatch<React.SetStateAction<ClientUser | null>>
+  setClientSelected: React.Dispatch<React.SetStateAction<ProfessionalUser | null>>
+  professionalSelected: ClientUser | null;
+  setProfessionalSelected: React.Dispatch<React.SetStateAction<ProfessionalUser | null>>
   signOut: () => Promise<void>;
   isLoading: boolean;
 }
@@ -21,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<ProfileResponse | null>(null);
   const [clientSelected, setClientSelected] = useState<ClientUser | null>(null);
+  const [professionalSelected, setProfessionalSelected] = useState<ProfessionalUser | null>(null);
 
   useEffect(() => {
     loadStoredData();
@@ -85,7 +88,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ token, signIn, signOut, isLoading, profile, setProfile: handleSetProfile, clientSelected, setClientSelected }}>
+    <AuthContext.Provider value={{
+      token,
+      signIn,
+      signOut,
+      isLoading,
+      profile,
+      setProfile: handleSetProfile,
+      clientSelected,
+      setClientSelected,
+      professionalSelected,
+      setProfessionalSelected
+    }}>
       {children}
     </AuthContext.Provider>
   );

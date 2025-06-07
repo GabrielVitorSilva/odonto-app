@@ -6,9 +6,13 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
 import { treatmentsService } from "@/services/treatments";
 import type { ClientUser, ProfessionalUser } from "@/services/types/treatments";
+import { useAuth } from "@/contexts/AuthContext";
+import { SingleSelectList } from "@/components/SingleSelectList";
 
 export default function SelectClientAdmin() {
-  const [selected, setSelected] = useState<string[]>([]);
+  const { setClientSelected } = useAuth()
+
+  const [selected, setSelected] = useState<{name: string; id: string}>({ name: "", id: "" });
   const navigation = useNavigation();
   const [patients, setPatients] = useState<ClientUser[]>([]);
 
@@ -35,7 +39,7 @@ export default function SelectClientAdmin() {
         </Text>
 
         <View className="flex-1">
-          <PersonList
+          <SingleSelectList
             list={patients}
             selected={selected}
             setSelected={setSelected}
@@ -45,7 +49,11 @@ export default function SelectClientAdmin() {
       <Button
         className="mb-5"
         title="Selecionar"
-        onPress={() => navigation.navigate("SelectProfessionalAdmin")}
+        onPress={() => {
+          const selectedClient = patients.find(p => p.id === selected.id);
+          setClientSelected(selectedClient || null);
+          navigation.navigate("SelectProfessionalAdmin")
+        }}
       />
     </View>
   );

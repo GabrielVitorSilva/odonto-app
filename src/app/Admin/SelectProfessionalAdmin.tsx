@@ -6,8 +6,11 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
 import { treatmentsService } from "@/services/treatments";
 import type { ProfessionalUser } from "@/services/types/treatments";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function SelectProfessionalAdmin() {
+  const {clientSelected} = useAuth();
+  
   const [selected, setSelected] = useState<string[]>([]);
   const navigation = useNavigation();
 
@@ -23,13 +26,6 @@ export default function SelectProfessionalAdmin() {
       fetchProfessionals();
     }, [])
   );
-  const list = [
-    { name: "Alberes" },
-    { name: "Maria Santos" },
-    { name: "Flávia Souza" },
-    { name: "Thiago Monteiro" },
-    { name: "Camila Duarte" },
-  ];
 
   return (
     <View className="flex-1">

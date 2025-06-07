@@ -6,7 +6,7 @@ interface AuthResponse {
   token: string;
 }
 
-interface ProfileResponse {
+export interface ProfileResponse {
   user: {
     id: string;
     name: string;

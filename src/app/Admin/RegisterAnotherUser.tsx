@@ -306,24 +306,6 @@ export default function RegisterAnotherUser() {
               </View>
             </View>
 
-            <TouchableOpacity 
-              className="mt-4 p-4" 
-              onPress={() => {
-                setTermsAccepted(!termsAccepted);
-                validateField('terms', !termsAccepted);
-                navigation.navigate('UseTerms');
-              }}
-            >
-              <Text className={`text-center font-roboto-medium underline ${
-                termsAccepted ? 'text-green-500' : errors.terms ? 'text-red-500' : 'text-gray-400'
-              }`}>
-                {termsAccepted ? '✓ Termos e condições aceitos' : 'Confirmo que li e aceito os termos e condições'}
-              </Text>
-              {errors.terms && (
-                <Text className="text-red-500 text-sm text-center mt-1">{errors.terms}</Text>
-              )}
-            </TouchableOpacity>
-
             <View className="mt-4 mb-8">
               <Button 
                 title="Cadastrar" 
@@ -332,14 +314,6 @@ export default function RegisterAnotherUser() {
                 className={Object.keys(errors).length > 0 ? 'opacity-50' : ''}
                 isLoading={isLoading}
               />
-
-              <TouchableOpacity className="p-2 mt-4" 
-                onPress={() => navigation.navigate('Login')}
-              >
-                <Text className="text-app-blue text-center text-xl font-roboto-medium">
-                  Já possui uma conta? Faça login
-                </Text>
-              </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>

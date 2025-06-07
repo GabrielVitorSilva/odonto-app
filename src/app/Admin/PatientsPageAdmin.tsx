@@ -1,14 +1,28 @@
 import ListEmptyComponent from "@/components/ListEmptyComponent";
-import * as React from "react";
+import React, { useCallback, useState } from "react";
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import Header from "@/components/Header";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import type { ProfessionalUser } from "@/services/types/treatments";
+import { treatmentsService } from "@/services/treatments";
 
 export default function PatientsPage() {
   const navigation = useNavigation();
 
-  const patients = ["Victoria Robertson"];
+  const [patients, setPatients] = useState<ProfessionalUser[]>([]);
 
+  async function fetchClients() {    
+    const data = await treatmentsService.listClients()
+    console.log(data);
+    
+    setPatients(data);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchClients();
+    }, [])
+  );
   function handlePress(name: string) {
     navigation.navigate("ViewPatientsProfile", { name });
   }
@@ -34,9 +48,9 @@ export default function PatientsPage() {
           renderItem={({ item }) => (
             <TouchableOpacity
               className="py-5 px-8"
-              onPress={() => handlePress(item)}
+              onPress={() => handlePress(item.name)}
             >
-              <Text className="text-lg">{item}</Text>
+              <Text className="text-lg">{item.name}</Text>
             </TouchableOpacity>
           )}
         />

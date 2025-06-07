@@ -46,6 +46,24 @@ export interface ProfessionalsResponse {
   total: number;
 }
 
+export interface ClientUser {
+  id: string;
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string | null;
+  role: Profile;
+  professionalId: string;
+  createdAt: string;
+  updatedAt: string;
+  password: string;
+}
+
+export interface ClientsResponse {
+  clients: ClientUser[];
+  total: number;
+}
+
 export interface IGetUser {
   user: {
     id: string,

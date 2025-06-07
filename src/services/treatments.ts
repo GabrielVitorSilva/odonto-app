@@ -1,5 +1,5 @@
 import api from './api/api';
-import type { createTreatmentRequest, createTreatmentResponse, IGetUser, IUser, ProfessionalsResponse, ProfessionalUser } from './types/treatments';
+import type { ClientsResponse, ClientUser, createTreatmentRequest, createTreatmentResponse, IGetUser, IUser, ProfessionalsResponse, ProfessionalUser } from './types/treatments';
 import { Profile } from './auth';
 
 export interface Professional {
@@ -100,6 +100,15 @@ export const treatmentsService = {
     try {
       const response = await api.get<ProfessionalsResponse>(`/professionals`);
       return response.data.professionals;
+    } catch (error: any) {
+      console.error('Erro ao buscar profissionais:', error?.response?.data || error.message);
+      throw error;
+    }
+  },  
+  async listClients(): Promise<ClientUser[]> {
+    try {
+      const response = await api.get<ClientsResponse>(`/clients`);
+      return response.data.clients;
     } catch (error: any) {
       console.error('Erro ao buscar profissionais:', error?.response?.data || error.message);
       throw error;

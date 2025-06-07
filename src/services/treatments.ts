@@ -24,7 +24,9 @@ export interface TreatmentsResponse {
   treatments: Treatment[];
 }
 
-
+export interface TreatmentResponse {
+  treatment: Treatment;
+}
 
 export const treatmentsService = {
   async createTreatment({description, name, professionalIds}:createTreatmentRequest): Promise<createTreatmentResponse> {
@@ -44,6 +46,21 @@ export const treatmentsService = {
       return response.data;
     } catch (error: any) {
       console.error('Erro ao buscar tratamentos:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
+
+  async getTreatment(id: string): Promise<Treatment> {
+    try {
+      const response = await api.get<TreatmentResponse>(`/treatments/${id}`);
+
+      if (!response.data || !response.data.treatment) {
+        throw new Error('Dados do tratamento inválidos ou vazios');
+      }
+
+      return response.data.treatment;
+    } catch (error: any) {
+      console.error('Erro ao buscar tratamento:', error?.response?.data || error.message);
       throw error;
     }
   },

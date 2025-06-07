@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { useState } from "react";
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,7 +7,7 @@ import { Button } from "@/components/Button";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useRoute, useNavigation, useFocusEffect } from "@react-navigation/native";
-import { treatmentsService } from "@/services/treatments";
+import { treatmentsService, Professional } from "@/services/treatments";
 
 type RouteParams = {
   name: string;
@@ -16,23 +16,27 @@ type RouteParams = {
   professionals: string[];
 };
 
-type Professional = {
+type ProfessionalWithName = {
   id: string;
   name: string;
 };
 
 export default function TreatmentPageAdmin() {
   const route = useRoute();
-  const { name, description, professionals, treatment_id  } = route.params as RouteParams;
+  const { name, description, treatment_id } = route.params as RouteParams;
   const [showDrawer, setShowDrawer] = useState(false);
-  const [lastSelected, setLastSelected] = useState<Professional | null>(null);
-  const [boundProfessionals, setBoundProfessionals] = useState<Professional[]>([]);
-  const [userNameSelected, setUserNameSelected] = useState('')
+  const [lastSelected, setLastSelected] = useState<ProfessionalWithName | null>(null);
+  const [boundProfessionals, setBoundProfessionals] = useState<ProfessionalWithName[]>([]);
   const navigation = useNavigation();
 
   async function loadProfessionals() {
     try {
-      const professionalsAvailable = await treatmentsService.listProfessionalAvailablesToTreatment(professionals);
+      // Busca os dados atualizados do tratamento
+      const treatment = await treatmentsService.getTreatment(treatment_id);
+      const professionalsAvailable = await treatmentsService.listProfessionalAvailablesToTreatment(
+        treatment.professionals.map((p: Professional) => p.userId)
+      );
+      
       setBoundProfessionals(professionalsAvailable.map(userSelected => ({
         id: userSelected.user.id,
         name: userSelected.user.name
@@ -41,10 +45,6 @@ export default function TreatmentPageAdmin() {
       console.error('Erro ao carregar profissionais:', error);
     }
   }
-
-  useEffect(() => {
-    loadProfessionals();
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -56,7 +56,7 @@ export default function TreatmentPageAdmin() {
     try {
       const { user } = await treatmentsService.getUser(userId);
       await treatmentsService.removeProfessionalFromTreatment(user.Professional.id, treatmentId);
-      setBoundProfessionals(prevState => prevState.filter(prof => prof.id !== userId));
+      await loadProfessionals(); // Recarrega os profissionais após remover
     } catch (error) {
       console.error('Erro ao remover profissional:', error);
     }
@@ -70,7 +70,7 @@ export default function TreatmentPageAdmin() {
     </Text>
   );
 
-  function handlePress(professional: Professional) {
+  function handlePress(professional: ProfessionalWithName) {
     setShowDrawer(true);
     setLastSelected(professional);
   }

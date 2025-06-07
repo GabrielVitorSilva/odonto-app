@@ -3,18 +3,16 @@ import React, { useCallback, useState } from "react";
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import type { ProfessionalUser } from "@/services/types/treatments";
+import type { ClientUser, ProfessionalUser } from "@/services/types/treatments";
 import { treatmentsService } from "@/services/treatments";
 
 export default function PatientsPage() {
   const navigation = useNavigation();
 
-  const [patients, setPatients] = useState<ProfessionalUser[]>([]);
+  const [patients, setPatients] = useState<ClientUser[]>([]);
 
   async function fetchClients() {    
     const data = await treatmentsService.listClients()
-    console.log(data);
-    
     setPatients(data);
   }
 

@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { PersonList } from "@/components/PersonList";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
+import { treatmentsService } from "@/services/treatments";
+import type { ClientUser, ProfessionalUser } from "@/services/types/treatments";
 
 export default function SelectClientAdmin() {
   const [selected, setSelected] = useState<string[]>([]);
   const navigation = useNavigation();
+  const [patients, setPatients] = useState<ClientUser[]>([]);
 
-  const list = [
-    { name: "Victoria Robertson" },
-    { name: "Lucas Andrade" },
-    { name: "Flávia Souza" },
-    { name: "Thiago Monteiro" },
-    { name: "Camila Duarte" },
-  ];
+  async function fetchClients() {    
+    const data = await treatmentsService.listClients()
+    setPatients(data);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchClients();
+    }, [])
+  );
 
   return (
     <View className="flex-1">
@@ -30,7 +36,7 @@ export default function SelectClientAdmin() {
 
         <View className="flex-1">
           <PersonList
-            list={list}
+            list={patients}
             selected={selected}
             setSelected={setSelected}
           />

@@ -8,7 +8,7 @@ import { treatmentsService } from "@/services/treatments";
 import type { ProfessionalUser } from "@/services/types/treatments";
 
 export default function SelectProfessionalAdmin() {
-  const [selected, setSelected] = useState<String[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
   const navigation = useNavigation();
 
   const [patients, setPatients] = useState<ProfessionalUser[]>([]);

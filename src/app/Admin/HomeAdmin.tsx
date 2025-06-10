@@ -2,10 +2,11 @@ import { View, Text } from "react-native";
 import { Menu, menuItem } from "@/components/Menu";
 import { useNavigation } from "@react-navigation/native";
 import Header from "@/components/Header";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function HomeAdmin() {
   const navigation = useNavigation();
-
+  const {profile} = useAuth()
   const menuItems: menuItem[] = [
     {
       title: "Consultas",
@@ -46,7 +47,7 @@ export default function HomeAdmin() {
       />
 
       <Text className="text-center text-3xl font-semibold my-[25px]">
-        Marina Dias
+        {profile?.user.name || "Bem-vindo(a)!"}
       </Text>
 
       <Menu items={menuItems} />

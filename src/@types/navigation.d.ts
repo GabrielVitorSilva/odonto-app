@@ -29,6 +29,7 @@ export type RootStackParamList = {
   ProfessionalsPageAdmin: undefined;
   ViewProfessionalsProfile: {
     name: string;
+    professionalId: string;
   }
   ConsultationsPageAdmin: undefined;
   Treatments: undefined;

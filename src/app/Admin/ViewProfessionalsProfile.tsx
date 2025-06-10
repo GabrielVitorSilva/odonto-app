@@ -1,51 +1,69 @@
-import * as React from "react";
+import React, { useCallback, useState } from "react";
 import { Text, View, FlatList } from "react-native";
 import Header from "@/components/Header";
 import Card from "@/components/Card";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useFocusEffect } from "@react-navigation/native";
+import { consultationService } from "@/services/consultations";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
+import { treatmentsService } from "@/services/treatments";
 
 type RouteParams = {
   name: string;
+  professionalId: string;
+};
+
+type ConsultationDetails = {
+  id: string;
+  status: string;
+  dateTime: Date;
+  treatmentName: string;
 };
 
 export default function ViewProfessionalsProfile() {
-  const route = useRoute();
-  const { name } = route.params as RouteParams;
+  const [consultations, setConsultations] = useState<ConsultationDetails[]>([]);
 
-  const consultations = [
-    {
-      id: 1,
-      name: "Clareamento",
-      patient: "Victoria Robertson",
-      status: "Pendente",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 2,
-      name: "Clareamento",
-      patient: "Lucas",
-      status: "Confirmado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 3,
-      name: "Clareamento",
-      patient: "Marcelo",
-      status: "Cancelado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 4,
-      name: "Clareamento",
-      patient: "Gabriel Vitor",
-      status: "Finalizado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-  ];
+  const route = useRoute();
+  const { name, professionalId } = route.params as RouteParams;
+
+  async function fetchTreatmentName(treatmentId: string) {
+    const response = await treatmentsService.getTreatment(treatmentId);
+    return response.name;
+  }
+
+  async function fetchProfConsultations() {
+    const response = await consultationService.listConsultationsByProfessional(
+      professionalId
+    );
+
+    const consultationsWithDetails = await Promise.all(
+      response.consultations.map(async (consultation) => {
+        const treatmentName = await fetchTreatmentName(
+          consultation.treatmentId
+        );
+
+        return {
+          id: consultation.id,
+          status: consultation.status,
+          dateTime: consultation.dateTime,
+          treatmentName,
+        };
+      })
+    );
+
+    setConsultations(consultationsWithDetails);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfConsultations();
+    }, [])
+  );
+
+  function ConsultationsEmpty() {
+    return (
+      <ListEmptyComponent iconName="clipboard" text="Não há consultas ainda" />
+    );
+  }
 
   return (
     <View className="w-full">
@@ -64,12 +82,14 @@ export default function ViewProfessionalsProfile() {
 
       <FlatList
         data={consultations}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={ConsultationsEmpty}
         renderItem={({ item }) => (
           <Card
-            name={item.name}
-            upperText={`Paciente: ${item.patient}`}
-            date={item.date}
-            hour={item.hour}
+            name={item.treatmentName}
+            upperText={`Paciente: ${"Ainda a fazer"}`}
+            date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
+            hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
             status={item.status}
           />
         )}

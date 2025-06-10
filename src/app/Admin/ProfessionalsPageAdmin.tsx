@@ -1,4 +1,4 @@
-import  React, { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import Header from "@/components/Header";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
@@ -10,8 +10,8 @@ export default function ProfessionalsPageAdmin() {
   const navigation = useNavigation();
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
 
-  async function fetchProfessionals() {    
-    const data = await treatmentsService.listProfessionals()
+  async function fetchProfessionals() {
+    const data = await treatmentsService.listProfessionals();
     setProfessionals(data);
   }
 
@@ -21,8 +21,8 @@ export default function ProfessionalsPageAdmin() {
     }, [])
   );
 
-  function handlePress(name: string) {
-    navigation.navigate("ViewProfessionalsProfile", { name });
+  function handlePress(name: string, professionalId: string) {
+    navigation.navigate("ViewProfessionalsProfile", { name, professionalId });
   }
 
   function ProfessionalsEmpty() {
@@ -51,7 +51,7 @@ export default function ProfessionalsPageAdmin() {
           renderItem={({ item }) => (
             <TouchableOpacity
               className="py-5 px-8"
-              onPress={() => handlePress(item.name)}
+              onPress={() => handlePress(item.name, item.professionalId)}
             >
               <Text className="text-lg">{item.name}</Text>
             </TouchableOpacity>

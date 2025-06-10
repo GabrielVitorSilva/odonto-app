@@ -21,6 +21,7 @@ export function SingleSelectList({
   return (
     <FlatList
       data={list}
+      keyExtractor={item => item.id}
       renderItem={({ item }) => {
         if (!item?.name) {
           return null;

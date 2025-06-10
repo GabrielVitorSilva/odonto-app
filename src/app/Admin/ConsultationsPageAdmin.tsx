@@ -72,6 +72,7 @@ export default function ConsultationsPageAdmin() {
         </View>
         <FlatList
           data={consultations}
+          keyExtractor={item => item.id.toString()}
           ListEmptyComponent={ConsultationsEmpty}
           renderItem={({ item }) => (
             <Card

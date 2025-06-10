@@ -42,6 +42,7 @@ export default function PatientsPage() {
 
         <FlatList
           data={patients}
+          keyExtractor={item => item.id}
           ListEmptyComponent={PatientsEmpty}
           renderItem={({ item }) => (
             <TouchableOpacity

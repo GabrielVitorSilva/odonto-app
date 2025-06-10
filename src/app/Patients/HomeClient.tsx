@@ -49,6 +49,7 @@ export default function HomeClient() {
 
       <FlatList
         data={consultations}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <Card
             name={item.name}

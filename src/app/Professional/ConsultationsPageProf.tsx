@@ -54,6 +54,7 @@ export default function ConsultationsPageProf() {
         </View>
         <FlatList
           data={consultations}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <Card
               name={item.name}

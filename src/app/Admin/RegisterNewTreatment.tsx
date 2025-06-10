@@ -98,6 +98,7 @@ export default function RegisterNewTreatment() {
                 </Text>
                 <FlatList
                   data={boundProfessionals}
+                  keyExtractor={item => item}
                   scrollEnabled={false}
                   renderItem={({ item }) => (
                     <View className="py-4 px-6 rounded-xl flex-row justify-between items-center bg-gray-50 mb-2">

@@ -100,6 +100,7 @@ export default function TreatmentPageAdmin() {
         </Text>
         <FlatList
           data={boundProfessionals}
+          keyExtractor={item => item.id}
           ListEmptyComponent={ProfessionalsEmpty}
           renderItem={({ item }) => (
             <View className="py-5 px-8 rounded-xl flex-row justify-between">

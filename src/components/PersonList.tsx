@@ -29,6 +29,7 @@ export function PersonList({
   return (
     <FlatList
       data={list}
+      keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => {
         if (!item?.name) {
           return null;

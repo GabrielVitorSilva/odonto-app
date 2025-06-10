@@ -22,7 +22,7 @@ export function Menu({ items }: MenuProps) {
         </Text>
         <FlatList
           data={items}
-          keyExtractor={(item) => item.toString()}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
             <TouchableOpacity
               key={index}

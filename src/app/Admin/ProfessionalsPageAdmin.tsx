@@ -47,6 +47,7 @@ export default function ProfessionalsPageAdmin() {
 
         <FlatList
           data={professionals}
+          keyExtractor={item => item.id}
           ListEmptyComponent={ProfessionalsEmpty}
           renderItem={({ item }) => (
             <TouchableOpacity

@@ -52,5 +52,15 @@ export const consultationService = {
       console.error('Error List consultations of the professional', error?.response?.data);
       throw error;
     }
+  },
+
+  async listConsultationsByClient(clientId: string): Promise<ConsultationsResponse>{
+    try {
+      const response = await api.get<ConsultationsResponse>(`/clients/${clientId}/consultations`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error List consultations of the client', error?.response?.data);
+      throw error;
+    }
   }
 }; 

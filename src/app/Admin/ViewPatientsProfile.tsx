@@ -1,39 +1,63 @@
+import React, { useCallback, useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import Header from "@/components/Header";
 import Card from "@/components/Card";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useFocusEffect } from "@react-navigation/native";
+import { treatmentsService } from "@/services/treatments";
+import { consultationService } from "@/services/consultations";
 
 type RouteParams = {
   name: string;
+  clientId: string;
+};
+
+type ConsultationDetails = {
+  id: string;
+  status: string;
+  dateTime: Date;
+  treatmentName: string;
+  treatmentDescription: string;
 };
 
 export default function ViewPatientsProfile() {
-  const route = useRoute();
-  const { name } = route.params as RouteParams;
+  const [consultations, setConsultations] = useState<ConsultationDetails[]>([]);
 
-  const consultations = [
-    {
-      name: "Clareamento",
-      description: "lorem ipsum lorem ipsum lorem ipsum",
-      date: "12/03/2025",
-      hour: "12:00",
-      status: "Pendente",
-    },
-    {
-      name: "Clareamento",
-      description: "lorem ipsum lorem ipsum lorem ipsum",
-      date: "12/03/2025",
-      hour: "12:00",
-      status: "Confirmado",
-    },
-    {
-      name: "Clareamento",
-      description: "lorem ipsum lorem ipsum lorem ipsum",
-      date: "12/03/2025",
-      hour: "12:00",
-      status: "Cancelado",
-    },
-  ];
+  const route = useRoute();
+  const { name, clientId } = route.params as RouteParams;
+
+  async function fetchTreatmentInfo(treatmentId: string) {
+    const response = await treatmentsService.getTreatment(treatmentId);
+    return [response.name, response.description];
+  }
+
+  async function fetchProfConsultations() {
+    const response = await consultationService.listConsultationsByClient(
+      clientId
+    );
+
+    const consultationsWithDetails = await Promise.all(
+      response.consultations.map(async (consultation) => {
+        const [treatmentName, treatmentDescription] = await fetchTreatmentInfo(
+          consultation.treatmentId
+        );
+        return {
+          id: consultation.id,
+          status: consultation.status,
+          dateTime: consultation.dateTime,
+          treatmentName,
+          treatmentDescription,
+        };
+      })
+    );
+
+    setConsultations(consultationsWithDetails);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfConsultations();
+    }, [])
+  );
 
   return (
     <View className="w-full">
@@ -52,14 +76,14 @@ export default function ViewPatientsProfile() {
 
       <FlatList
         data={consultations}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Card
-            name={item.name}
+            name={item.treatmentName}
             upperText={`Procedimentos:`}
-            lowerText={`${item.description}`}
-            date={item.date}
-            hour={item.hour}
+            lowerText={`${item.treatmentDescription}`}
+            date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
+            hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
             status={item.status}
           />
         )}
@@ -68,3 +92,4 @@ export default function ViewPatientsProfile() {
     </View>
   );
 }
+

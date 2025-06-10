@@ -21,8 +21,8 @@ export default function PatientsPage() {
       fetchClients();
     }, [])
   );
-  function handlePress(name: string) {
-    navigation.navigate("ViewPatientsProfile", { name });
+  function handlePress(name: string, clientId: string) {
+    navigation.navigate("ViewPatientsProfile", { name, clientId });
   }
 
   function PatientsEmpty() {
@@ -47,7 +47,7 @@ export default function PatientsPage() {
           renderItem={({ item }) => (
             <TouchableOpacity
               className="py-5 px-8"
-              onPress={() => handlePress(item.name)}
+              onPress={() => handlePress(item.name, item.clientId)}
             >
               <Text className="text-lg">{item.name}</Text>
             </TouchableOpacity>

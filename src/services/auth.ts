@@ -1,6 +1,7 @@
 import api from './api/api';
 import { LoginFormData } from '@/schemas/loginSchema';
 import { RegisterFormData } from '@/schemas/registerSchema';
+import { RegisterAnotherUserFormData } from '@/schemas/registerAnotherUserSchema';
 
 interface AuthResponse {
   token: string;
@@ -55,7 +56,7 @@ export const authService = {
     return response.data;
   },
 
-  async registerAnotherUser(data: RegisterFormData) {
+  async registerAnotherUser(data: RegisterAnotherUserFormData) {
     const response = await api.post('/register', {
       name: data.name.trim(),
       email: data.email.trim(),

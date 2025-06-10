@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
-import { registerSchema, type RegisterFormData } from '@/schemas/registerSchema';
+import { registerAnotherUserSchema, type RegisterAnotherUserFormData } from '@/schemas/registerAnotherUserSchema';
 import { authService, Profile } from '@/services/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import { Picker } from '@react-native-picker/picker';
@@ -14,7 +14,6 @@ interface FieldErrors {
   email?: string;
   cpf?: string;
   password?: string;
-  terms?: string;
   phone?: string;
   role?: string;
 }
@@ -31,7 +30,6 @@ export default function RegisterAnotherUser() {
   const [cpfClean, setCpfClean] = useState('');
   const [phone, setPhone] = useState('');
   const [role, setRole] = useState<Profile>(Profile.CLIENT);
-  const [termsAccepted, setTermsAccepted] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +50,7 @@ export default function RegisterAnotherUser() {
     return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
   }
 
-  function validateField(field: keyof RegisterFormData, value: any) {
+  function validateField(field: keyof RegisterAnotherUserFormData, value: any) {
     if (!hasAttemptedSubmit) return;
 
     const formData = {
@@ -60,14 +58,13 @@ export default function RegisterAnotherUser() {
       email,
       cpf,
       password,
-      terms: termsAccepted,
       phone,
       role,
       [field]: value
     };
 
     try {
-      registerSchema.parse(formData);
+      registerAnotherUserSchema.parse(formData);
       setErrors(prev => {
         const newErrors = { ...prev };
         delete newErrors[field];
@@ -99,12 +96,11 @@ export default function RegisterAnotherUser() {
         email,
         cpf,
         password,
-        terms: termsAccepted,
         phone,
         role
       };
 
-      registerSchema.parse(formData);
+      registerAnotherUserSchema.parse(formData);
       setErrors({});
       return true;
     } catch (error: any) {
@@ -119,6 +115,8 @@ export default function RegisterAnotherUser() {
     }
   }
 
+  console.log(errors)
+
   async function handleRegister() {
     setHasAttemptedSubmit(true);
     if (!validateFields()) return;
@@ -129,7 +127,6 @@ export default function RegisterAnotherUser() {
         email,
         password,
         cpf: cpfClean,
-        terms: termsAccepted,
         phone,
         role
       });

@@ -25,19 +25,22 @@ export default function Card({
     {
       Confirmado: {
         bg: "bg-app-light-green",
-        text: "text-app-green",
+        textStyle: "text-app-green",
       },
-      Pendente: {
+      SCHEDULED: {
         bg: "bg-app-light-yellow",
-        text: "text-app-yellow",
+        textStyle: "text-app-yellow",
+        text: "Pendente"
       },
-      Cancelado: {
+      CANCELED: {
         bg: "bg-app-light-red",
-        text: "text-app-red",
+        textStyle: "text-app-red",
+        text: "Cancelada"
       },
-      Finalizado: {
+      COMPLETED: {
         bg: "bg-app-light-blue",
-        text: "text-app-blue",
+        textStyle: "text-app-blue",
+        text: "Finalizada"
       },
     }[status] || {};
 
@@ -61,7 +64,7 @@ export default function Card({
           <Text>{upperText}</Text>
           <View className={`rounded-xl px-4 py-[2px] ${statusStyle.bg}`}>
             {status && (
-              <Text className={`font-bold ${statusStyle.text}`}>{status}</Text>
+              <Text className={`font-bold ${statusStyle.textStyle}`}>{statusStyle.text}</Text>
             )}
           </View>
         </View>

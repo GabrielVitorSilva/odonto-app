@@ -91,17 +91,6 @@ export default function LoginScreen() {
       await signIn(token);
       
       setProfile({ user });
-      if (user.role === Profile.CLIENT) {
-        navigation.navigate('HomeClient');
-      }
-
-      if (user.role ===   Profile.PROFESSIONAL) {
-        navigation.navigate('HomeProf');
-      }
-
-      if (user.role ===   Profile.ADMIN) {
-        navigation.navigate('HomeAdmin');
-      }
       showToast('Login realizado com sucesso!', 'success');
       // TODO: Implementar navegação após login
     } catch (error: any) {

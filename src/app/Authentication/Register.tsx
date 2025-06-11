@@ -120,10 +120,6 @@ export default function Register() {
  
       await signIn(token);
 
-      if (user.role === Profile.CLIENT) {
-        navigation.navigate('HomeClient');
-      }
-
       showToast('Cadastro realizado com sucesso!', 'success');
     } catch (error: any) {
       if (error.response?.data?.message) {

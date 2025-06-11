@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import ConsultationsPageAdmin from "@/app/Admin/ConsultationsPageAdmin";
 import ConsultationPage from "@/app/Patients/ConsultationPage";
 import ConsultationPageAdmin from "@/app/Admin/ConsultationPageAdmin";
@@ -39,7 +39,18 @@ import SelectTreatmentAdmin from "@/app/Admin/SelectTreatmentAdmin";
 const Stack = createNativeStackNavigator();
 
 export function StackRoutes() {
-  const { token, isLoading, profile } = useAuth();
+  const { token, isLoading } = useAuth();
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    async function loadProfile() {
+      const storedProfile = await AsyncStorage.getItem('@OdontoApp:profile');
+      if (storedProfile) {
+        setProfile(JSON.parse(storedProfile));
+      }
+    }
+    loadProfile();
+  }, []);
 
   if (isLoading) {
     return (
@@ -65,13 +76,13 @@ export function StackRoutes() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="UseTerms" component={UseTerms} />
         </>
-      ) : profile?.user.role === "CLIENT" ? (
+      ) : profile?.user?.role === "CLIENT" ? (
         <>
           <Stack.Screen name="SelectDatePatient" component={SelectDatePatient} />
           <Stack.Screen name="HomeClient" component={HomeClient} />
           <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
         </>
-      ) : profile?.user.role === "ADMIN" ? (
+      ) : profile?.user?.role === "ADMIN" ? (
         <>
           <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
           <Stack.Screen name="RegisterAnotherUser" component={RegisterAnotherUser} />
@@ -91,7 +102,7 @@ export function StackRoutes() {
           <Stack.Screen name="ViewPatientsProfile" component={ViewPatientsProfile} />
           <Stack.Screen name="ViewProfessionalsProfile" component={ViewProfessionalsProfile} />
         </>
-      ) : profile?.user.role === "PROFESSIONAL" ? (
+      ) : profile?.user?.role === "PROFESSIONAL" ? (
         <>
           <Stack.Screen name="HomeProf" component={HomeProf} />
           <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf} />

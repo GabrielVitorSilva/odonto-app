@@ -16,6 +16,7 @@ interface AuthContextData {
   treatmentSelected: Treatment | null;
   setTreatmentSelected: React.Dispatch<React.SetStateAction<Treatment | null>>
   signOut: () => Promise<void>;
+  loadStoredData: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -35,6 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function loadStoredData() {
     try {
+      setIsLoading(true);
       const [storedToken, storedProfile] = await Promise.all([
         AsyncStorage.getItem('@OdontoApp:token'),
         AsyncStorage.getItem('@OdontoApp:profile')
@@ -96,6 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       token,
       signIn,
       signOut,
+      loadStoredData,
       isLoading,
       profile,
       setProfile: handleSetProfile,

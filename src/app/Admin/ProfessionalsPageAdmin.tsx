@@ -1,19 +1,26 @@
 import React, { useCallback, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity } from "react-native";
+import { Text, View, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
 import Header from "@/components/Header";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { ProfessionalUser } from "@/services/types/treatments";
 import { treatmentsService } from "@/services/treatments";
+import { colors } from "@/theme/colors";
 
 export default function ProfessionalsPageAdmin() {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
 
   async function fetchProfessionals() {
-    const data = await treatmentsService.listProfessionals();
-    setProfessionals(data);
-  }
+      try {
+        setLoading(true);
+        const data = await treatmentsService.listProfessionals();
+        setProfessionals(data);
+      } finally {
+        setLoading(false);
+      }
+    }
 
   useFocusEffect(
     useCallback(() => {
@@ -44,20 +51,25 @@ export default function ProfessionalsPageAdmin() {
         <Text className="text-lg text-app-blue font-semibold mb-3">
           Lista de Odontólogos
         </Text>
-
-        <FlatList
-          data={professionals}
-          keyExtractor={item => item.id}
-          ListEmptyComponent={ProfessionalsEmpty}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              className="py-5 px-8"
-              onPress={() => handlePress(item.name, item.professionalId)}
-            >
-              <Text className="text-lg">{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
+        {loading ? (
+          <View className="flex-1 justify-center items-center mt-10">
+            <ActivityIndicator size="large" color={colors.blue} />
+          </View>
+        ) : (
+          <FlatList
+            data={professionals}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={ProfessionalsEmpty}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                className="py-5 px-8"
+                onPress={() => handlePress(item.name, item.professionalId)}
+              >
+                <Text className="text-lg">{item.name}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </View>
     </View>
   );

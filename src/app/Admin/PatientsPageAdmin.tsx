@@ -1,19 +1,25 @@
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import React, { useCallback, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity } from "react-native";
+import { Text, View, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import type { ClientUser, ProfessionalUser } from "@/services/types/treatments";
+import type { ClientUser } from "@/services/types/treatments";
 import { treatmentsService } from "@/services/treatments";
+import { colors } from "@/theme/colors";
 
 export default function PatientsPage() {
   const navigation = useNavigation();
-
+  const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState<ClientUser[]>([]);
 
-  async function fetchClients() {    
-    const data = await treatmentsService.listClients()
-    setPatients(data);
+  async function fetchClients() {
+    try {
+      setLoading(true);
+      const data = await treatmentsService.listClients();
+      setPatients(data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useFocusEffect(
@@ -40,19 +46,25 @@ export default function PatientsPage() {
           Lista de Clientes
         </Text>
 
-        <FlatList
-          data={patients}
-          keyExtractor={item => item.id}
-          ListEmptyComponent={PatientsEmpty}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              className="py-5 px-8"
-              onPress={() => handlePress(item.name, item.clientId)}
-            >
-              <Text className="text-lg">{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
+        {loading ? (
+          <View className="flex-1 justify-center items-center mt-10">
+            <ActivityIndicator size="large" color={colors.blue} />
+          </View>
+        ) : (
+          <FlatList
+            data={patients}
+            keyExtractor={item => item.id}
+            ListEmptyComponent={PatientsEmpty}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                className="py-5 px-8"
+                onPress={() => handlePress(item.name, item.clientId)}
+              >
+                <Text className="text-lg">{item.name}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </View>
     </View>
   );

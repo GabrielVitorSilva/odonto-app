@@ -1,16 +1,12 @@
 import api from './api/api';
+import { ConsultationStatus } from './types/consultations';
+import { UpdateConsultationRequest } from './types/consultations';
 
 interface IScheduleConsultRequest {
   clientId: string,
   professionalId: string,
   treatmentId: string,
   dateTime: string,
-}
-
-export enum ConsultationStatus {
-  SCHEDULED = 'SCHEDULED',
-  CANCELED = 'CANCELED',
-  COMPLETED = 'COMPLETED',
 }
 
 export interface Consultation {
@@ -70,6 +66,15 @@ export const consultationService = {
       return response.data;
     } catch (error: any) {
       console.error('Error List consultations of the client', error?.response?.data);
+      throw error;
+    }
+  },
+
+  async updateConsultation(consultationId: string, newData: UpdateConsultationRequest): Promise<void> {
+    try {
+      const response = await api.patch(`/consultations/${consultationId}`, newData)
+    } catch (error: any) {
+      console.error('Error Update consultations', error?.response?.data);
       throw error;
     }
   }

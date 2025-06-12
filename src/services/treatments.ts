@@ -123,6 +123,17 @@ export const treatmentsService = {
       throw error;
     }
   },
+
+  async getLoggedInfo(): Promise<IGetUser> {
+    try {
+      const response = await api.post<IGetUser>('/me');
+      return response.data
+    } catch (error: any) {
+      console.error('Erro ao obter informações:', error?.response?.data || error.message);
+      throw error;
+    }
+
+  },
   async addProfessionalFromTreatment(treatmentId: string, userIds: string[]): Promise<void> {
     try {
       const promises = userIds.map(async (userId) => {

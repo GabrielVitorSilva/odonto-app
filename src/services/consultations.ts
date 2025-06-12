@@ -40,9 +40,9 @@ export const consultationService = {
     }
   },
 
-  async listAllConsultations(): Promise<ConsultationsResponse>{
+  async listAllConsultations(userId: string | undefined): Promise<ConsultationsResponse>{
     try {
-      const response = await api.get<ConsultationsResponse>('/consultations');
+      const response = await api.get<ConsultationsResponse>(`/users/${userId}/consultations`);
       return response.data;
     } catch (error: any) {
       console.error('Error List consultations of the professional', error?.response?.data);

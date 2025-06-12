@@ -7,6 +7,7 @@ import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { consultationService, Consultation } from "@/services/consultations";
 import { useCallback, useState } from "react";
 import { treatmentsService } from "@/services/treatments";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ConsultationsWithDetails = Consultation & {
   treatmentName: string;
@@ -15,6 +16,7 @@ type ConsultationsWithDetails = Consultation & {
 };
 
 export default function ConsultationsPageAdmin() {
+  const {profile} = useAuth();
   const [consultations, setConsultations] = useState<
     ConsultationsWithDetails[]
   >([]);
@@ -26,7 +28,7 @@ export default function ConsultationsPageAdmin() {
   }
 
   async function loadConsultations() {
-    const response = await consultationService.listAllConsultations();
+    const response = await consultationService.listAllConsultations(profile?.user.id);
 
     const consultationsWithDetails = await Promise.all(
       response.consultations.map(async (consultation) => {

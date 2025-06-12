@@ -44,6 +44,16 @@ export const consultationService = {
     }
   },
 
+  async listAllConsultations(): Promise<ConsultationsResponse>{
+    try {
+      const response = await api.get<ConsultationsResponse>('/consultations');
+      return response.data;
+    } catch (error: any) {
+      console.error('Error List consultations of the professional', error?.response?.data);
+      throw error;
+    }
+  },
+
   async listConsultationsByProfessional(professionalId: string): Promise<ConsultationsResponse>{
     try {
       const response = await api.get<ConsultationsResponse>(`/professionals/${professionalId}/consultations`);

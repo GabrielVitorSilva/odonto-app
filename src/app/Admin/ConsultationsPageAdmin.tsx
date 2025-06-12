@@ -2,63 +2,60 @@ import { View, Text, FlatList } from "react-native";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
+import { consultationService, Consultation } from "@/services/consultations";
+import { useCallback, useState } from "react";
+import { treatmentsService } from "@/services/treatments";
+
+type ConsultationsWithDetails = Consultation & {
+  treatmentName: string;
+  patientName: string;
+  professionalName: string;
+};
 
 export default function ConsultationsPageAdmin() {
+  const [consultations, setConsultations] = useState<
+    ConsultationsWithDetails[]
+  >([]);
   const navigation = useNavigation();
 
-  type Consultation = {
-    id: number;
-    name: string;
-    patient: string;
-    professional: string;
-    status: string;
-    date: string;
-    hour: string;
+  async function fetchTreatmentInfo(treatmentId: string) {
+    const response = await treatmentsService.getTreatment(treatmentId);
+    return response.name;
   }
 
-  const consultations: Consultation[] = [
-    {
-      id: 1,
-      name: "Clareamento",
-      patient: "Victoria Robertson",
-      professional: "Alberes",
-      status: "Pendente",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 2,
-      name: "Clareamento",
-      patient: "Lucas",
-      professional: "Maria Santos",
-      status: "Confirmado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 3,
-      name: "Clareamento",
-      patient: "Marcelo",
-      professional: "Flávia Souza",
-      status: "Cancelado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 4,
-      name: "Clareamento",
-      patient: "Gabriel Vitor",
-      professional: "Alberes",
-      status: "Finalizado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-  ];
+  async function loadConsultations() {
+    const response = await consultationService.listAllConsultations();
 
-  function ConsultationsEmpty(){
-    return (<ListEmptyComponent iconName="clipboard" text="Não há consultas ainda" />);
+    const consultationsWithDetails = await Promise.all(
+      response.consultations.map(async (consultation) => {
+        const treatmentName = await fetchTreatmentInfo(
+          consultation.treatmentId
+        );
+
+        return {
+          ...consultation,
+          treatmentName,
+          patientName: "",
+          professionalName: "",
+        };
+      })
+    );
+
+    setConsultations(consultationsWithDetails);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      loadConsultations();
+    }, [])
+  );
+
+  function ConsultationsEmpty() {
+    return (
+      <ListEmptyComponent iconName="clipboard" text="Não há consultas ainda" />
+    );
   }
 
   return (
@@ -72,24 +69,23 @@ export default function ConsultationsPageAdmin() {
         </View>
         <FlatList
           data={consultations}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           ListEmptyComponent={ConsultationsEmpty}
           renderItem={({ item }) => (
             <Card
-              name={item.name}
-              upperText={`Paciente: ${item.patient}`}
-              lowerText={`Profissional: ${item.professional}`}
-              date={item.date}
-              hour={item.hour}
+              name={item.treatmentName}
+              upperText={`Paciente: ${item.patientName}`}
+              lowerText={`Profissional: ${item.professionalName}`}
+              date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
+              hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
               status={item.status}
               handlePress={() =>
                 navigation.navigate("ConsultationPageAdmin", {
-                  name: item.name,
-                  date: item.date,
-                  hour: item.hour,
+                  name: item.treatmentName,
+                  dateTime: item.dateTime,
                   status: item.status,
-                  patientName: item.patient,
-                  professionalName: item.professional,
+                  patientName: item.patientName,
+                  professionalName: item.professionalName,
                 })
               }
             />
@@ -108,3 +104,4 @@ export default function ConsultationsPageAdmin() {
     </View>
   );
 }
+

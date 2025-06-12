@@ -53,6 +53,12 @@ export type RootStackParamList = {
   SelectDateHourProf: undefined;
   SelectPatientProf: undefined;
   SelectTreatmentProf: undefined;
+  ConsultationPageProf: {
+    name: string;
+    dateTime: Date;
+    status: string;
+    patientName: string;
+  };
 };
 
 declare global {

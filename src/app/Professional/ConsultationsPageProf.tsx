@@ -47,8 +47,6 @@ export default function ConsultationsPageProf() {
     },
   ];
 
-  consultationService.updateConsultation('a57777c9-a87c-486e-ab73-36eb8a970834', {clientId: "0c04a807-7a69-4abe-8ede-d441944fab36", treatmentId: "8548e3e8-930f-41c1-989c-4fcfb3cb90a3", dateTime: new Date("2025-06-16T09:00:00.000Z"), professionalId: "eeeeaabd-dd32-4678-9c45-ad4fa9306685", status: 'CANCELED'})
-
   return (
     <View>
       <Header className="bg-app-blue" contentColor="white" />

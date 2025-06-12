@@ -119,8 +119,8 @@ export default function SelectDateHourAdmin() {
           style={{ height: 50, backgroundColor: "#f3f4f6" }}
           itemStyle={{ backgroundColor: "#f3f4f6" }}
         >
-          {availableHours.map((hour) => (
-            <Picker.Item label={hour} value={hour} />
+          {availableHours.map((hour, index) => (
+            <Picker.Item label={hour} key={index} value={hour} />
           ))}
         </Picker>
       </View>
@@ -137,7 +137,7 @@ export default function SelectDateHourAdmin() {
         content={
           <Text className="text-center mb-6">
             Deseja realmente agendar {``}
-            <Text className="text-app-blue font-semibold">{`(${treatmentSelected?.name})`}</Text>{" "}
+            <Text className="text-app-blue font-semibold">{`${treatmentSelected?.name}`}</Text>{" "}
             para{" "}
             <Text className="text-app-blue font-semibold">
             {`${clientSelected?.name}`}

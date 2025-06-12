@@ -49,6 +49,10 @@ export type RootStackParamList = {
   BindProfessionalAdmin: {
     treatment_id: string;
   };
+  TreatmentsProf: undefined;
+  SelectDateHourProf: undefined;
+  SelectPatientProf: undefined;
+  SelectTreatmentProf: undefined;
 };
 
 declare global {

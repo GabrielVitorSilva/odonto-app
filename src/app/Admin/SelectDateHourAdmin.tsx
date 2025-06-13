@@ -85,6 +85,7 @@ export default function SelectDateHourAdmin() {
 
   return (
     <View className="flex-1 bg-white">
+      <Header />
       <Text className="text-4xl text-center mt-6 mb-4">Selecione data e hora</Text>
       <Calendar
         current={new Date().toISOString().split("T")[0]}
@@ -126,7 +127,7 @@ export default function SelectDateHourAdmin() {
       </View>
 
       <Button
-        className="mt-8"
+        className="mt-auto mb-16"
         title="Agendar Consulta"
         onPress={() => {
           setShowDrawer(true);

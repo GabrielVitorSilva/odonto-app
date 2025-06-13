@@ -47,7 +47,7 @@ export default function SelectClientAdmin() {
         </View>
       </View>
       <Button
-        className="mb-5"
+        className="mb-16"
         title="Selecionar"
         onPress={() => {
           const selectedClient = patients.find(p => p.id === selected.id);

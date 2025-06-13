@@ -6,6 +6,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { consultationService, type ListAllConsultation,   } from "@/services/consultations";
 import { useCallback, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import Loading from "@/components/Loading";
 
 export default function ConsultationsPageAdmin() {
   const navigation = useNavigation();
@@ -26,11 +27,7 @@ export default function ConsultationsPageAdmin() {
       fetchConsultations();
     }, [])
   );
-
- 
-
- 
-
+  
   return (
     <View className="flex-1">
       <Header className="bg-app-blue" contentColor="white" />

@@ -8,17 +8,28 @@ import { treatmentsService } from "@/services/treatments";
 import type { ClientUser, ProfessionalUser } from "@/services/types/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
+import Loading from "@/components/Loading";
 
 export default function SelectClientAdmin() {
-  const { setClientSelected } = useAuth()
+  const { setClientSelected } = useAuth();
 
-  const [selected, setSelected] = useState<{name: string; id: string}>({ name: "", id: "" });
+  const [selected, setSelected] = useState<{ name: string; id: string }>({
+    name: "",
+    id: "",
+  });
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<ClientUser[]>([]);
 
-  async function fetchClients() {    
-    const data = await treatmentsService.listClients()
-    setPatients(data);
+  async function fetchClients() {
+    try {
+      setLoading(true);
+      const data = await treatmentsService.listClients();
+      setPatients(data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useFocusEffect(
@@ -26,6 +37,12 @@ export default function SelectClientAdmin() {
       fetchClients();
     }, [])
   );
+
+  function PatientsEmpty() {
+    return (
+      <ListEmptyComponent iconName="people" text="Não há pacientes ainda" />
+    );
+  }
 
   return (
     <View className="flex-1">
@@ -39,22 +56,28 @@ export default function SelectClientAdmin() {
         </Text>
 
         <View className="flex-1">
-          <SingleSelectList
-            list={patients}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          {Loading ? (
+            <Loading />
+          ) : (
+            <SingleSelectList
+              list={patients}
+              selected={selected}
+              setSelected={setSelected}
+              ListEmptyComponent={PatientsEmpty}
+            />
+          )}
         </View>
       </View>
       <Button
         className="mb-16"
         title="Selecionar"
         onPress={() => {
-          const selectedClient = patients.find(p => p.id === selected.id);
+          const selectedClient = patients.find((p) => p.id === selected.id);
           setClientSelected(selectedClient || null);
-          navigation.navigate("SelectProfessionalAdmin")
+          navigation.navigate("SelectProfessionalAdmin");
         }}
       />
     </View>
   );
 }
+

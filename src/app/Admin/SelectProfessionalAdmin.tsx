@@ -8,18 +8,28 @@ import { treatmentsService } from "@/services/treatments";
 import type { ProfessionalUser } from "@/services/types/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
+import Loading from "@/components/Loading";
 
 export default function SelectProfessionalAdmin() {
   const { setProfessionalSelected } = useAuth();
-  
-  const [selected, setSelected] = useState<{name: string; id: string}>({ name: "", id: "" });
-  const navigation = useNavigation();
 
+  const [selected, setSelected] = useState<{ name: string; id: string }>({
+    name: "",
+    id: "",
+  });
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
 
-  async function fetchProfessionals() {    
-    const data = await treatmentsService.listProfessionals()
-    setProfessionals(data);
+  async function fetchProfessionals() {
+    try {
+      setLoading(true);
+      const data = await treatmentsService.listProfessionals();
+      setProfessionals(data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useFocusEffect(
@@ -27,6 +37,15 @@ export default function SelectProfessionalAdmin() {
       fetchProfessionals();
     }, [])
   );
+
+  function ProfessionalsEmpty() {
+    return (
+      <ListEmptyComponent
+        iconName="medical"
+        text="Não há funcionários vinculados ainda"
+      />
+    );
+  }
 
   return (
     <View className="flex-1">
@@ -40,22 +59,30 @@ export default function SelectProfessionalAdmin() {
         </Text>
 
         <View className="flex-1">
-        <SingleSelectList
-            list={professionals}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          {loading ? (
+            <Loading />
+          ) : (
+            <SingleSelectList
+              list={professionals}
+              selected={selected}
+              setSelected={setSelected}
+              ListEmptyComponent={ProfessionalsEmpty}
+            />
+          )}
         </View>
       </View>
       <Button
         className="mb-16"
         title="Selecionar"
         onPress={() => {
-          const selectedClient = professionals.find(p => p.id === selected.id);
+          const selectedClient = professionals.find(
+            (p) => p.id === selected.id
+          );
           setProfessionalSelected(selectedClient || null);
-          navigation.navigate("SelectTreatmentAdmin")
+          navigation.navigate("SelectTreatmentAdmin");
         }}
       />
     </View>
   );
 }
+

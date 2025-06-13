@@ -9,10 +9,12 @@ import { useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "@/@types/navigation";
 import { treatmentsService } from "@/services/treatments";
 import type { IUser, ProfessionalUser } from "@/services/types/treatments";
+import Loading from "@/components/Loading";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
 
 type RouteParams = {
   treatment_id: string;
-}
+};
 
 export default function BindProfessionalAdmin() {
   const route = useRoute();
@@ -21,12 +23,18 @@ export default function BindProfessionalAdmin() {
   const [selectedNames, setSelectedNames] = useState<string[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [noSelected, setNoSelected] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
   const navigation = useNavigation();
 
   async function fetchProfessionals() {
-    const data = await treatmentsService.listProfessionals()
-    setProfessionals(data);
+    try {
+      setLoading(true);
+      const data = await treatmentsService.listProfessionals();
+      setProfessionals(data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useFocusEffect(
@@ -44,11 +52,14 @@ export default function BindProfessionalAdmin() {
   };
 
   const handleConfirmation = async () => {
-    try {      
-      await treatmentsService.addProfessionalFromTreatment(treatment_id, selectedIds);
-      navigation.goBack(); 
+    try {
+      await treatmentsService.addProfessionalFromTreatment(
+        treatment_id,
+        selectedIds
+      );
+      navigation.goBack();
     } catch (error) {
-      console.error('Erro ao vincular profissionais:', error);
+      console.error("Erro ao vincular profissionais:", error);
     }
   };
 
@@ -60,14 +71,25 @@ export default function BindProfessionalAdmin() {
     </Text>
   );
 
-  const handleSelection = (value: string[] | ((prevState: string[]) => string[])) => {
-    const names = typeof value === 'function' ? value(selectedNames) : value;
+  const handleSelection = (
+    value: string[] | ((prevState: string[]) => string[])
+  ) => {
+    const names = typeof value === "function" ? value(selectedNames) : value;
     setSelectedNames(names);
     const ids = professionals
-      .filter(prof => names.includes(prof.name))
-      .map(prof => prof.id);
+      .filter((prof) => names.includes(prof.name))
+      .map((prof) => prof.id);
     setSelectedIds(ids);
   };
+
+  function ProfessionalsEmpty() {
+    return (
+      <ListEmptyComponent
+        iconName="medical"
+        text="Não há funcionários vinculados ainda"
+      />
+    );
+  }
 
   return (
     <View className="flex-1">
@@ -75,14 +97,19 @@ export default function BindProfessionalAdmin() {
       <View className="flex-1 px-4 py-4">
         <Text className="text-center text-3xl font-semibold">Odontólogos</Text>
 
-        <View className="flex-1">
-          <PersonList
-            list={professionals}
-            multiselection
-            selected={selectedNames}
-            setSelected={handleSelection}
-          />
-        </View>
+        {loading ? (
+          <Loading />
+        ) : (
+          <View className="flex-1">
+            <PersonList
+              list={professionals}
+              multiselection
+              selected={selectedNames}
+              setSelected={handleSelection}
+              ListEmptyComponent={ProfessionalsEmpty}
+            />
+          </View>
+        )}
       </View>
 
       <View className="mb-16">
@@ -105,3 +132,4 @@ export default function BindProfessionalAdmin() {
     </View>
   );
 }
+

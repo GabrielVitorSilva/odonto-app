@@ -6,21 +6,25 @@ import { View, Text } from "react-native";
 import { treatmentsService, type Treatment } from "@/services/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
 
 export default function SelectTreatmentAdmin() {
   const { setTreatmentSelected } = useAuth();
-  
-  const [selected, setSelected] = useState<{name: string; id: string}>({ name: "", id: "" });
+
+  const [selected, setSelected] = useState<{ name: string; id: string }>({
+    name: "",
+    id: "",
+  });
   const navigation = useNavigation();
 
   const [treatments, setTreatments] = useState<Treatment[]>([]);
-  
+
   async function loadTreatments() {
     try {
       const response = await treatmentsService.listAllTreatments();
       setTreatments(response.treatments);
     } catch (error) {
-      console.error('Erro ao carregar tratamentos:', error);
+      console.error("Erro ao carregar tratamentos:", error);
     }
   }
 
@@ -29,6 +33,15 @@ export default function SelectTreatmentAdmin() {
       loadTreatments();
     }, [])
   );
+
+  function TreatmentsEmpty() {
+    return (
+      <ListEmptyComponent
+        iconName="medkit"
+        text="Não há tratamentos cadastrados ainda"
+      />
+    );
+  }
 
   return (
     <View className="flex-1">
@@ -42,10 +55,11 @@ export default function SelectTreatmentAdmin() {
         </Text>
 
         <View className="flex-1">
-        <SingleSelectList
+          <SingleSelectList
             list={treatments}
             selected={selected}
             setSelected={setSelected}
+            ListEmptyComponent={TreatmentsEmpty}
           />
         </View>
       </View>
@@ -53,11 +67,14 @@ export default function SelectTreatmentAdmin() {
         className="mb-16"
         title="Selecionar"
         onPress={() => {
-          const treatmentSelected = treatments.find(p => p.id === selected.id);
+          const treatmentSelected = treatments.find(
+            (p) => p.id === selected.id
+          );
           setTreatmentSelected(treatmentSelected || null);
-          navigation.navigate("SelectDateHourAdmin")
+          navigation.navigate("SelectDateHourAdmin");
         }}
       />
     </View>
   );
 }
+

@@ -8,6 +8,7 @@ import { treatmentsService } from "@/services/treatments";
 import type { ClientUser, ProfessionalUser } from "@/services/types/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
 
 export default function SelectClientAdmin() {
   const { setClientSelected } = useAuth()
@@ -27,6 +28,12 @@ export default function SelectClientAdmin() {
     }, [])
   );
 
+  function PatientsEmpty() {
+      return (
+        <ListEmptyComponent iconName="people" text="Não há pacientes ainda" />
+      );
+  }
+
   return (
     <View className="flex-1">
       <Header />
@@ -43,6 +50,7 @@ export default function SelectClientAdmin() {
             list={patients}
             selected={selected}
             setSelected={setSelected}
+            ListEmptyComponent={PatientsEmpty}
           />
         </View>
       </View>

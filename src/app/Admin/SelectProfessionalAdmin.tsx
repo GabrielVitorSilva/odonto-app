@@ -8,6 +8,7 @@ import { treatmentsService } from "@/services/treatments";
 import type { ProfessionalUser } from "@/services/types/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
 
 export default function SelectProfessionalAdmin() {
   const { setProfessionalSelected } = useAuth();
@@ -28,6 +29,15 @@ export default function SelectProfessionalAdmin() {
     }, [])
   );
 
+  function ProfessionalsEmpty() {
+      return (
+        <ListEmptyComponent
+          iconName="medical"
+          text="Não há funcionários vinculados ainda"
+        />
+      );
+  }
+
   return (
     <View className="flex-1">
       <Header />
@@ -44,6 +54,7 @@ export default function SelectProfessionalAdmin() {
             list={professionals}
             selected={selected}
             setSelected={setSelected}
+            ListEmptyComponent={ProfessionalsEmpty}
           />
         </View>
       </View>

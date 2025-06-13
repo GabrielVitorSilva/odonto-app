@@ -1,5 +1,5 @@
 import type { ProfessionalUser } from "@/services/types/treatments";
-import React from "react";
+import React, { ComponentType } from "react";
 import { FlatList, Text, TouchableOpacity } from "react-native";
 
 interface SelectedItem {
@@ -11,16 +11,19 @@ type SingleSelectListProps = {
   list: ProfessionalUser[] | {name: string; id: string}[];
   selected: SelectedItem;
   setSelected: React.Dispatch<React.SetStateAction<SelectedItem>>;
+  ListEmptyComponent: ComponentType<any>;
 };
 
 export function SingleSelectList({
   list,
   selected,
   setSelected,
+  ListEmptyComponent,
 }: SingleSelectListProps) {
   return (
     <FlatList
       data={list}
+      ListEmptyComponent={ListEmptyComponent}
       keyExtractor={item => item.id}
       renderItem={({ item }) => {
         if (!item?.name) {

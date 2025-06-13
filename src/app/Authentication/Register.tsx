@@ -105,26 +105,11 @@ export default function Register() {
 
   async function handleRegister() {
     setHasAttemptedSubmit(true);
-    console.log({
-      name,
-      email,
-      password,
-      cpf: cpfClean,
-      terms: termsAccepted,
-      role: Profile.CLIENT,
-    })
     if (!validateFields()) return;
     try {
       setIsLoading(true);
-      console.log({
-        name,
-        email,
-        password,
-        cpf: cpfClean,
-        terms: termsAccepted,
-        role: Profile.CLIENT,
-      })
-      await authService.register({
+      
+      const registerResponse = await authService.register({
         name,
         email,
         password,
@@ -132,15 +117,17 @@ export default function Register() {
         terms: termsAccepted,
         role: Profile.CLIENT,
       });
+      console.log('Register response:', registerResponse);
       
-      const { token } = await authService.login({ email, password });
-      const { user } = await authService.profile(token);
-      setProfile({ user });
- 
-      await signIn(token);
-
-      showToast('Cadastro realizado com sucesso!', 'success');
+      if (registerResponse === 201) {
+        const { token } = await authService.login({ email, password });
+        const { user } = await authService.profile(token);
+        setProfile({ user });
+        await signIn(token);
+        showToast('Cadastro realizado com sucesso!', 'success');
+      }
     } catch (error: any) {
+      console.log('Error during registration:', error.response?.data);
       if (error.response?.data?.message) {
         showToast(error.response.data.message, 'error');
       } else if (error.response?.status === 409) {

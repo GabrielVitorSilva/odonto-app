@@ -53,7 +53,7 @@ export const authService = {
         password: data.password,
         cpf: data.cpf,
       });
-      return response.data;
+      return response.status;
     } catch (error: any) {
       console.error('Error during registration:', error?.response?.data);
       throw error;

@@ -1,6 +1,6 @@
 
 import type { ProfessionalUser } from "@/services/types/treatments";
-import React from "react";
+import React, { ComponentType } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 type PersonListProps = {
@@ -8,6 +8,7 @@ type PersonListProps = {
   multiselection?: boolean;
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+  ListEmptyComponent: ComponentType<any>;
 };
 
 export function PersonList({
@@ -15,6 +16,7 @@ export function PersonList({
   multiselection = false,
   selected,
   setSelected,
+  ListEmptyComponent
 }: PersonListProps) {
   function handlePress(name: string) {
     selected.indexOf(name) != -1
@@ -29,6 +31,7 @@ export function PersonList({
   return (
     <FlatList
       data={list}
+      ListEmptyComponent={ListEmptyComponent}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => {
         if (!item?.name) {

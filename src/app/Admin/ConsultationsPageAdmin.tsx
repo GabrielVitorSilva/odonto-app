@@ -54,8 +54,7 @@ export default function ConsultationsPageAdmin() {
               handlePress={() =>
                 navigation.navigate("ConsultationPageAdmin", {
                   name: item.treatmentName,
-                  date: new Date(item.dateTime).toLocaleDateString("pt-BR"),
-                  hour: new Date(item.dateTime).toLocaleTimeString("pt-BR"),
+                  dateTime: item.dateTime,
                   status: item.status,
                   patientName: item.clientName,
                   professionalName: item.professionalName,

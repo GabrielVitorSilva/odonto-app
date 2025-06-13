@@ -13,6 +13,7 @@ interface FieldErrors {
   cpf?: string;
   password?: string;
   terms?: string;
+  role?: string;
 }
 
 export default function Register() {
@@ -83,7 +84,8 @@ export default function Register() {
         email,
         cpf,
         password,
-        terms: termsAccepted
+        terms: termsAccepted,
+        role: Profile.CLIENT
       };
 
       registerSchema.parse(formData);
@@ -103,15 +105,32 @@ export default function Register() {
 
   async function handleRegister() {
     setHasAttemptedSubmit(true);
+    console.log({
+      name,
+      email,
+      password,
+      cpf: cpfClean,
+      terms: termsAccepted,
+      role: Profile.CLIENT,
+    })
     if (!validateFields()) return;
     try {
       setIsLoading(true);
+      console.log({
+        name,
+        email,
+        password,
+        cpf: cpfClean,
+        terms: termsAccepted,
+        role: Profile.CLIENT,
+      })
       await authService.register({
         name,
         email,
         password,
         cpf: cpfClean,
-        terms: termsAccepted
+        terms: termsAccepted,
+        role: Profile.CLIENT,
       });
       
       const { token } = await authService.login({ email, password });
@@ -194,10 +213,13 @@ export default function Register() {
                   placeholder="CPF (000.000.000-00)"
                   value={cpf}
                   onChangeText={(text) => {
-                    setCpfClean(text.replace(/\D/g, ''));
-                    const formattedCpf = formatCPF(text);
-                    setCpf(formattedCpf);
-                    validateField('cpf', formattedCpf);
+                    const numbers = text.replace(/\D/g, '');
+                    if (numbers.length <= 11) {
+                      setCpfClean(numbers);
+                      const formattedCpf = formatCPF(numbers);
+                      setCpf(formattedCpf);
+                      validateField('cpf', formattedCpf);
+                    }
                   }}
                   className={`bg-gray-100 p-4 rounded-2xl text-base mb-1 font-roboto ${
                     errors.cpf ? 'border-2 border-red-500' : ''

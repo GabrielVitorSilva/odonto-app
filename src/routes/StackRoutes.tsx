@@ -78,8 +78,8 @@ export function StackRoutes() {
         </>
       ) : profile?.user?.role === "CLIENT" ? (
         <>
-          <Stack.Screen name="SelectDatePatient" component={SelectDatePatient} />
           <Stack.Screen name="HomeClient" component={HomeClient} />
+          <Stack.Screen name="SelectDatePatient" component={SelectDatePatient} />
           <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
         </>
       ) : profile?.user?.role === "ADMIN" ? (

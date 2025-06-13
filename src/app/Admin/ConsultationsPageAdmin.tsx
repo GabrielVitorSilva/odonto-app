@@ -8,6 +8,7 @@ import { consultationService, Consultation } from "@/services/consultations";
 import { useCallback, useState } from "react";
 import { treatmentsService } from "@/services/treatments";
 import { useAuth } from "@/contexts/AuthContext";
+import Loading from "@/components/Loading";
 
 type ConsultationsWithDetails = Consultation & {
   treatmentName: string;
@@ -16,7 +17,8 @@ type ConsultationsWithDetails = Consultation & {
 };
 
 export default function ConsultationsPageAdmin() {
-  const {profile} = useAuth();
+  const { profile } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [consultations, setConsultations] = useState<
     ConsultationsWithDetails[]
   >([]);
@@ -28,24 +30,31 @@ export default function ConsultationsPageAdmin() {
   }
 
   async function loadConsultations() {
-    const response = await consultationService.listAllConsultations(profile?.user.id);
+    try {
+      setLoading(true);
+      const response = await consultationService.listAllConsultations(
+        profile?.user.id
+      );
 
-    const consultationsWithDetails = await Promise.all(
-      response.consultations.map(async (consultation) => {
-        const treatmentName = await fetchTreatmentInfo(
-          consultation.treatmentId
-        );
+      const consultationsWithDetails = await Promise.all(
+        response.consultations.map(async (consultation) => {
+          const treatmentName = await fetchTreatmentInfo(
+            consultation.treatmentId
+          );
 
-        return {
-          ...consultation,
-          treatmentName,
-          patientName: "",
-          professionalName: "",
-        };
-      })
-    );
+          return {
+            ...consultation,
+            treatmentName,
+            patientName: "",
+            professionalName: "",
+          };
+        })
+      );
 
-    setConsultations(consultationsWithDetails);
+      setConsultations(consultationsWithDetails);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useFocusEffect(
@@ -69,31 +78,35 @@ export default function ConsultationsPageAdmin() {
             Atendimentos
           </Text>
         </View>
-        <FlatList
-          data={consultations}
-          keyExtractor={(item) => item.id.toString()}
-          ListEmptyComponent={ConsultationsEmpty}
-          renderItem={({ item }) => (
-            <Card
-              name={item.treatmentName}
-              upperText={`Paciente: ${item.patientName}`}
-              lowerText={`Profissional: ${item.professionalName}`}
-              date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
-              hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
-              status={item.status}
-              handlePress={() =>
-                navigation.navigate("ConsultationPageAdmin", {
-                  name: item.treatmentName,
-                  dateTime: item.dateTime,
-                  status: item.status,
-                  patientName: item.patientName,
-                  professionalName: item.professionalName,
-                })
-              }
-            />
-          )}
-          className="w-full px-5 mx-auto flex-1"
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <FlatList
+            data={consultations}
+            keyExtractor={(item) => item.id.toString()}
+            ListEmptyComponent={ConsultationsEmpty}
+            renderItem={({ item }) => (
+              <Card
+                name={item.treatmentName}
+                upperText={`Paciente: ${item.patientName}`}
+                lowerText={`Profissional: ${item.professionalName}`}
+                date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
+                hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
+                status={item.status}
+                handlePress={() =>
+                  navigation.navigate("ConsultationPageAdmin", {
+                    name: item.treatmentName,
+                    dateTime: item.dateTime,
+                    status: item.status,
+                    patientName: item.patientName,
+                    professionalName: item.professionalName,
+                  })
+                }
+              />
+            )}
+            className="w-full px-5 mx-auto flex-1"
+          />
+        )}
       </View>
 
       <Button

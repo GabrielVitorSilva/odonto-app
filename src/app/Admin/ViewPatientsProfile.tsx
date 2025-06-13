@@ -5,6 +5,7 @@ import Card from "@/components/Card";
 import { useRoute, useFocusEffect } from "@react-navigation/native";
 import { treatmentsService } from "@/services/treatments";
 import { consultationService } from "@/services/consultations";
+import Loading from "@/components/Loading";
 
 type RouteParams = {
   name: string;
@@ -20,6 +21,7 @@ type ConsultationDetails = {
 };
 
 export default function ViewPatientsProfile() {
+  const [loading, setLoading] = useState(true);
   const [consultations, setConsultations] = useState<ConsultationDetails[]>([]);
 
   const route = useRoute();
@@ -31,26 +33,30 @@ export default function ViewPatientsProfile() {
   }
 
   async function fetchProfConsultations() {
-    const response = await consultationService.listConsultationsByClient(
-      clientId
-    );
+    try {
+      setLoading(true);
+      const response = await consultationService.listConsultationsByClient(
+        clientId
+      );
 
-    const consultationsWithDetails = await Promise.all(
-      response.consultations.map(async (consultation) => {
-        const [treatmentName, treatmentDescription] = await fetchTreatmentInfo(
-          consultation.treatmentId
-        );
-        return {
-          id: consultation.id,
-          status: consultation.status,
-          dateTime: consultation.dateTime,
-          treatmentName,
-          treatmentDescription,
-        };
-      })
-    );
+      const consultationsWithDetails = await Promise.all(
+        response.consultations.map(async (consultation) => {
+          const [treatmentName, treatmentDescription] =
+            await fetchTreatmentInfo(consultation.treatmentId);
+          return {
+            id: consultation.id,
+            status: consultation.status,
+            dateTime: consultation.dateTime,
+            treatmentName,
+            treatmentDescription,
+          };
+        })
+      );
 
-    setConsultations(consultationsWithDetails);
+      setConsultations(consultationsWithDetails);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useFocusEffect(
@@ -74,21 +80,25 @@ export default function ViewPatientsProfile() {
         Lista de consultas
       </Text>
 
-      <FlatList
-        data={consultations}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Card
-            name={item.treatmentName}
-            upperText={`Procedimentos:`}
-            lowerText={`${item.treatmentDescription}`}
-            date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
-            hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
-            status={item.status}
-          />
-        )}
-        className="w-full px-5 mx-auto"
-      />
+      {loading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={consultations}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Card
+              name={item.treatmentName}
+              upperText={`Procedimentos:`}
+              lowerText={`${item.treatmentDescription}`}
+              date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
+              hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
+              status={item.status}
+            />
+          )}
+          className="w-full px-5 mx-auto"
+        />
+      )}
     </View>
   );
 }

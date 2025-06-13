@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import Header from "@/components/Header";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { ProfessionalUser } from "@/services/types/treatments";
 import { treatmentsService } from "@/services/treatments";
-import { colors } from "@/theme/colors";
+import Loading from "@/components/Loading";
 
 export default function ProfessionalsPageAdmin() {
   const navigation = useNavigation();
@@ -44,7 +44,7 @@ export default function ProfessionalsPageAdmin() {
   return (
     <View className="flex-1 ">
       <Header />
-      <View className="px-5">
+      <View className="px-5 flex-1">
         <Text className="text-center text-3xl font-semibold mb-5">
           Odontólogos
         </Text>
@@ -52,9 +52,7 @@ export default function ProfessionalsPageAdmin() {
           Lista de Odontólogos
         </Text>
         {loading ? (
-          <View className="flex-1 justify-center items-center mt-10">
-            <ActivityIndicator size="large" color={colors.blue} />
-          </View>
+          <Loading />
         ) : (
           <FlatList
             data={professionals}

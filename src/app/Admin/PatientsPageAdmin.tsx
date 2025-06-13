@@ -1,11 +1,11 @@
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import React, { useCallback, useState } from "react";
-import { Text, View, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { ClientUser } from "@/services/types/treatments";
 import { treatmentsService } from "@/services/treatments";
-import { colors } from "@/theme/colors";
+import Loading from "@/components/Loading";
 
 export default function PatientsPage() {
   const navigation = useNavigation();
@@ -40,16 +40,14 @@ export default function PatientsPage() {
   return (
     <View className="flex-1 ">
       <Header />
-      <View className="px-5">
+      <View className="flex-1 px-5">
         <Text className="text-center text-3xl font-semibold mb-5">Pacientes</Text>
         <Text className="text-lg text-app-blue font-semibold mb-3">
           Lista de Clientes
         </Text>
 
         {loading ? (
-          <View className="flex-1 justify-center items-center mt-10">
-            <ActivityIndicator size="large" color={colors.blue} />
-          </View>
+          <Loading />
         ) : (
           <FlatList
             data={patients}

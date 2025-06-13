@@ -7,6 +7,7 @@ import { treatmentsService, type Treatment } from "@/services/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
+import Loading from "@/components/Loading";
 
 export default function SelectTreatmentAdmin() {
   const { setTreatmentSelected } = useAuth();
@@ -16,15 +17,18 @@ export default function SelectTreatmentAdmin() {
     id: "",
   });
   const navigation = useNavigation();
-
+  const [loading, setLoading] = useState(false);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
 
   async function loadTreatments() {
     try {
+      setLoading(true);
       const response = await treatmentsService.listAllTreatments();
       setTreatments(response.treatments);
     } catch (error) {
       console.error("Erro ao carregar tratamentos:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -55,12 +59,16 @@ export default function SelectTreatmentAdmin() {
         </Text>
 
         <View className="flex-1">
-          <SingleSelectList
-            list={treatments}
-            selected={selected}
-            setSelected={setSelected}
-            ListEmptyComponent={TreatmentsEmpty}
-          />
+          {loading ? (
+            <Loading />
+          ) : (
+            <SingleSelectList
+              list={treatments}
+              selected={selected}
+              setSelected={setSelected}
+              ListEmptyComponent={TreatmentsEmpty}
+            />
+          )}
         </View>
       </View>
       <Button

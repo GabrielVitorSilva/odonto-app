@@ -2,60 +2,31 @@ import { View, Text, FlatList } from "react-native";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
+import { consultationService, type ListAllConsultation,   } from "@/services/consultations";
+import { useCallback, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ConsultationsPageAdmin() {
   const navigation = useNavigation();
+  const {profile} = useAuth();
+  const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
 
-  type Consultation = {
-    id: number;
-    name: string;
-    patient: string;
-    professional: string;
-    status: string;
-    date: string;
-    hour: string;
+  async function fetchConsultations() {
+    if (!profile) {
+      console.error("User profile is not available");
+      return;
+    }
+    const data = await consultationService.listAllConsultations(profile.user.id);
+    setConsultations(data.consultations);
   }
 
-  const consultations: Consultation[] = [
-    {
-      id: 1,
-      name: "Clareamento",
-      patient: "Victoria Robertson",
-      professional: "Alberes",
-      status: "Pendente",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 2,
-      name: "Clareamento",
-      patient: "Lucas",
-      professional: "Maria Santos",
-      status: "Confirmado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 3,
-      name: "Clareamento",
-      patient: "Marcelo",
-      professional: "Flávia Souza",
-      status: "Cancelado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 4,
-      name: "Clareamento",
-      patient: "Gabriel Vitor",
-      professional: "Alberes",
-      status: "Finalizado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-  ];
+  useFocusEffect(
+    useCallback(() => {
+      fetchConsultations();
+    }, [])
+  );
 
   function ConsultationsEmpty(){
     return (<ListEmptyComponent iconName="clipboard" text="Não há consultas ainda" />);
@@ -76,20 +47,20 @@ export default function ConsultationsPageAdmin() {
           ListEmptyComponent={ConsultationsEmpty}
           renderItem={({ item }) => (
             <Card
-              name={item.name}
-              upperText={`Paciente: ${item.patient}`}
-              lowerText={`Profissional: ${item.professional}`}
-              date={item.date}
-              hour={item.hour}
+              name={item.treatmentName}
+              upperText={`Paciente: ${item.clientName}`}
+              lowerText={`Profissional: ${item.professionalName}`}
+              date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
+              hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
               status={item.status}
               handlePress={() =>
                 navigation.navigate("ConsultationPageAdmin", {
-                  name: item.name,
-                  date: item.date,
-                  hour: item.hour,
+                  name: item.treatmentName,
+                  date: new Date(item.dateTime).toLocaleDateString("pt-BR"),
+                  hour: new Date(item.dateTime).toLocaleTimeString("pt-BR"),
                   status: item.status,
-                  patientName: item.patient,
-                  professionalName: item.professional,
+                  patientName: item.clientName,
+                  professionalName: item.professionalName,
                 })
               }
             />

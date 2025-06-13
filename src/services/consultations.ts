@@ -1,4 +1,5 @@
 import api from './api/api';
+import { treatmentsService } from './treatments';
 
 interface IScheduleConsultRequest {
   clientId: string,
@@ -28,6 +29,21 @@ export interface ConsultationsResponse {
   consultations: Consultation[];
 }
 
+export interface ListAllConsultation {
+  status: ConsultationStatus;
+  treatmentName: string;
+  id: string;
+  clientName: string;
+  professionalName: string;
+  dateTime: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ListAllConsultationsResponse {
+  consultations: ListAllConsultation[];
+}
+
 export const consultationService = {
   async scheduleConsult(data: IScheduleConsultRequest): Promise<void> {
     try {
@@ -43,7 +59,15 @@ export const consultationService = {
       throw error; 
     }
   },
-
+  async listAllConsultations(admId: string): Promise<ListAllConsultationsResponse> {
+    try {
+      const response = await api.get<ListAllConsultationsResponse>(`/users/${admId}/consultations`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error listing consultations:', error?.response?.data);
+      throw error;
+    }
+  },
   async listConsultationsByProfessional(professionalId: string): Promise<ConsultationsResponse>{
     try {
       const response = await api.get<ConsultationsResponse>(`/professionals/${professionalId}/consultations`);

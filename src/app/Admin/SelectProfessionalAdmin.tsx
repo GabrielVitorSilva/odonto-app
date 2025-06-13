@@ -48,7 +48,7 @@ export default function SelectProfessionalAdmin() {
         </View>
       </View>
       <Button
-        className="mb-5"
+        className="mb-16"
         title="Selecionar"
         onPress={() => {
           const selectedClient = professionals.find(p => p.id === selected.id);

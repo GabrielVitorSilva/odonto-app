@@ -115,8 +115,6 @@ export default function RegisterAnotherUser() {
     }
   }
 
-  console.log(errors)
-
   async function handleRegister() {
     setHasAttemptedSubmit(true);
     if (!validateFields()) return;

@@ -50,7 +50,7 @@ export default function SelectTreatmentAdmin() {
         </View>
       </View>
       <Button
-        className="mb-5"
+        className="mb-16"
         title="Selecionar"
         onPress={() => {
           const treatmentSelected = treatments.find(p => p.id === selected.id);

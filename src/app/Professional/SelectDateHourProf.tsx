@@ -6,6 +6,11 @@ import Header from "@/components/Header";
 import { LocaleConfig } from "react-native-calendars";
 import { Button } from "@/components/Button";
 import { Picker } from "@react-native-picker/picker";
+import { consultationService } from "@/services/consultations";
+import { useToast } from "@/contexts/ToastContext";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "@/contexts/AuthContext";
+import { treatmentsService } from "@/services/treatments";
 
 LocaleConfig.locales["pt"] = {
   monthNames: [
@@ -52,6 +57,9 @@ LocaleConfig.locales["pt"] = {
 LocaleConfig.defaultLocale = "pt";
 
 export default function SelectDateHourProf() {
+  const { clientSelected, treatmentSelected } = useAuth();
+  const { showToast } = useToast();
+  const navigation = useNavigation();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedHour, setSelectedHour] = useState<string | null>("08:00");
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -64,6 +72,23 @@ export default function SelectDateHourProf() {
     "18:00",
     "20:00",
   ];
+
+  async function fetchUserInfo() {
+    const info = await treatmentsService.getLoggedInfo()
+    return info;
+  }
+
+  async function handleSchedule() {
+    const info = await fetchUserInfo();
+    const schedule = await consultationService.scheduleConsult({
+      clientId: clientSelected?.clientId || "",
+      professionalId: info.user.Professional.id || "",
+      treatmentId: treatmentSelected?.id || "",
+      dateTime: `${selectedDay}T${selectedHour}:00.000Z`,
+    });
+    showToast("Consulta agendada com sucesso!", "success");
+    navigation.navigate("HomeProf");
+  }
 
   return (
     <View className="flex-1 bg-gray-100">
@@ -101,8 +126,8 @@ export default function SelectDateHourProf() {
           style={{ height: 50, backgroundColor: "#f3f4f6" }}
           itemStyle={{ backgroundColor: "#f3f4f6" }}
         >
-          {availableHours.map((hour) => (
-            <Picker.Item label={hour} value={hour} />
+          {availableHours.map((hour, index) => (
+            <Picker.Item label={hour} key={index} value={hour} />
           ))}
         </Picker>
       </View>
@@ -118,16 +143,18 @@ export default function SelectDateHourProf() {
         title="Agendar consulta"
         content={
           <Text className="text-center mb-6">
-            Deseja realmente agendar uma{" "}
-            <Text className="text-app-blue font-semibold">Clareamento</Text>{" "}
+            Deseja realmente agendar {``}
+            <Text className="text-app-blue font-semibold">{`${treatmentSelected?.name}`}</Text>{" "}
             para{" "}
             <Text className="text-app-blue font-semibold">
-              Victoria Robertson
+              {`${clientSelected?.name}`}
             </Text>
             ?
           </Text>
         }
-        handlePress={() => {}}
+        handlePress={() => {
+          handleSchedule();
+        }}
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
         buttonTitle="Agendar agora"

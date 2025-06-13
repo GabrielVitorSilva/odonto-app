@@ -23,14 +23,10 @@ export default function Card({
 }: CardProps) {
   const statusStyle =
     {
-      Confirmado: {
-        bg: "bg-app-light-green",
-        textStyle: "text-app-green",
-      },
       SCHEDULED: {
         bg: "bg-app-light-yellow",
         textStyle: "text-app-yellow",
-        text: "Pendente"
+        text: "Agendada"
       },
       CANCELED: {
         bg: "bg-app-light-red",

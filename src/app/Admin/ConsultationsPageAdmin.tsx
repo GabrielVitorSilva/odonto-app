@@ -3,7 +3,6 @@ import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { consultationService, type ListAllConsultation,   } from "@/services/consultations";
 import { useCallback, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -28,9 +27,9 @@ export default function ConsultationsPageAdmin() {
     }, [])
   );
 
-  function ConsultationsEmpty(){
-    return (<ListEmptyComponent iconName="clipboard" text="Não há consultas ainda" />);
-  }
+ 
+
+ 
 
   return (
     <View className="flex-1">
@@ -43,8 +42,7 @@ export default function ConsultationsPageAdmin() {
         </View>
         <FlatList
           data={consultations}
-          keyExtractor={item => item.id.toString()}
-          ListEmptyComponent={ConsultationsEmpty}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <Card
               name={item.treatmentName}
@@ -79,3 +77,4 @@ export default function ConsultationsPageAdmin() {
     </View>
   );
 }
+

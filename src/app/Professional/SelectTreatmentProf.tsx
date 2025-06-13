@@ -1,103 +1,62 @@
 import { View, FlatList, Text } from "react-native";
 import Card from "@/components/Card";
 import Header from "@/components/Header";
-import BottomDrawer from "@/components/BottomDrawer";
 import { Button } from "@/components/Button";
-import { useState } from "react";
-
-interface Treatment {
-  id: number;
-  title: string;
-  description: string;
-  color: string;
-}
+import { useCallback, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Treatment, treatmentsService } from "@/services/treatments";
+import { SingleSelectList } from "@/components/SingleSelectList";
 
 export default function SelectTreatmentProf() {
+  const { setTreatmentSelected } = useAuth();
 
-  const [selectedTreatment, setSelectedTreatment] = useState(" ")
-  const [showDrawer, setShowDrawer] = useState(false)
-  const [noSelected, setNoSelected] = useState(false);
+  const [selected, setSelected] = useState<{ name: string; id: string }>({
+    name: "",
+    id: "",
+  });
+  const navigation = useNavigation();
 
-  const handlePress = () => {
-    if (selectedTreatment != " ") {
-      setShowDrawer(true);
-    } else {
-      setNoSelected(true);
+  const [treatments, setTreatments] = useState<Treatment[]>([]);
+
+  async function loadTreatments() {
+    try {
+      const response = await treatmentsService.listAllTreatments();
+      setTreatments(response.treatments);
+    } catch (error) {
+      console.error("Erro ao carregar tratamentos:", error);
     }
-  };
+  }
 
-  const treatments: Treatment[] = [
-    {
-      id: 1,
-      title: "Clareamento",
-      description:
-        "Procedimentos: lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      color: "bg-orange-100",
-    },
-    {
-      id: 2,
-      title: "Limpeza",
-      description:
-        "Procedimentos: lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      color: "bg-gray-800",
-    },
-    {
-      id: 3,
-      title: "Implante",
-      description:
-        "Procedimentos: lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      color: "bg-pink-100",
-    },
-    {
-      id: 4,
-      title: "Manutenção",
-      description:
-        "Procedimentos: lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-      color: "bg-blue-100",
-    },
-  ];
+  useFocusEffect(
+    useCallback(() => {
+      loadTreatments();
+    }, [])
+  );
 
   return (
     <View className="flex-1 bg-gray-50">
       <Header title="Tratamentos" />
 
-      <FlatList
-        data={treatments}
-        renderItem={({ item }) => (
-          <Card className={`p-3 ${selectedTreatment == item.title ? "bg-app-light-blue rounded-xl" : " "}`} handlePress={() => setSelectedTreatment(item.title)} name={item.title} upperText={item.description} />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        className="w-full px-5 mt-8 mx-auto"
+      <SingleSelectList
+        list={treatments}
+        selected={selected}
+        setSelected={setSelected}
       />
 
       <View className="mb-16">
-        <Button title="Selecionar" onPress={handlePress} />
-        {noSelected && (
-          <Text className="text-lg text-app-red text-center mt-3">
-            Selecione um tratamento
-          </Text>
-        )}
+        <Button
+          className="mb-5"
+          title="Selecionar"
+          onPress={() => {
+            const treatmentSelected = treatments.find(
+              (p) => p.id === selected.id
+            );
+            setTreatmentSelected(treatmentSelected || null);
+            navigation.navigate("SelectDateHourProf");
+          }}
+        />
       </View>
-
-      <BottomDrawer
-              title="Agendar consulta"
-              content={
-                <Text className="text-center mb-6">
-                  Deseja realmente agendar uma{" "}
-                  <Text className="text-app-blue font-semibold">Clareamento</Text>{" "}
-                  para{" "}
-                  <Text className="text-app-blue font-semibold">
-                    Victoria Robertson
-                  </Text>
-                  ?
-                </Text>
-              }
-              handlePress={() => {}}
-              showDrawer={showDrawer}
-              setShowDrawer={setShowDrawer}
-              buttonTitle="Agendar agora"
-            />
     </View>
   );
 }

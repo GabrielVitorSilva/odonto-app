@@ -5,8 +5,7 @@ import { useRoute } from "@react-navigation/native";
 
 type RouteParams = {
   name: string;
-  date: string;
-  hour: string;
+  dateTime: Date;
   status: string;
   patientName: string;
   professionalName: string;
@@ -14,7 +13,7 @@ type RouteParams = {
 
 export default function ConsultationPageAdmin() {
   const route = useRoute();
-  const { name, date, hour, status, patientName, professionalName } =
+  const { name, dateTime, status, patientName, professionalName } =
     route.params as RouteParams;
 
   return (
@@ -33,11 +32,11 @@ export default function ConsultationPageAdmin() {
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Data</Text>
-            <Text>{date}</Text>
+            <Text>{new Date(dateTime).toLocaleDateString("pt-BR")}</Text>
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Horário</Text>
-            <Text>{hour}</Text>
+            <Text>{new Date(dateTime).toLocaleTimeString("pt-BR")}</Text>
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Paciente</Text>

@@ -11,8 +11,7 @@ export type RootStackParamList = {
   };
   ConsultationPageAdmin: {
     name: string;
-    date: string;
-    hour: string;
+    dateTime: Date;
     status: string;
     patientName: string;
     professionalName: string;
@@ -49,6 +48,16 @@ export type RootStackParamList = {
   SelectTreatmentAdmin: undefined;
   BindProfessionalAdmin: {
     treatment_id: string;
+  };
+  TreatmentsProf: undefined;
+  SelectDateHourProf: undefined;
+  SelectPatientProf: undefined;
+  SelectTreatmentProf: undefined;
+  ConsultationPageProf: {
+    name: string;
+    dateTime: Date;
+    status: string;
+    patientName: string;
   };
 };
 

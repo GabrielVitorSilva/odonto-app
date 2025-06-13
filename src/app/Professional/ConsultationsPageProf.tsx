@@ -2,51 +2,68 @@ import { View, Text, FlatList } from "react-native";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Consultation, consultationService } from "@/services/consultations";
+import { ConsultationStatus } from "@/services/types/consultations";
+import { treatmentsService } from "@/services/treatments";
+import { useCallback, useState } from "react";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
+
+type ConsultationsWithDetails = Consultation & {
+  treatmentName: string;
+  patientName: string;
+  professionalName: string;
+};
 
 export default function ConsultationsPageProf() {
-  const consultations = [
-    {
-      id: 1,
-      name: "Clareamento",
-      patient: "Victoria Robertson",
-      professional: "Alberes",
-      status: "Pendente",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 2,
-      name: "Clareamento",
-      patient: "Lucas",
-      professional: "Maria Santos",
-      status: "Confirmado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 3,
-      name: "Clareamento",
-      patient: "Marcelo",
-      professional: "Flávia Souza",
-      status: "Cancelado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-    {
-      id: 4,
-      name: "Clareamento",
-      patient: "Gabriel Vitor",
-      professional: "Alberes",
-      status: "Finalizado",
-      date: "12/03/2025",
-      hour: "12:00",
-    },
-  ];
+  const navigation = useNavigation();
+  const [consultations, setConsultations] = useState<
+    ConsultationsWithDetails[]
+  >([]);
+  async function fetchTreatmentInfo(treatmentId: string) {
+    const response = await treatmentsService.getTreatment(treatmentId);
+    return response.name;
+  }
+
+  async function loadConsultations() {
+    const info = await treatmentsService.getLoggedInfo();
+    const response = await consultationService.listConsultationsByProfessional(
+      info.user.Professional.id
+    );
+    const consultationsWithDetails = await Promise.all(
+      response.consultations.map(async (consultation) => {
+        const treatmentName = await fetchTreatmentInfo(
+          consultation.treatmentId
+        );
+
+        return {
+          ...consultation,
+          treatmentName,
+          patientName: "",
+          professionalName: "",
+        };
+      })
+    );
+
+    setConsultations(consultationsWithDetails);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      loadConsultations();
+    }, [])
+  );
+
+  function ConsultationsEmpty() {
+    return (
+      <ListEmptyComponent iconName="clipboard" text="Não há consultas ainda" />
+    );
+  }
 
   return (
-    <View>
+    <View className="flex-1">
       <Header className="bg-app-blue" contentColor="white" />
-      <View className="px-4">
+      <View className="px-4 flex-1">
         <View className="border rounded-3xl border-gray-300 py-4 my-8 ">
           <Text className="text-app-blue font-semibold text-center">
             Atendimentos
@@ -54,22 +71,37 @@ export default function ConsultationsPageProf() {
         </View>
         <FlatList
           data={consultations}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
+          ListEmptyComponent={ConsultationsEmpty}
           renderItem={({ item }) => (
             <Card
-              name={item.name}
-              upperText={`Paciente: ${item.patient}`}
-              lowerText={`Profissional: ${item.professional}`}
-              date={item.date}
-              hour={item.hour}
+              name={item.treatmentName}
+              upperText={`Paciente: ${item.patientName}`}
+              lowerText={`Profissional: ${item.professionalName}`}
+              date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
+              hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
               status={item.status}
+              handlePress={() =>
+                navigation.navigate("ConsultationPageProf", {
+                  name: item.treatmentName,
+                  dateTime: item.dateTime,
+                  status: item.status,
+                  patientName: item.patientName
+                })
+              }
             />
           )}
-          className="w-full px-5 mx-auto"
+          className="w-full px-5 mx-auto flex-1"
         />
       </View>
 
-      <Button title="Agendar Consulta" onPress={() => {}} />
+      <Button
+        title="Agendar Consulta"
+        onPress={() => {
+          navigation.navigate("SelectPatientProf");
+        }}
+        className="mb-16"
+      />
     </View>
   );
 }

@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { PersonList } from "@/components/PersonList";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
+import { treatmentsService } from "@/services/treatments";
+import { ClientUser } from "@/services/types/treatments";
+import { SingleSelectList } from "@/components/SingleSelectList";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function SelectPatientProf() {
-  const [selected, setSelected] = useState<string[]>([]);
+  const { setClientSelected } = useAuth();
+  const [selected, setSelected] = useState<{ name: string; id: string }>({
+    name: "",
+    id: "",
+  });
   const navigation = useNavigation();
+  const [patients, setPatients] = useState<ClientUser[]>([]);
 
-  const list = [
-    { name: "Victoria Robertson" },
-    { name: "Lucas Andrade" },
-    { name: "Flávia Souza" },
-    { name: "Thiago Monteiro" },
-    { name: "Camila Duarte" },
-  ];
+  async function fetchClients() {
+    const data = await treatmentsService.listClients();
+    setPatients(data);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchClients();
+    }, [])
+  );
 
   return (
     <View className="flex-1">
@@ -29,8 +40,8 @@ export default function SelectPatientProf() {
         </Text>
 
         <View className="flex-1">
-          <PersonList
-            list={list}
+          <SingleSelectList
+            list={patients}
             selected={selected}
             setSelected={setSelected}
           />
@@ -39,7 +50,11 @@ export default function SelectPatientProf() {
       <Button
         className="mb-5"
         title="Selecionar"
-        onPress={() => navigation.navigate("SelectProfessionalAdmin")}
+        onPress={() => {
+          const selectedClient = patients.find((p) => p.id === selected.id);
+          setClientSelected(selectedClient || null);
+          navigation.navigate("SelectTreatmentProf");
+        }}
       />
     </View>
   );

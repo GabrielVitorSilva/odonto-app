@@ -1,6 +1,6 @@
 import api from './api/api';
-import { ConsultationStatus } from './types/consultations';
-import { UpdateConsultationRequest } from './types/consultations';
+import { treatmentsService } from './treatments';
+import type { ConsultationStatus, UpdateConsultationRequest } from './types/consultations';
 
 interface IScheduleConsultRequest {
   clientId: string,
@@ -24,6 +24,21 @@ export interface ConsultationsResponse {
   consultations: Consultation[];
 }
 
+export interface ListAllConsultation {
+  status: ConsultationStatus;
+  treatmentName: string;
+  id: string;
+  clientName: string;
+  professionalName: string;
+  dateTime: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ListAllConsultationsResponse {
+  consultations: ListAllConsultation[];
+}
+
 export const consultationService = {
   async scheduleConsult(data: IScheduleConsultRequest): Promise<void> {
     try {
@@ -39,17 +54,15 @@ export const consultationService = {
       throw error; 
     }
   },
-
-  async listAllConsultations(userId: string | undefined): Promise<ConsultationsResponse>{
+  async listAllConsultations(admId: string): Promise<ListAllConsultationsResponse> {
     try {
-      const response = await api.get<ConsultationsResponse>(`/users/${userId}/consultations`);
+      const response = await api.get<ListAllConsultationsResponse>(`/users/${admId}/consultations`);
       return response.data;
     } catch (error: any) {
-      console.error('Error List consultations of the professional', error?.response?.data);
+      console.error('Error listing consultations:', error?.response?.data);
       throw error;
     }
   },
-
   async listConsultationsByProfessional(professionalId: string): Promise<ConsultationsResponse>{
     try {
       const response = await api.get<ConsultationsResponse>(`/professionals/${professionalId}/consultations`);

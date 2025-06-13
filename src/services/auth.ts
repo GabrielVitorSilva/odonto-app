@@ -46,14 +46,20 @@ export const authService = {
   },
 
   async register(data: RegisterFormData) {
-    const response = await api.post('/register/client', {
-      name: data.name.trim(),
-      email: data.email.trim(),
-      password: data.password,
-      cpf: data.cpf,
-      phone: data.phone,
-    });
-    return response.data;
+    try {
+      const response = await api.post('/register/client', {
+        name: data.name.trim(),
+        email: data.email.trim(),
+        password: data.password,
+        cpf: data.cpf,
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Error during registration:', error?.response?.data);
+      throw error;
+      
+    }
+   
   },
 
   async registerAnotherUser(data: RegisterAnotherUserFormData) {

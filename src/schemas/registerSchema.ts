@@ -25,10 +25,6 @@ export const registerSchema = z.object({
   terms: z.boolean()
     .refine(val => val === true, 'Você precisa aceitar os termos e condições'),
 
-  phone: z.string()
-    .min(1, 'Telefone é obrigatório')
-    .regex(/^\(\d{2}\) \d{5}-\d{4}$/, 'Telefone deve estar no formato (00) 00000-0000'),
-
   role: z.nativeEnum(Profile, {
     errorMap: () => ({ message: 'Perfil inválido' })
   })

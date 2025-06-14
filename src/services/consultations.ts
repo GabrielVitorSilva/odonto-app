@@ -63,6 +63,15 @@ export const consultationService = {
       throw error;
     }
   },
+  async listAllClientConsultations(clientId: string): Promise<ListAllConsultationsResponse> {
+    try {
+      const response = await api.get<ListAllConsultationsResponse>(`/clients/${clientId}/consultations`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error listing consultations:', error?.response?.data);
+      throw error;
+    }
+  },
   async listConsultationsByProfessional(professionalId: string): Promise<ConsultationsResponse>{
     try {
       const response = await api.get<ConsultationsResponse>(`/professionals/${professionalId}/consultations`);

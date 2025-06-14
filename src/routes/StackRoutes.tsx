@@ -35,13 +35,14 @@ import SelectTreatmentProf from "@/app/Professional/SelectTreatmentProf";
 import SelectDateHourProf from "@/app/Professional/SelectDateHourProf";
 import SelectPatientProf from "@/app/Professional/SelectPatientProf";
 import SelectTreatmentAdmin from "@/app/Admin/SelectTreatmentAdmin";
+import type { ProfileResponse } from "@/services/auth";
 
 const Stack = createNativeStackNavigator();
 
 export function StackRoutes() {
   const { token, isLoading } = useAuth();
-  const [profile, setProfile] = useState<any>(null);
-
+  const [profile, setProfile] = useState<ProfileResponse>();
+  console.log('profile => ',profile)
   useEffect(() => {
     async function loadProfile() {
       const storedProfile = await AsyncStorage.getItem('@OdontoApp:profile');
@@ -76,13 +77,13 @@ export function StackRoutes() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="UseTerms" component={UseTerms} />
         </>
-      ) : profile?.user?.role === "CLIENT" ? (
+      ) : profile?.user?.User.role === "CLIENT" ? (
         <>
           <Stack.Screen name="HomeClient" component={HomeClient} />
           <Stack.Screen name="SelectDatePatient" component={SelectDatePatient} />
           <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
         </>
-      ) : profile?.user?.role === "ADMIN" ? (
+      ) : profile?.user?.User.role === "ADMIN" ? (
         <>
           <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
           <Stack.Screen name="RegisterAnotherUser" component={RegisterAnotherUser} />
@@ -102,7 +103,7 @@ export function StackRoutes() {
           <Stack.Screen name="ViewPatientsProfile" component={ViewPatientsProfile} />
           <Stack.Screen name="ViewProfessionalsProfile" component={ViewProfessionalsProfile} />
         </>
-      ) : profile?.user?.role === "PROFESSIONAL" ? (
+      ) : profile?.user?.User.role === "PROFESSIONAL" ? (
         <>
           <Stack.Screen name="HomeProf" component={HomeProf} />
           <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf} />

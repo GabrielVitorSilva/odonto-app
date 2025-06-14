@@ -3,33 +3,29 @@ import Header from "@/components/Header";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { consultationService, type ListAllConsultation } from "@/services/consultations";
 
 export default function HomeClient() {
   const { profile } = useAuth()
-  
-  const consultations = [
-    {
-      name: "Clareamento",
-      description: "lorem ipsum lorem ipsum lorem ipsum",
-      date: "12/03/2025",
-      hour: "12:00",
-      status: "Pendente",
-    },
-    {
-      name: "Clareamento",
-      description: "lorem ipsum lorem ipsum lorem ipsum",
-      date: "12/03/2025",
-      hour: "12:00",
-      status: "Confirmado",
-    },
-    {
-      name: "Clareamento",
-      description: "lorem ipsum lorem ipsum lorem ipsum",
-      date: "12/03/2025",
-      hour: "12:00",
-      status: "Cancelado",
-    },
-  ];
+  const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
+
+  async function fetchConsultations() {
+    if (!profile) {
+      console.error("User profile is not available");
+      return;
+    }
+    const data = await consultationService.listAllClientConsultations(profile.user.User.id);
+    console.log("Consultations fetched:", data);
+    setConsultations(data.consultations);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchConsultations();
+    }, [])
+  );
 
   return (
     <View className="w-full">
@@ -40,7 +36,7 @@ export default function HomeClient() {
         hasExit={true}
       />
       <Text className="text-center text-3xl font-semibold my-[25px]">
-        {profile?.user.name}
+        {profile?.user.User.name}
       </Text>
 
       <Text className="text-app-blue ml-5 mb-5 text-lg font-semibold">
@@ -52,11 +48,11 @@ export default function HomeClient() {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <Card
-            name={item.name}
+            name={item.clientName}
             upperText={`Procedimentos:`}
-            lowerText={`${item.description}`}
-            date={item.date}
-            hour={item.hour}
+            lowerText={`${item.treatmentName}`}
+            date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
+            hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
             status={item.status}
           />
         )}

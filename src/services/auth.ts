@@ -9,10 +9,18 @@ interface AuthResponse {
 
 export interface ProfileResponse {
   user: {
+   User: {
     id: string;
     name: string;
     email: string;
     role: Profile;
+   } 
+   profileData: {
+    id: string,
+    userId: string,
+    createdAt: string,
+    updatedAt: string
+   }
   };
 }
 

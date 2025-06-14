@@ -3,54 +3,51 @@ import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { Consultation, consultationService } from "@/services/consultations";
-import { ConsultationStatus } from "@/services/types/consultations";
+import { Consultation, consultationService,} from "@/services/consultations";
 import { treatmentsService } from "@/services/treatments";
 import { useCallback, useState } from "react";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ConsultationsWithDetails = Consultation & {
   treatmentName: string;
-  patientName: string;
+  clientName: string;
   professionalName: string;
 };
 
 export default function ConsultationsPageProf() {
   const navigation = useNavigation();
-  const [consultations, setConsultations] = useState<
-    ConsultationsWithDetails[]
-  >([]);
-  async function fetchTreatmentInfo(treatmentId: string) {
-    const response = await treatmentsService.getTreatment(treatmentId);
-    return response.name;
-  }
+  const { profile } = useAuth();
+  const [consultations, setConsultations] = useState<ConsultationsWithDetails[]>([]);
 
-  async function loadConsultations() {
-    const info = await treatmentsService.getLoggedInfo();
-    const response = await consultationService.listConsultationsByProfessional(
-      info.user.Professional.id
-    );
+  async function fetchConsultations() {
+    console.log("Fetching consultations for profile:", profile);
+    
+    if (!profile) {
+      console.error("User profile is not available");
+      return;
+    }
+    const data = await consultationService.listConsultationsByProfessional(profile.user.profileData.id);
+    console.log("Consultations fetched:", data);
+    
     const consultationsWithDetails = await Promise.all(
-      response.consultations.map(async (consultation) => {
-        const treatmentName = await fetchTreatmentInfo(
-          consultation.treatmentId
-        );
-
+      data.consultations.map(async (consultation) => {
+        const treatment = await treatmentsService.getTreatment(consultation.treatmentId);
         return {
           ...consultation,
-          treatmentName,
-          patientName: "",
-          professionalName: "",
-        };
+          treatmentName: treatment.name,
+          clientName: "Carregando...", 
+          professionalName: profile.user.User.name
+        } as ConsultationsWithDetails;
       })
     );
-
+    
     setConsultations(consultationsWithDetails);
   }
 
   useFocusEffect(
     useCallback(() => {
-      loadConsultations();
+      fetchConsultations();
     }, [])
   );
 
@@ -76,7 +73,7 @@ export default function ConsultationsPageProf() {
           renderItem={({ item }) => (
             <Card
               name={item.treatmentName}
-              upperText={`Paciente: ${item.patientName}`}
+              upperText={`Paciente: ${item.clientName}`}
               lowerText={`Profissional: ${item.professionalName}`}
               date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
               hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
@@ -86,7 +83,7 @@ export default function ConsultationsPageProf() {
                   name: item.treatmentName,
                   dateTime: item.dateTime,
                   status: item.status,
-                  patientName: item.patientName
+                  patientName: item.clientName
                 })
               }
             />

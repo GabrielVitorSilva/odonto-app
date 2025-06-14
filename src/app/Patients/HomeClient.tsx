@@ -3,11 +3,14 @@ import Header from "@/components/Header";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import { useAuth } from "@/contexts/AuthContext";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import { consultationService, type ListAllConsultation } from "@/services/consultations";
+import { treatmentsService } from "@/services/treatments";
 
 export default function HomeClient() {
+  const navigation = useNavigation()
+
   const { profile } = useAuth()
   const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
 
@@ -18,10 +21,19 @@ export default function HomeClient() {
     const data = await consultationService.listAllClientConsultations(profile.user.profileData.id);
     setConsultations(data.consultations);
   }
-
+  async function listaAllProfessionals () {
+    if (!profile) {
+      return;
+    }
+    const professionals = await treatmentsService.listProfessionals();
+    const professionalsAvailable = await consultationService.listConsultationsByProfessional(professionals[3].professionalId);
+    console.log(professionals);
+    console.log(professionalsAvailable);
+  }
   useFocusEffect(
     useCallback(() => {
       fetchConsultations();
+      listaAllProfessionals();
     }, [])
   );
 
@@ -61,7 +73,9 @@ export default function HomeClient() {
       </View>
 
       <View className="absolute bottom-0 w-full px-5 pb-5 bg-gray-100">
-        <Button title="Agendar Triagem" onPress={() => {}} />
+        <Button title="Agendar Triagem" onPress={() => {
+          navigation.navigate("SelectDatePatient")
+        }} />
       </View>
     </View>
   );

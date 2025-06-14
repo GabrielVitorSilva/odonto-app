@@ -29,9 +29,9 @@ export interface TreatmentResponse {
 }
 
 export const treatmentsService = {
-  async createTreatment({description, name, professionalIds}:createTreatmentRequest): Promise<createTreatmentResponse> {
+  async createTreatment({ description, name, professionalIds }: createTreatmentRequest): Promise<createTreatmentResponse> {
     try {
-      const response = await api.post<createTreatmentResponse>('/treatments',{
+      const response = await api.post<createTreatmentResponse>('/treatments', {
         name,
         description,
         durationMinutes: 60,
@@ -104,7 +104,7 @@ export const treatmentsService = {
       console.error('Erro ao buscar profissionais:', error?.response?.data || error.message);
       throw error;
     }
-  },  
+  },
   async listClients(): Promise<ClientUser[]> {
     try {
       const response = await api.get<ClientsResponse>(`/clients`);
@@ -114,7 +114,7 @@ export const treatmentsService = {
       throw error;
     }
   },
-  async getUser(id:string): Promise<IGetUser> {
+  async getUser(id: string): Promise<IGetUser> {
     try {
       const response = await api.get<IGetUser>(`/users/${id}`);
       return response.data
@@ -141,9 +141,18 @@ export const treatmentsService = {
         const professionalId = userData.user.Professional.id;
         return api.post<void>(`/treatments/${treatmentId}/professionals/${professionalId}`);
       });
-      
+
       await Promise.all(promises);
       return;
+    } catch (error: any) {
+      console.error('Erro ao vincular profissionais:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
+  async addUniqueProfessionalFromTreatment(treatmentId: string, professionalId: string): Promise<void> {
+    try {
+      api.post<void>(`/treatments/${treatmentId}/professionals/${professionalId}`);
+      return
     } catch (error: any) {
       console.error('Erro ao vincular profissionais:', error?.response?.data || error.message);
       throw error;

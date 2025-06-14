@@ -7,48 +7,24 @@ import { LocaleConfig } from "react-native-calendars";
 import { Button } from "@/components/Button";
 import { treatmentsService } from "@/services/treatments";
 import { consultationService } from "@/services/consultations";
-import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "@/contexts/AuthContext";
 import { Picker } from "@react-native-picker/picker";
 import { useToast } from "@/contexts/ToastContext";
+import { useNavigation } from "@react-navigation/native";
 
+// Configuração do calendário em português
 LocaleConfig.locales["pt"] = {
   monthNames: [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
   ],
   monthNamesShort: [
-    "Jan",
-    "Fev",
-    "Mar",
-    "Abr",
-    "Mai",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Set",
-    "Out",
-    "Nov",
-    "Dez",
+    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+    "Jul", "Ago", "Set", "Out", "Nov", "Dez",
   ],
   dayNames: [
-    "Domingo",
-    "Segunda-feira",
-    "Terça-feira",
-    "Quarta-feira",
-    "Quinta-feira",
-    "Sexta-feira",
-    "Sábado",
+    "Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
+    "Quinta-feira", "Sexta-feira", "Sábado",
   ],
   dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
   today: "Hoje",
@@ -56,61 +32,124 @@ LocaleConfig.locales["pt"] = {
 
 LocaleConfig.defaultLocale = "pt";
 
+const AVAILABLE_HOURS = [
+  "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00",
+];
+
+const TRIAGEM_TREATMENT_ID = 'ca43f3d3-0195-4177-892e-1958f06c2dac';
+
 export default function SelectDatePatient() {
-  const { profile } = useAuth()
-  const { showToast } = useToast()
+  const navigation = useNavigation();
+  const { profile } = useAuth();
+  const { showToast } = useToast();
 
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [selectedHour, setSelectedHour] = useState<string>("08:00");
+  const [selectedHour, setSelectedHour] = useState<string>(AVAILABLE_HOURS[0]);
   const [professionalAvailable, setProfessionalAvailable] = useState<any>(null);
-  
-  const availableHours = [
-    "08:00",
-    "10:00",
-    "12:00",
-    "14:00",
-    "16:00",
-    "18:00",
-    "20:00",
-  ];
 
-  async function checkAvailableProfessionals(date: string) {
+  const checkProfessionalAvailability = async (professional: any, date: string) => {
+    const consultations = await consultationService.listConsultationsByProfessional(professional.professionalId);
+    return !consultations.consultations.some(
+      (consultation: any) => consultation.dateTime.split('T')[0] === date
+    );
+  };
+
+  const findAvailableProfessional = async (date: string) => {
     try {
       const professionals = await treatmentsService.listProfessionals();
       
       for (const professional of professionals) {
-        const consultations = await consultationService.listConsultationsByProfessional(professional.professionalId);
-        
-        const hasConsultationOnDate = consultations.consultations.some(
-          (consultation: any) => consultation.dateTime.split('T')[0] === date
-        );
-        
-        if (!hasConsultationOnDate) {
-          setProfessionalAvailable(professional);
-          return;
+        const isAvailable = await checkProfessionalAvailability(professional, date);
+        if (isAvailable) {
+          return professional;
         }
       }
       
-      console.error('Nenhum profissional disponível para esta data');
-      setProfessionalAvailable(null);
+      return null;
     } catch (error) {
-      console.error('Erro ao verificar profissionais disponíveis:', error);
-      setProfessionalAvailable(null);
+      console.error('Erro ao buscar profissionais:', error);
+      return null;
     }
-  }
-
-  const handleDayPress = (day: any) => {
-    setSelectedDay(day.dateString);
-    checkAvailableProfessionals(day.dateString);
   };
+
+  const handleDayPress = async (day: any) => {
+    const selectedDate = new Date(day.dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      showToast('Não é possível selecionar uma data passada', 'error');
+      return;
+    }
+
+    setSelectedDay(day.dateString);
+    const availableProfessional = await findAvailableProfessional(day.dateString);
+    setProfessionalAvailable(availableProfessional);
+    
+    if (!availableProfessional) {
+      showToast('Nenhum profissional disponível para esta data', 'error');
+    }
+  };
+
+  const handleScheduleConsultation = async () => {
+    if (!profile || !professionalAvailable || !selectedDay) {
+      showToast('Dados incompletos para agendamento', 'error');
+      return;
+    }
+
+    try {
+      // Vincular profissional ao tratamento
+      await treatmentsService.addUniqueProfessionalFromTreatment(
+        TRIAGEM_TREATMENT_ID,
+        professionalAvailable.professionalId
+      );
+
+      // Agendar consulta
+      await consultationService.scheduleConsult({
+        clientId: profile.user.profileData.id,
+        professionalId: professionalAvailable.professionalId,
+        dateTime: `${selectedDay}T${selectedHour}:00.000Z`,
+        treatmentId: TRIAGEM_TREATMENT_ID,
+      });
+
+      showToast('Consulta agendada com sucesso!', 'success');
+      navigation.navigate('HomeClient');
+      setShowDrawer(false);
+    } catch (error) {
+      console.error('Erro ao agendar consulta:', error);
+      showToast('Erro ao agendar consulta', 'error');
+    }
+  };
+
+  const renderTimePicker = () => (
+    <View className="mt-10 mx-4 border border-app-blue rounded-md p-4 shadow">
+      <Text className="text-app-blue text-sm -mt-5 mb-2 px-1 bg-white rounded w-fit">
+        Horário
+      </Text>
+      <Text className="mb-4">Selecione um horário:</Text>
+
+      <Picker
+        selectedValue={selectedHour}
+        onValueChange={setSelectedHour}
+        style={{ height: 50, backgroundColor: "#f3f4f6" }}
+        itemStyle={{ backgroundColor: "#f3f4f6" }}
+      >
+        {AVAILABLE_HOURS.map((hour, index) => (
+          <Picker.Item key={index} label={hour} value={hour} />
+        ))}
+      </Picker>
+    </View>
+  );
 
   return (
     <View className="flex-1">
       <Header className="bg-app-blue" contentColor="white" />
+      
       <Calendar
         current={new Date().toISOString().split("T")[0]}
         onDayPress={handleDayPress}
+        minDate={new Date().toISOString().split("T")[0]}
         markedDates={
           selectedDay
             ? {
@@ -127,25 +166,7 @@ export default function SelectDatePatient() {
         }}
       />
 
-      <View className="mt-10 mx-4 border border-app-blue rounded-md p-4 shadow">
-        <Text className="text-app-blue text-sm -mt-5 mb-2 px-1 bg-white rounded w-fit">
-          Horário
-        </Text>
-        <Text className="mb-4">Selecione um horário:</Text>
-
-        <Picker
-          selectedValue={selectedHour}
-          onValueChange={(value) => {
-            setSelectedHour(value);
-          }}
-          style={{ height: 50, backgroundColor: "#f3f4f6" }}
-          itemStyle={{ backgroundColor: "#f3f4f6" }}
-        >
-          {availableHours.map((hour, index) => (
-            <Picker.Item label={hour} key={index} value={hour} />
-          ))}
-        </Picker>
-      </View>
+      {renderTimePicker()}
 
       <Button
         className="mt-auto mb-16 mx-4"
@@ -158,6 +179,7 @@ export default function SelectDatePatient() {
           }
         }}
       />
+
       <BottomDrawer
         title="Agendar consulta"
         content={
@@ -167,31 +189,7 @@ export default function SelectDatePatient() {
             {professionalAvailable && ` com ${professionalAvailable.name}`} para {selectedHour}?
           </Text>
         }
-        handlePress={async () => {
-          if(!profile) return
-          try {
-            console.log({
-              clientId: profile?.user.User.id,
-              professionalId: professionalAvailable.professionalId,
-              dateTime: `${selectedDay}T${selectedHour}:00.000Z`,
-              treatmentId: 'ca43f3d3-0195-4177-892e-1958f06c2dac', 
-            });
-            const vincule = await treatmentsService.addUniqueProfessionalFromTreatment(
-              'ca43f3d3-0195-4177-892e-1958f06c2dac', 
-              professionalAvailable.professionalId
-            )
-            const res = await consultationService.scheduleConsult({
-              clientId: profile?.user.profileData.id,
-              professionalId: professionalAvailable.professionalId,
-              dateTime: `${selectedDay}T${selectedHour}:00.000Z`,
-              treatmentId: 'ca43f3d3-0195-4177-892e-1958f06c2dac', 
-            })
-            showToast('Consulta agendada com sucesso!', 'success');
-            setShowDrawer(false);
-          } catch (error) {
-            showToast('Erro ao agendar consulta', 'error');
-          }
-        }}
+        handlePress={handleScheduleConsultation}
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
         buttonTitle="Agendar agora"

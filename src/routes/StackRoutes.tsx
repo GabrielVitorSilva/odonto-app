@@ -42,7 +42,6 @@ const Stack = createNativeStackNavigator();
 export function StackRoutes() {
   const { token, isLoading } = useAuth();
   const [profile, setProfile] = useState<ProfileResponse>();
-  
   useEffect(() => {
     async function loadProfile() {
       const storedProfile = await AsyncStorage.getItem('@OdontoApp:profile');
@@ -51,7 +50,7 @@ export function StackRoutes() {
       }
     }
     loadProfile();
-  }, []);
+  }, [profile, setProfile]);
 
   if (isLoading) {
     return (

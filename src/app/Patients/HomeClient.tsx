@@ -13,11 +13,9 @@ export default function HomeClient() {
 
   async function fetchConsultations() {
     if (!profile) {
-      console.error("User profile is not available");
       return;
     }
-    const data = await consultationService.listAllClientConsultations(profile.user.User.id);
-    console.log("Consultations fetched:", data);
+    const data = await consultationService.listAllClientConsultations(profile.user.profileData.id);
     setConsultations(data.consultations);
   }
 

@@ -99,5 +99,14 @@ export const consultationService = {
       console.error('Error Update consultations', error?.response?.data);
       throw error;
     }
+  },
+
+  async deleteConsultation(consultationId: string): Promise<void> {
+    try {
+      const response = await api.delete(`/consultations/${consultationId}`)
+    } catch (error: any) {
+      console.error('Error Update consultations', error?.response?.data);
+      throw error;
+    }
   }
 }; 

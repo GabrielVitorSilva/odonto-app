@@ -3,23 +3,35 @@ import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { consultationService, type ListAllConsultation,   } from "@/services/consultations";
+import {
+  consultationService,
+  formatDateTime,
+  type ListAllConsultation,
+} from "@/services/consultations";
 import { useCallback, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Loading from "@/components/Loading";
 
 export default function ConsultationsPageAdmin() {
   const navigation = useNavigation();
-  const {profile} = useAuth();
+  const { profile } = useAuth();
+  const [loading, setLoading] = useState(true);
   const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
 
   async function fetchConsultations() {
-    if (!profile) {
-      console.error("User profile is not available");
-      return;
+    try {
+      setLoading(true);
+      if (!profile) {
+        console.error("User profile is not available");
+        return;
+      }
+      const data = await consultationService.listAllConsultations(
+        profile.user.User.id
+      );
+      setConsultations(data.consultations);
+    } finally {
+      setLoading(false);
     }
-    const data = await consultationService.listAllConsultations(profile.user.User.id);
-    setConsultations(data.consultations);
   }
 
   useFocusEffect(
@@ -27,7 +39,7 @@ export default function ConsultationsPageAdmin() {
       fetchConsultations();
     }, [])
   );
-  
+
   return (
     <View className="flex-1">
       <Header className="bg-app-blue" contentColor="white" />
@@ -37,30 +49,38 @@ export default function ConsultationsPageAdmin() {
             Atendimentos
           </Text>
         </View>
-        <FlatList
-          data={consultations}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <Card
-              name={item.treatmentName}
-              upperText={`Paciente: ${item.clientName}`}
-              lowerText={`Profissional: ${item.professionalName}`}
-              date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
-              hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
-              status={item.status}
-              handlePress={() =>
-                navigation.navigate("ConsultationPageAdmin", {
-                  name: item.treatmentName,
-                  dateTime: item.dateTime,
-                  status: item.status,
-                  patientName: item.clientName,
-                  professionalName: item.professionalName,
-                })
-              }
-            />
-          )}
-          className="w-full px-5 mx-auto flex-1"
-        />
+
+        {loading ? (
+          <Loading />
+        ) : (
+          <FlatList
+            data={consultations}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => {
+              const { date, time } = formatDateTime(item.dateTime.toString());
+              return (
+                <Card
+                  name={item.treatmentName}
+                  upperText={`Paciente: ${item.clientName}`}
+                  lowerText={`Profissional: ${item.professionalName}`}
+                  date={date}
+                  hour={time}
+                  status={item.status}
+                  handlePress={() =>
+                    navigation.navigate("ConsultationPageAdmin", {
+                      name: item.treatmentName,
+                      dateTime: item.dateTime,
+                      status: item.status,
+                      patientName: item.clientName,
+                      professionalName: item.professionalName,
+                    })
+                  }
+                />
+              );
+            }}
+            className="w-full px-5 mx-auto flex-1"
+          />
+        )}
       </View>
 
       <Button

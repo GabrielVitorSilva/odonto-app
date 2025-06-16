@@ -16,6 +16,19 @@ export default function ConsultationPageAdmin() {
   const { name, dateTime, status, patientName, professionalName } =
     route.params as RouteParams;
 
+  const statusStyle =
+    {
+      SCHEDULED: {
+        text: "Agendada"
+      },
+      CANCELED: {
+        text: "Cancelada"
+      },
+      COMPLETED: {
+        text: "Finalizada"
+      },
+    }[status] || {};
+
   return (
     <View className="h-full">
       <Header className="bg-app-blue" contentColor="white" />
@@ -28,7 +41,7 @@ export default function ConsultationPageAdmin() {
         <View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Status</Text>
-            <Text>{status}</Text>
+            <Text>{statusStyle.text}</Text>
           </View>
           <View className="flex-row justify-between pb-2 m-2 border-b border-gray-300">
             <Text className="font-bold">Data</Text>
@@ -49,18 +62,11 @@ export default function ConsultationPageAdmin() {
         </View>
 
         <View>
-          {status === "Confirmado" && (
+          {status === "SCHEDULED" && (
             <Button
               className="mt-4 mb-16"
               title="Marcar como finalizada"
               onPress={() => {}}
-            />
-          )}
-          {status === "Pendente" && (
-            <Button
-              title="Cancelar Consulta"
-              onPress={() => {}}
-              className="bg-app-red mb-16 mt-4"
             />
           )}
         </View>

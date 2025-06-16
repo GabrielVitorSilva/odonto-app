@@ -35,6 +35,12 @@ export default function SelectDateHourProf() {
   }
 
   async function handleSchedule() {
+    if (!selectedDay) {
+      showToast('Selecione uma data', 'error');
+      setShowDrawer(false);
+      return;
+    }
+
     const info = await fetchUserInfo();
     const schedule = await consultationService.scheduleConsult({
       clientId: clientSelected?.clientId || "",
@@ -52,6 +58,7 @@ export default function SelectDateHourProf() {
       <Calendar
         current={new Date().toISOString().split("T")[0]}
         onDayPress={(day) => setSelectedDay(day.dateString)}
+        minDate={new Date().toISOString().split("T")[0]}
         markedDates={
           selectedDay
             ? {

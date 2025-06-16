@@ -29,6 +29,12 @@ export default function SelectDateHourAdmin() {
   ];
 
   async function handleSchedule(){
+    if (!selectedDay) {
+      showToast('Selecione uma data', 'error');
+      setShowDrawer(false);
+      return;
+    }
+    
     const schedule = await consultationService.scheduleConsult({
       clientId: clientSelected?.clientId || "",
       professionalId: professionalSelected?.professionalId || "",
@@ -44,6 +50,7 @@ export default function SelectDateHourAdmin() {
       <Header />
       <Text className="text-4xl text-center mt-6 mb-4">Selecione data e hora</Text>
       <Calendar
+        minDate={new Date().toISOString().split("T")[0]}
         current={new Date().toISOString().split("T")[0]}
         onDayPress={(day) => setSelectedDay(day.dateString)}
         markedDates={

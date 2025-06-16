@@ -9,8 +9,8 @@ interface SelectedItem {
 
 type SingleSelectListProps = {
   list: ProfessionalUser[] | {name: string; id: string}[];
-  selected: SelectedItem;
-  setSelected: React.Dispatch<React.SetStateAction<SelectedItem>>;
+  selected: SelectedItem | null;
+  setSelected: React.Dispatch<React.SetStateAction<SelectedItem | null>>;
   ListEmptyComponent: ComponentType<any>;
 };
 
@@ -33,7 +33,7 @@ export function SingleSelectList({
         return (
           <TouchableOpacity
             className={`py-5 px-8 rounded-xl ${
-              selected.name === item.name ? "bg-app-light-blue" : ""
+              selected?.id === item.id ? "bg-app-light-blue" : ""
             }`}
             onPress={() => {
               setSelected({ name: item.name, id: item.id });

@@ -13,11 +13,8 @@ import Loading from "@/components/Loading";
 
 export default function SelectClientAdmin() {
   const { setClientSelected } = useAuth();
-
-  const [selected, setSelected] = useState<{ name: string; id: string }>({
-    name: "",
-    id: "",
-  });
+  const [noSelected, setNoSelected] = useState(false);
+  const [selected, setSelected] = useState<{ name: string; id: string } | null>(null);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<ClientUser[]>([]);
@@ -44,6 +41,17 @@ export default function SelectClientAdmin() {
     );
   }
 
+  function handleSelect() {
+    if (selected === null) {
+      setNoSelected(true)
+    } else {
+      setNoSelected(false);
+      const selectedClient = patients.find((p) => p.id === selected.id);
+      setClientSelected(selectedClient || null);
+      navigation.navigate("SelectProfessionalAdmin");
+    }
+  }
+
   return (
     <View className="flex-1">
       <Header />
@@ -68,15 +76,14 @@ export default function SelectClientAdmin() {
           )}
         </View>
       </View>
-      <Button
-        className="mb-16"
-        title="Selecionar"
-        onPress={() => {
-          const selectedClient = patients.find((p) => p.id === selected.id);
-          setClientSelected(selectedClient || null);
-          navigation.navigate("SelectProfessionalAdmin");
-        }}
-      />
+      <View className="mb-16">
+        <Button title="Selecionar" onPress={handleSelect} />
+        {noSelected && (
+          <Text className="text-lg text-app-red text-center mt-3">
+            Selecione pelo menos um Paciente
+          </Text>
+        )}
+      </View>
     </View>
   );
 }

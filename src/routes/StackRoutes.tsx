@@ -19,7 +19,6 @@ import SelectDateHourAdmin from "@/app/Admin/SelectDateHourAdmin";
 import RegisterNewUserAdmin from "@/app/Admin/RegisterNewUserAdmin";
 import PatientsPageAdmin from "@/app/Admin/PatientsPageAdmin"
 import RegisterNewTreatment from "@/app/Admin/RegisterNewTreatment";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { ActivityIndicator, View } from "react-native";
 import { colors } from "@/theme/colors";
@@ -35,24 +34,13 @@ import SelectTreatmentProf from "@/app/Professional/SelectTreatmentProf";
 import SelectDateHourProf from "@/app/Professional/SelectDateHourProf";
 import SelectPatientProf from "@/app/Professional/SelectPatientProf";
 import SelectTreatmentAdmin from "@/app/Admin/SelectTreatmentAdmin";
-import type { ProfileResponse } from "@/services/auth";
 
 const Stack = createNativeStackNavigator();
 
 export function StackRoutes() {
-  const { token, isLoading } = useAuth();
-  const [profile, setProfile] = useState<ProfileResponse>();
-  useEffect(() => {
-    async function loadProfile() {
-      const storedProfile = await AsyncStorage.getItem('@OdontoApp:profile');
-      if (storedProfile) {
-        setProfile(JSON.parse(storedProfile));
-      }
-    }
-    loadProfile();
-  }, [profile, setProfile]);
+  const { token, isLoading, profile } = useAuth();
 
-  if (isLoading) {
+  if (isLoading || (token && profile === null)) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
         <ActivityIndicator

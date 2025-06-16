@@ -11,6 +11,7 @@ export type RootStackParamList = {
     professionalName: string;
   };
   ConsultationPageAdmin: {
+    id: string;
     name: string;
     dateTime: Date;
     status: string;

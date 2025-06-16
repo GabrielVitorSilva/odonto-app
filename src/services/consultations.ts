@@ -101,6 +101,15 @@ export const consultationService = {
     }
   },
 
+  async completeConsultation(consultationId: string, newData: UpdateConsultationRequest): Promise<void> {
+    try {
+      this.updateConsultation(consultationId, {...newData, status: "COMPLETED"});
+    } catch (error: any){
+      console.error('Error update consultations', error?.response?.data);
+      throw error;
+    }
+  },
+
   async deleteConsultation(consultationId: string): Promise<void> {
     try {
       const response = await api.delete(`/consultations/${consultationId}`)

@@ -2,8 +2,12 @@ import { View, Text } from "react-native";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useRoute } from "@react-navigation/native";
+import { consultationService } from "@/services/consultations";
+import { useState } from "react";
+import { useToast } from "@/contexts/ToastContext";
 
 type RouteParams = {
+  id: string;
   name: string;
   dateTime: Date;
   status: string;
@@ -12,22 +16,45 @@ type RouteParams = {
 };
 
 export default function ConsultationPageAdmin() {
+  const { showToast } = useToast();
   const route = useRoute();
-  const { name, dateTime, status, patientName, professionalName } =
+  const { id, name, dateTime, status, patientName, professionalName } =
     route.params as RouteParams;
+
+  const [statusState, setStatusState] = useState(status);
 
   const statusStyle =
     {
       SCHEDULED: {
-        text: "Agendada"
+        text: "Agendada",
       },
       CANCELED: {
-        text: "Cancelada"
+        text: "Cancelada",
       },
       COMPLETED: {
-        text: "Finalizada"
+        text: "Finalizada",
       },
-    }[status] || {};
+    }[statusState] || {};
+
+  function handleCancelConsultation() {
+    try {
+      consultationService.deleteConsultation(id);
+      setStatusState("CANCELED");
+      showToast("Consulta cancelada com sucesso!", "success");
+    } catch (error) {
+      showToast("Erro ao carregar consultas", "error");
+    }
+  }
+
+  function handleCompleteConsultation() {
+    try {
+      // consultationService.completeConsultation(id);
+      setStatusState("COMPLETED");
+      showToast("Consulta marcada como finalizada com sucesso", "success");
+    } catch (error) {
+      showToast("Error ao marcar como Finalizado", "error");
+    }
+  }
 
   return (
     <View className="h-full">
@@ -61,13 +88,21 @@ export default function ConsultationPageAdmin() {
           </View>
         </View>
 
-        <View>
-          {status === "SCHEDULED" && (
-            <Button
-              className="mt-4 mb-16"
-              title="Marcar como finalizada"
-              onPress={() => {}}
-            />
+        <View className="mb-16">
+          {statusState === "SCHEDULED" && (
+            <>
+              <Button
+                className="mt-4"
+                title="Marcar como finalizada"
+                onPress={handleCompleteConsultation}
+              />
+
+              <Button
+                className="mt-4 bg-app-red"
+                title="Cancelar Consulta"
+                onPress={handleCancelConsultation}
+              />
+            </>
           )}
         </View>
       </View>

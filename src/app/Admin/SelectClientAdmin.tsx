@@ -56,7 +56,7 @@ export default function SelectClientAdmin() {
         </Text>
 
         <View className="flex-1">
-          {Loading ? (
+          {loading ? (
             <Loading />
           ) : (
             <SingleSelectList

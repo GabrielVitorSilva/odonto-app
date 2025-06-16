@@ -9,10 +9,18 @@ interface AuthResponse {
 
 export interface ProfileResponse {
   user: {
+   User: {
     id: string;
     name: string;
     email: string;
     role: Profile;
+   } 
+   profileData: {
+    id: string,
+    userId: string,
+    createdAt: string,
+    updatedAt: string
+   }
   };
 }
 
@@ -53,7 +61,7 @@ export const authService = {
         password: data.password,
         cpf: data.cpf,
       });
-      return response.data;
+      return response.status;
     } catch (error: any) {
       console.error('Error during registration:', error?.response?.data);
       throw error;

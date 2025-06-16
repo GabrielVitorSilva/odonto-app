@@ -29,7 +29,7 @@ export default function HomeProf() {
       />
 
       <Text className="text-center text-3xl font-semibold my-[25px]">
-        {profile?.user.name || "Bem-vindo(a)!"}
+        {profile?.user.User.name || "Bem-vindo(a)!"}
       </Text>
 
       <Menu items={menuItems} />

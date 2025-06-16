@@ -18,7 +18,7 @@ export default function ConsultationsPageAdmin() {
       console.error("User profile is not available");
       return;
     }
-    const data = await consultationService.listAllConsultations(profile.user.id);
+    const data = await consultationService.listAllConsultations(profile.user.User.id);
     setConsultations(data.consultations);
   }
 

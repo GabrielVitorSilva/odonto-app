@@ -39,6 +39,14 @@ export interface ListAllConsultationsResponse {
   consultations: ListAllConsultation[];
 }
 
+export const formatDateTime = (dateTime: string) => {
+    const date = new Date(dateTime);
+    return {
+      date: date.toLocaleDateString("pt-BR"),
+      time: date.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })
+    };
+  };
+
 export const consultationService = {
   async scheduleConsult(data: IScheduleConsultRequest): Promise<void> {
     try {
@@ -63,18 +71,10 @@ export const consultationService = {
       throw error;
     }
   },
-  async listAllClientConsultations(clientId: string): Promise<ListAllConsultationsResponse> {
+
+  async listConsultationsByProfessional(professionalId: string): Promise<ListAllConsultationsResponse>{
     try {
-      const response = await api.get<ListAllConsultationsResponse>(`/clients/${clientId}/consultations`);
-      return response.data;
-    } catch (error: any) {
-      console.error('Error listing consultations:', error?.response?.data);
-      throw error;
-    }
-  },
-  async listConsultationsByProfessional(professionalId: string): Promise<ConsultationsResponse>{
-    try {
-      const response = await api.get<ConsultationsResponse>(`/professionals/${professionalId}/consultations`);
+      const response = await api.get<ListAllConsultationsResponse>(`/professionals/${professionalId}/consultations`);
       return response.data;
     } catch (error: any) {
       console.error('Error List consultations of the professional', error?.response?.data);
@@ -82,9 +82,9 @@ export const consultationService = {
     }
   },
 
-  async listConsultationsByClient(clientId: string): Promise<ConsultationsResponse>{
+  async listConsultationsByClient(clientId: string): Promise<ListAllConsultationsResponse>{
     try {
-      const response = await api.get<ConsultationsResponse>(`/clients/${clientId}/consultations`);
+      const response = await api.get<ListAllConsultationsResponse>(`/clients/${clientId}/consultations`);
       return response.data;
     } catch (error: any) {
       console.error('Error List consultations of the client', error?.response?.data);

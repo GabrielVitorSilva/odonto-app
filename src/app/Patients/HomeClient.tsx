@@ -5,7 +5,7 @@ import { Button } from "@/components/Button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { consultationService, type ListAllConsultation } from "@/services/consultations";
+import { consultationService, formatDateTime, type ListAllConsultation } from "@/services/consultations";
 import { treatmentsService } from "@/services/treatments";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useToast } from "@/contexts/ToastContext";
@@ -23,7 +23,7 @@ export default function HomeClient() {
     try {
       if (!profile) return;
       
-      const data = await consultationService.listAllClientConsultations(profile.user.profileData.id);
+      const data = await consultationService.listConsultationsByClient(profile.user.profileData.id);
       setConsultations(data.consultations);
     } catch (error) {
       showToast('Erro ao carregar consultas', 'error');
@@ -44,14 +44,6 @@ export default function HomeClient() {
   const handleLongPressCard = (consultationId: string) => {
     setIdToCancel(consultationId);
     setShowDrawer(true);
-  };
-
-  const formatDateTime = (dateTime: string) => {
-    const date = new Date(dateTime);
-    return {
-      date: date.toLocaleDateString("pt-BR"),
-      time: date.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })
-    };
   };
 
   useFocusEffect(
@@ -87,9 +79,8 @@ export default function HomeClient() {
             return (
               <Card
                 handleLongPress={() => handleLongPressCard(item.id)}
-                name={item.clientName}
-                upperText="Procedimentos:"
-                lowerText={item.treatmentName}
+                name={item.treatmentName}
+                upperText={item.professionalName}
                 date={date}
                 hour={time}
                 status={item.status}
@@ -101,12 +92,11 @@ export default function HomeClient() {
         />
       </View>
 
-      <View className="absolute bottom-0 w-full px-5 pb-5 bg-gray-100">
         <Button 
+          className="mb-16"
           title="Agendar Triagem" 
           onPress={() => navigation.navigate("SelectDatePatient")} 
         />
-      </View>
 
       <BottomDrawer
         title="Agendar consulta"

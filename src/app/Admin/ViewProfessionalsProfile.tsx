@@ -3,7 +3,11 @@ import { Text, View, FlatList } from "react-native";
 import Header from "@/components/Header";
 import Card from "@/components/Card";
 import { useRoute, useFocusEffect } from "@react-navigation/native";
-import { consultationService } from "@/services/consultations";
+import {
+  consultationService,
+  formatDateTime,
+  ListAllConsultation,
+} from "@/services/consultations";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { treatmentsService } from "@/services/treatments";
 import Loading from "@/components/Loading";
@@ -13,24 +17,12 @@ type RouteParams = {
   professionalId: string;
 };
 
-type ConsultationDetails = {
-  id: string;
-  status: string;
-  dateTime: Date;
-  treatmentName: string;
-};
-
 export default function ViewProfessionalsProfile() {
   const [loading, setLoading] = useState(true);
-  const [consultations, setConsultations] = useState<ConsultationDetails[]>([]);
+  const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
 
   const route = useRoute();
   const { name, professionalId } = route.params as RouteParams;
-
-  async function fetchTreatmentName(treatmentId: string) {
-    const response = await treatmentsService.getTreatment(treatmentId);
-    return response.name;
-  }
 
   async function fetchProfConsultations() {
     try {
@@ -40,22 +32,7 @@ export default function ViewProfessionalsProfile() {
           professionalId
         );
 
-      const consultationsWithDetails = await Promise.all(
-        response.consultations.map(async (consultation) => {
-          const treatmentName = await fetchTreatmentName(
-            consultation.treatmentId
-          );
-
-          return {
-            id: consultation.id,
-            status: consultation.status,
-            dateTime: consultation.dateTime,
-            treatmentName,
-          };
-        })
-      );
-
-      setConsultations(consultationsWithDetails);
+      setConsultations(response.consultations);
     } finally {
       setLoading(false);
     }
@@ -95,15 +72,19 @@ export default function ViewProfessionalsProfile() {
           data={consultations}
           keyExtractor={(item) => item.id}
           ListEmptyComponent={ConsultationsEmpty}
-          renderItem={({ item }) => (
-            <Card
-              name={item.treatmentName}
-              upperText={`Paciente: ${"Ainda a fazer"}`}
-              date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
-              hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
-              status={item.status}
-            />
-          )}
+          renderItem={({ item }) => {
+            const { date, time } = formatDateTime(item.dateTime.toString());
+
+            return (
+              <Card
+                name={item.treatmentName}
+                upperText={`Paciente: ${"Ainda a fazer"}`}
+                date={date}
+                hour={time}
+                status={item.status}
+              />
+            );
+          }}
           className="w-full px-5 mx-auto"
         />
       )}

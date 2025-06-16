@@ -12,26 +12,6 @@ import { Picker } from "@react-native-picker/picker";
 import { useToast } from "@/contexts/ToastContext";
 import { useNavigation } from "@react-navigation/native";
 
-// Configuração do calendário em português
-LocaleConfig.locales["pt"] = {
-  monthNames: [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
-  ],
-  monthNamesShort: [
-    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-    "Jul", "Ago", "Set", "Out", "Nov", "Dez",
-  ],
-  dayNames: [
-    "Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
-    "Quinta-feira", "Sexta-feira", "Sábado",
-  ],
-  dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-  today: "Hoje",
-};
-
-LocaleConfig.defaultLocale = "pt";
-
 const AVAILABLE_HOURS = [
   "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00",
 ];

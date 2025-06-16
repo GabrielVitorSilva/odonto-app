@@ -11,50 +11,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { consultationService } from "@/services/consultations";
 import { useToast } from "@/contexts/ToastContext";
 
-LocaleConfig.locales["pt"] = {
-  monthNames: [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
-  ],
-  monthNamesShort: [
-    "Jan",
-    "Fev",
-    "Mar",
-    "Abr",
-    "Mai",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Set",
-    "Out",
-    "Nov",
-    "Dez",
-  ],
-  dayNames: [
-    "Domingo",
-    "Segunda-feira",
-    "Terça-feira",
-    "Quarta-feira",
-    "Quinta-feira",
-    "Sexta-feira",
-    "Sábado",
-  ],
-  dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-  today: "Hoje",
-};
-
-LocaleConfig.defaultLocale = "pt";
-
 export default function SelectDateHourAdmin() {
   const {clientSelected, professionalSelected, treatmentSelected} = useAuth();
   const { showToast } = useToast()

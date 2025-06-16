@@ -2,6 +2,7 @@ import { Routes } from '@/routes';
 import React from 'react';
 import './global.css';
 import { useAppFonts } from './src/theme/fonts';
+import "./src/config/calendarConfig";
 import { View, ActivityIndicator } from 'react-native';
 import { colors } from './src/theme/colors';
 import { ToastProvider } from './src/contexts/ToastContext';

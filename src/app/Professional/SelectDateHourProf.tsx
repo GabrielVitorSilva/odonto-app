@@ -29,11 +29,6 @@ export default function SelectDateHourProf() {
     "20:00",
   ];
 
-  async function fetchUserInfo() {
-    const info = await treatmentsService.getLoggedInfo()
-    return info;
-  }
-
   async function handleSchedule() {
     if (!selectedDay) {
       showToast('Selecione uma data', 'error');

@@ -9,6 +9,7 @@ export type RootStackParamList = {
     date: string;
     hour: string;
     professionalName: string;
+    status: string;
   };
   ConsultationPageAdmin: {
     id: string;
@@ -56,6 +57,7 @@ export type RootStackParamList = {
   SelectPatientProf: undefined;
   SelectTreatmentProf: undefined;
   ConsultationPageProf: {
+    id: string;
     name: string;
     dateTime: Date;
     status: string;

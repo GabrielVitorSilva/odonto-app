@@ -74,7 +74,7 @@ export default function TreatmentsAdmin() {
       )}
 
       <Button
-        className="mb-16"
+        className="mb-4"
         title="Cadastrar Tratamento"
         onPress={() =>
           navigation.navigate("RegisterNewTreatment", { professionals: [] })

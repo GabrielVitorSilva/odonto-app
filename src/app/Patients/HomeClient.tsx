@@ -107,7 +107,7 @@ export default function HomeClient() {
       </View>
 
       <Button
-        className="mb-16"
+        className="mb-4"
         title="Agendar Triagem"
         onPress={() => navigation.navigate("SelectDatePatient")}
       />

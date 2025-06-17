@@ -79,7 +79,7 @@ export default function SelectProfessionalAdmin() {
           )}
         </View>
       </View>
-      <View className="mb-16">
+      <View className="mb-4">
       <Button
         title="Selecionar"
         onPress={handleSelect}

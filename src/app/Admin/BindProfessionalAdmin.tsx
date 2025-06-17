@@ -112,7 +112,7 @@ export default function BindProfessionalAdmin() {
         )}
       </View>
 
-      <View className="mb-16">
+      <View className="mb-4">
         <Button title="Vincular Tratamento" onPress={handleBind} />
         {noSelected && (
           <Text className="text-lg text-app-red text-center mt-3">

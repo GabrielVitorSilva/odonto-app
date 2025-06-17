@@ -76,7 +76,7 @@ export default function SelectClientAdmin() {
           )}
         </View>
       </View>
-      <View className="mb-16">
+      <View className="mb-4">
         <Button title="Selecionar" onPress={handleSelect} />
         {noSelected && (
           <Text className="text-lg text-app-red text-center mt-3">

@@ -98,7 +98,7 @@ export default function ConsultationsPageProf() {
         onPress={() => {
           navigation.navigate("SelectPatientProf");
         }}
-        className="mb-16"
+        className="mb-4"
       />
     </View>
   );

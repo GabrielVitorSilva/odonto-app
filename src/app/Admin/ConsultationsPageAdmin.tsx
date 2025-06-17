@@ -89,7 +89,7 @@ export default function ConsultationsPageAdmin() {
         onPress={() => {
           navigation.navigate("SelectClientAdmin");
         }}
-        className="mb-16"
+        className="mb-4"
       />
     </View>
   );

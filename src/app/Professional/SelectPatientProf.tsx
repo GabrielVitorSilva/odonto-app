@@ -66,7 +66,7 @@ export default function SelectPatientProf() {
         </View>
       </View>
       <Button
-        className="mb-16"
+        className="mb-4"
         title="Selecionar"
         onPress={() => {
           const selectedClient = patients.find((p) => p.id === selected?.id);

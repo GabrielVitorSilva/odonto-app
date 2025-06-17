@@ -88,7 +88,7 @@ export default function ConsultationPageAdmin() {
           </View>
         </View>
 
-        <View className="mb-16">
+        <View className="mb-4">
           {statusState === "SCHEDULED" && (
             <>
               <Button

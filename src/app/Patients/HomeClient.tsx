@@ -5,8 +5,11 @@ import { Button } from "@/components/Button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { consultationService, formatDateTime, type ListAllConsultation } from "@/services/consultations";
-import { treatmentsService } from "@/services/treatments";
+import {
+  consultationService,
+  formatDateTime,
+  type ListAllConsultation,
+} from "@/services/consultations";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useToast } from "@/contexts/ToastContext";
 
@@ -17,16 +20,18 @@ export default function HomeClient() {
 
   const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  const [idToCancel, setIdToCancel] = useState<string>('');
+  const [idToCancel, setIdToCancel] = useState<string>("");
 
   const fetchConsultations = async () => {
     try {
       if (!profile) return;
-      
-      const data = await consultationService.listConsultationsByClient(profile.user.profileData.id);
+
+      const data = await consultationService.listConsultationsByClient(
+        profile.user.profileData.id
+      );
       setConsultations(data.consultations);
     } catch (error) {
-      showToast('Erro ao carregar consultas', 'error');
+      showToast("Erro ao carregar consultas", "error");
     }
   };
 
@@ -35,9 +40,9 @@ export default function HomeClient() {
       await consultationService.deleteConsultation(idToCancel);
       await fetchConsultations(); // Atualiza a lista após cancelamento
       setShowDrawer(false);
-      showToast('Consulta cancelada com sucesso', 'success');
+      showToast("Consulta cancelada com sucesso", "success");
     } catch (error) {
-      showToast('Erro ao cancelar consulta', 'error');
+      showToast("Erro ao cancelar consulta", "error");
     }
   };
 
@@ -60,7 +65,7 @@ export default function HomeClient() {
         title="Perfil"
         hasExit={true}
       />
-      
+
       <Text className="text-center text-3xl font-semibold my-[25px]">
         {profile?.user.User.name}
       </Text>
@@ -75,7 +80,7 @@ export default function HomeClient() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
             const { date, time } = formatDateTime(item.dateTime.toString());
-            
+
             return (
               <Card
                 handleLongPress={() => handleLongPressCard(item.id)}
@@ -84,6 +89,15 @@ export default function HomeClient() {
                 date={date}
                 hour={time}
                 status={item.status}
+                handlePress={() =>
+                  navigation.navigate("ConsultationPage", {
+                    name: item.treatmentName,
+                    date: date,
+                    hour: time,
+                    professionalName: item.professionalName,
+                    status: item.status
+                  })
+                }
               />
             );
           }}
@@ -92,11 +106,11 @@ export default function HomeClient() {
         />
       </View>
 
-        <Button 
-          className="mb-16"
-          title="Agendar Triagem" 
-          onPress={() => navigation.navigate("SelectDatePatient")} 
-        />
+      <Button
+        className="mb-16"
+        title="Agendar Triagem"
+        onPress={() => navigation.navigate("SelectDatePatient")}
+      />
 
       <BottomDrawer
         title="Agendar consulta"
@@ -113,3 +127,4 @@ export default function HomeClient() {
     </View>
   );
 }
+

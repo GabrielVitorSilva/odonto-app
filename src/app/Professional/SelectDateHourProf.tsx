@@ -31,7 +31,7 @@ export default function SelectDateHourProf() {
 
   async function handleSchedule() {
     if (!selectedDay) {
-      showToast('Selecione uma data', 'error');
+      showToast("Selecione uma data", "error");
       setShowDrawer(false);
       return;
     }
@@ -46,12 +46,50 @@ export default function SelectDateHourProf() {
     navigation.navigate("HomeProf");
   }
 
+  const checkProfessionalAvailability = async (
+    professional: any,
+    date: string
+  ) => {
+    const consultations =
+      await consultationService.listConsultationsByProfessional(
+        professional?.profileData.id
+      );
+    return !consultations.consultations.some(
+      (consultation: any) => consultation.dateTime.split("T")[0] === date
+    );
+  };
+
+  const handleDayPress = async (day: any) => {
+    const selectedDate = new Date(day.dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      showToast("Não é possível selecionar uma data passada", "error");
+      return;
+    }
+
+    const isAvailable = await checkProfessionalAvailability(
+      profile?.user,
+      day.dateString
+    );
+
+    if (!isAvailable) {
+      showToast(
+        "Você não está disponível para esta data",
+        "error"
+      );
+      return;
+    }
+    setSelectedDay(day.dateString);
+  };
+
   return (
     <View className="flex-1 bg-gray-100">
       <Header className="bg-app-blue" contentColor="white" />
       <Calendar
         current={new Date().toISOString().split("T")[0]}
-        onDayPress={(day) => setSelectedDay(day.dateString)}
+        onDayPress={handleDayPress}
         minDate={new Date().toISOString().split("T")[0]}
         markedDates={
           selectedDay
@@ -117,3 +155,4 @@ export default function SelectDateHourProf() {
     </View>
   );
 }
+

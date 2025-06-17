@@ -12,8 +12,8 @@ import { consultationService } from "@/services/consultations";
 import { useToast } from "@/contexts/ToastContext";
 
 export default function SelectDateHourAdmin() {
-  const {clientSelected, professionalSelected, treatmentSelected} = useAuth();
-  const { showToast } = useToast()
+  const { clientSelected, professionalSelected, treatmentSelected } = useAuth();
+  const { showToast } = useToast();
   const navigation = useNavigation();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [selectedHour, setSelectedHour] = useState<string | null>("08:00");
@@ -28,31 +28,71 @@ export default function SelectDateHourAdmin() {
     "20:00",
   ];
 
-  async function handleSchedule(){
+  async function handleSchedule() {
     if (!selectedDay) {
-      showToast('Selecione uma data', 'error');
+      showToast("Selecione uma data", "error");
       setShowDrawer(false);
       return;
     }
-    
+
     const schedule = await consultationService.scheduleConsult({
       clientId: clientSelected?.clientId || "",
       professionalId: professionalSelected?.professionalId || "",
       treatmentId: treatmentSelected?.id || "",
-      dateTime: `${selectedDay}T${selectedHour}:00.000Z`
-    })
-    showToast('Consulta agendada com sucesso!', 'success');
+      dateTime: `${selectedDay}T${selectedHour}:00.000Z`,
+    });
+    showToast("Consulta agendada com sucesso!", "success");
     navigation.navigate("HomeAdmin");
   }
+
+  const checkProfessionalAvailability = async (
+    professional: any,
+    date: string
+  ) => {
+    const consultations =
+      await consultationService.listConsultationsByProfessional(
+        professional.professionalId
+      );
+    return !consultations.consultations.some(
+      (consultation: any) => consultation.dateTime.split("T")[0] === date
+    );
+  };
+
+  const handleDayPress = async (day: any) => {
+    const selectedDate = new Date(day.dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      showToast("Não é possível selecionar uma data passada", "error");
+      return;
+    }
+
+    const isAvailable = await checkProfessionalAvailability(
+      professionalSelected,
+      day.dateString
+    );
+
+    if (!isAvailable) {
+      showToast(
+        "Profissional selecionado não está disponível para esta data",
+        "error"
+      );
+      return;
+    }
+    setSelectedDay(day.dateString);
+  };
 
   return (
     <View className="flex-1 bg-white">
       <Header />
-      <Text className="text-4xl text-center mt-6 mb-4">Selecione data e hora</Text>
+      <Text className="text-4xl text-center mt-6 mb-4">
+        Selecione data e hora
+      </Text>
       <Calendar
         minDate={new Date().toISOString().split("T")[0]}
         current={new Date().toISOString().split("T")[0]}
-        onDayPress={(day) => setSelectedDay(day.dateString)}
+        onDayPress={handleDayPress}
         markedDates={
           selectedDay
             ? {
@@ -104,12 +144,14 @@ export default function SelectDateHourAdmin() {
             <Text className="text-app-blue font-semibold">{`${treatmentSelected?.name}`}</Text>{" "}
             para{" "}
             <Text className="text-app-blue font-semibold">
-            {`${clientSelected?.name}`}
+              {`${clientSelected?.name}`}
             </Text>
             ?
           </Text>
         }
-        handlePress={() => {handleSchedule()}}
+        handlePress={() => {
+          handleSchedule();
+        }}
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
         buttonTitle="Agendar agora"
@@ -117,3 +159,4 @@ export default function SelectDateHourAdmin() {
     </View>
   );
 }
+

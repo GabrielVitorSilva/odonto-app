@@ -3,7 +3,6 @@ import { Calendar } from "react-native-calendars";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useCallback, useState } from "react";
 import Header from "@/components/Header";
-import { LocaleConfig } from "react-native-calendars";
 import { Button } from "@/components/Button";
 import { treatmentsService } from "@/services/treatments";
 import { consultationService } from "@/services/consultations";

@@ -2,7 +2,11 @@ import React, { useCallback, useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import Header from "@/components/Header";
 import Card from "@/components/Card";
-import { useRoute, useFocusEffect } from "@react-navigation/native";
+import {
+  useRoute,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
 import {
   consultationService,
   formatDateTime,
@@ -18,7 +22,7 @@ type RouteParams = {
 export default function ViewPatientsProfile() {
   const [loading, setLoading] = useState(true);
   const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
-
+  const navigation = useNavigation();
   const route = useRoute();
   const { name, clientId } = route.params as RouteParams;
 
@@ -71,6 +75,16 @@ export default function ViewPatientsProfile() {
                 date={date}
                 hour={time}
                 status={item.status}
+                handlePress={() =>
+                  navigation.navigate("ConsultationPageAdmin", {
+                    id: item.id,
+                    name: item.treatmentName,
+                    dateTime: item.dateTime,
+                    status: item.status,
+                    patientName: item.clientName,
+                    professionalName: item.professionalName,
+                  })
+                }
               />
             );
           }}

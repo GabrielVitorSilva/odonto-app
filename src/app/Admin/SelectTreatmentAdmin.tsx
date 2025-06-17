@@ -8,19 +8,29 @@ import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import Loading from "@/components/Loading";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function SelectTreatmentAdmin() {
-  const { setTreatmentSelected } = useAuth();
+  const { professionalSelected, setTreatmentSelected } = useAuth();
   const [noSelected, setNoSelected] = useState(false);
-  const [selected, setSelected] = useState<{ name: string; id: string } | null>(null);
+  const [selected, setSelected] = useState<{ name: string; id: string } | null>(
+    null
+  );
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
 
   async function loadTreatments() {
     try {
       setLoading(true);
-      const response = await treatmentsService.listAllTreatments();
+      if (!professionalSelected?.professionalId) {
+        showToast("Nenhum profissional selecionado.", "error");
+        return;
+      }
+      const response = await treatmentsService.listTreatmentsByProfessional(
+        professionalSelected.professionalId
+      );
       setTreatments(response.treatments);
     } catch (error) {
       console.error("Erro ao carregar tratamentos:", error);
@@ -39,7 +49,7 @@ export default function SelectTreatmentAdmin() {
     return (
       <ListEmptyComponent
         iconName="medkit"
-        text="Não há tratamentos cadastrados ainda"
+        text="Não há tratamentos vinculados com o funcionário"
       />
     );
   }

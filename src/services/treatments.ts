@@ -96,6 +96,15 @@ export const treatmentsService = {
       throw error;
     }
   },
+  async listTreatmentsByProfessional(professionalId: string){
+    try {
+      const response = await api.get<TreatmentsResponse>(`/professionals/${professionalId}/treatments`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Erro ao buscar tratamentos:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
   async listProfessionals(): Promise<ProfessionalUser[]> {
     try {
       const response = await api.get<ProfessionalsResponse>(`/professionals`);

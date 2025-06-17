@@ -28,9 +28,7 @@ export default function SelectTreatmentAdmin() {
         showToast("Nenhum profissional selecionado.", "error");
         return;
       }
-      const response = await treatmentsService.listTreatmentsByProfessional(
-        professionalSelected.professionalId
-      );
+      const response = await treatmentsService.listAllTreatments();
       setTreatments(response.treatments);
     } catch (error) {
       console.error("Erro ao carregar tratamentos:", error);

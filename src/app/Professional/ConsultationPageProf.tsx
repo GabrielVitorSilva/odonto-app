@@ -84,19 +84,20 @@ export default function ConsultationPageProf() {
         </View>
 
         <View>
-          {status === "Confirmado" && (
-            <Button
-              className="mt-4 mb-16"
-              title="Marcar como finalizada"
-              onPress={handleCompleteConsultation}
-            />
-          )}
-          {status === "Pendente" && (
-            <Button
-              title="Cancelar Consulta"
-              onPress={handleCancelConsultation}
-              className="bg-app-red mb-16 mt-4"
-            />
+          {statusState === "SCHEDULED" && (
+            <>
+              <Button
+                className="mt-4"
+                title="Marcar como finalizada"
+                onPress={handleCompleteConsultation}
+              />
+
+              <Button
+                className="mt-4 bg-app-red"
+                title="Cancelar Consulta"
+                onPress={handleCancelConsultation}
+              />
+            </>
           )}
         </View>
       </View>

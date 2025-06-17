@@ -3,51 +3,43 @@ import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { Consultation, consultationService,} from "@/services/consultations";
-import { treatmentsService } from "@/services/treatments";
+import {
+  consultationService,
+  formatDateTime,
+  ListAllConsultation,
+} from "@/services/consultations";
 import { useCallback, useState } from "react";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { useAuth } from "@/contexts/AuthContext";
-
-type ConsultationsWithDetails = Consultation & {
-  treatmentName: string;
-  clientName: string;
-  professionalName: string;
-};
+import Loading from "@/components/Loading";
 
 export default function ConsultationsPageProf() {
   const navigation = useNavigation();
   const { profile } = useAuth();
-  const [consultations, setConsultations] = useState<ConsultationsWithDetails[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
 
-  async function fetchConsultations() {
-    console.log("Fetching consultations for profile:", profile);
-    
-    if (!profile) {
-      console.error("User profile is not available");
-      return;
+  async function fetchProfConsultations() {
+    try {
+      setLoading(true);
+      if (!profile) {
+        console.error("User profile is not available");
+        return;
+      }
+      const response =
+        await consultationService.listConsultationsByProfessional(
+          profile?.user.profileData.id
+        );
+
+      setConsultations(response.consultations);
+    } finally {
+      setLoading(false);
     }
-    const data = await consultationService.listConsultationsByProfessional(profile.user.profileData.id);
-    console.log("Consultations fetched:", data);
-    
-    const consultationsWithDetails = await Promise.all(
-      data.consultations.map(async (consultation) => {
-        const treatment = await treatmentsService.getTreatment(consultation.treatmentId);
-        return {
-          ...consultation,
-          treatmentName: treatment.name,
-          clientName: "Carregando...", 
-          professionalName: profile.user.User.name
-        } as ConsultationsWithDetails;
-      })
-    );
-    
-    setConsultations(consultationsWithDetails);
   }
 
   useFocusEffect(
     useCallback(() => {
-      fetchConsultations();
+      fetchProfConsultations();
     }, [])
   );
 
@@ -66,30 +58,38 @@ export default function ConsultationsPageProf() {
             Atendimentos
           </Text>
         </View>
-        <FlatList
-          data={consultations}
-          keyExtractor={(item) => item.id.toString()}
-          ListEmptyComponent={ConsultationsEmpty}
-          renderItem={({ item }) => (
-            <Card
-              name={item.treatmentName}
-              upperText={`Paciente: ${item.clientName}`}
-              lowerText={`Profissional: ${item.professionalName}`}
-              date={new Date(item.dateTime).toLocaleDateString("pt-BR")}
-              hour={new Date(item.dateTime).toLocaleTimeString("pt-BR")}
-              status={item.status}
-              handlePress={() =>
-                navigation.navigate("ConsultationPageProf", {
-                  name: item.treatmentName,
-                  dateTime: item.dateTime,
-                  status: item.status,
-                  patientName: item.clientName
-                })
-              }
-            />
-          )}
-          className="w-full px-5 mx-auto flex-1"
-        />
+
+        {loading ? (
+          <Loading />
+        ) : (
+          <FlatList
+            data={consultations}
+            keyExtractor={(item) => item.id.toString()}
+            ListEmptyComponent={ConsultationsEmpty}
+            renderItem={({ item }) => {
+              const { date, time } = formatDateTime(item.dateTime.toString());
+              return (
+                <Card
+                  name={item.treatmentName}
+                  upperText={`Paciente: ${item.clientName}`}
+                  lowerText={`Profissional: ${item.professionalName}`}
+                  date={date}
+                  hour={time}
+                  status={item.status}
+                  handlePress={() =>
+                    navigation.navigate("ConsultationPageProf", {
+                      name: item.treatmentName,
+                      dateTime: item.dateTime,
+                      status: item.status,
+                      patientName: item.clientName,
+                    })
+                  }
+                />
+              );
+            }}
+            className="w-full px-5 mx-auto flex-1"
+          />
+        )}
       </View>
 
       <Button
@@ -102,3 +102,4 @@ export default function ConsultationsPageProf() {
     </View>
   );
 }
+

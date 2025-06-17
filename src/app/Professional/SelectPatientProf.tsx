@@ -7,19 +7,26 @@ import { treatmentsService } from "@/services/treatments";
 import { ClientUser } from "@/services/types/treatments";
 import { SingleSelectList } from "@/components/SingleSelectList";
 import { useAuth } from "@/contexts/AuthContext";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
+import Loading from "@/components/Loading";
 
 export default function SelectPatientProf() {
   const { setClientSelected } = useAuth();
-  const [selected, setSelected] = useState<{ name: string; id: string }>({
-    name: "",
-    id: "",
-  });
+  const [selected, setSelected] = useState<{ name: string; id: string } | null>(
+    null
+  );
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<ClientUser[]>([]);
 
   async function fetchClients() {
-    const data = await treatmentsService.listClients();
-    setPatients(data);
+    try {
+      setLoading(true);
+      const data = await treatmentsService.listClients();
+      setPatients(data);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useFocusEffect(
@@ -27,6 +34,12 @@ export default function SelectPatientProf() {
       fetchClients();
     }, [])
   );
+
+  function PatientsEmpty() {
+    return (
+      <ListEmptyComponent iconName="people" text="Não há pacientes ainda" />
+    );
+  }
 
   return (
     <View className="flex-1">
@@ -40,18 +53,23 @@ export default function SelectPatientProf() {
         </Text>
 
         <View className="flex-1">
-          <SingleSelectList
-            list={patients}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          {loading ? (
+            <Loading />
+          ) : (
+            <SingleSelectList
+              list={patients}
+              selected={selected}
+              setSelected={setSelected}
+              ListEmptyComponent={PatientsEmpty}
+            />
+          )}
         </View>
       </View>
       <Button
-        className="mb-5"
+        className="mb-16"
         title="Selecionar"
         onPress={() => {
-          const selectedClient = patients.find((p) => p.id === selected.id);
+          const selectedClient = patients.find((p) => p.id === selected?.id);
           setClientSelected(selectedClient || null);
           navigation.navigate("SelectTreatmentProf");
         }}
@@ -59,3 +77,4 @@ export default function SelectPatientProf() {
     </View>
   );
 }
+

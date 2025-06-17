@@ -29,7 +29,6 @@ import ProfessionalsPageAdmin from "@/app/Admin/ProfessionalsPageAdmin";
 import ViewProfessionalsProfile from "@/app/Admin/ViewProfessionalsProfile";
 import SelectDatePatient from "@/app/Patients/SelectDatePatient";
 import ConsultationPageProf from "@/app/Professional/ConsultationPageProf";
-import TreatmentPageProf from "@/app/Professional/TreatmentPageProf";
 import SelectTreatmentProf from "@/app/Professional/SelectTreatmentProf";
 import SelectDateHourProf from "@/app/Professional/SelectDateHourProf";
 import SelectPatientProf from "@/app/Professional/SelectPatientProf";
@@ -95,7 +94,6 @@ export function StackRoutes() {
           <Stack.Screen name="HomeProf" component={HomeProf} />
           <Stack.Screen name="ConsultationsPageProf" component={ConsultationsPageProf} />
           <Stack.Screen name="ConsultationPageProf" component={ConsultationPageProf} />
-          <Stack.Screen name="TreatmentPageProf" component={TreatmentPageProf} />
           <Stack.Screen name="TreatmentsProf" component={TreatmentsProf} />
           <Stack.Screen name="SelectTreatmentProf" component={SelectTreatmentProf} />
           <Stack.Screen name="SelectDateHourProf" component={SelectDateHourProf} />

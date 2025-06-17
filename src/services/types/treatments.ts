@@ -66,16 +66,24 @@ export interface ClientsResponse {
 
 export interface IGetUser {
   user: {
+    User: {
+      id: string,
+      name: string,
+      email: string,
+      cpf: string,
+      phone: string,
+      role: string,
+      createdAt: string,
+      updatedAt: string,
+      Professional: {
+        id: string
+      }
+    },
+  }
+  profileData: {
     id: string,
-    name: string,
-    email: string,
-    cpf: string,
-    phone: string,
-    role: string,
+    userId: string,
     createdAt: string,
     updatedAt: string,
-    Professional: {
-      id: string
-    }
   }
 }

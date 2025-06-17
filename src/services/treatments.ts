@@ -79,14 +79,14 @@ export const treatmentsService = {
       throw error;
     }
   },
-  async listProfessionalAvailablesToTreatment(userIds: string[]): Promise<IUser[]> {
+  async listProfessionalAvailablesToTreatment(userIds: string[]): Promise<IGetUser[]> {
     try {
       if (!userIds || !Array.isArray(userIds)) {
         return [];
       }
 
       const data = await Promise.all(userIds.map(async (id) => {
-        const response = await api.get<IUser>(`/users/${id}`);
+        const response = await api.get<IGetUser>(`/users/${id}`);
         return response.data;
       }));
 
@@ -137,7 +137,7 @@ export const treatmentsService = {
     try {
       const promises = userIds.map(async (userId) => {
         const userData = await this.getUser(userId);
-        const professionalId = userData.user.Professional.id;
+        const professionalId = userData.user.User.Professional.id;
         return api.post<void>(`/treatments/${treatmentId}/professionals/${professionalId}`);
       });
 

@@ -47,12 +47,12 @@ export default function TreatmentPageAdmin() {
         await treatmentsService.listProfessionalAvailablesToTreatment(
           treatment.professionals.map((p: Professional) => p.userId)
         );
-
       setBoundProfessionals(
-        professionalsAvailable.map((userSelected) => ({
-          id: userSelected.user.id,
-          name: userSelected.user.name,
-        }))
+        professionalsAvailable.map((userSelected) => {
+          return{
+          id: userSelected.user.User.id,
+          name: userSelected.user.User.name,
+        }})
       );
     } catch (error) {
       console.error("Erro ao carregar profissionais:", error);
@@ -71,7 +71,7 @@ export default function TreatmentPageAdmin() {
     try {
       const { user } = await treatmentsService.getUser(userId);
       await treatmentsService.removeProfessionalFromTreatment(
-        user.Professional.id,
+        user.User.Professional.id,
         treatmentId
       );
       await loadProfessionals(); // Recarrega os profissionais após remover
@@ -162,7 +162,6 @@ export default function TreatmentPageAdmin() {
               treatment_id,
             });
           }}
-          className="mb-14"
         />
       </View>
     </View>

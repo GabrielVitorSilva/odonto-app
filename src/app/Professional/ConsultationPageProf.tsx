@@ -2,19 +2,25 @@ import { View, Text } from "react-native";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useRoute } from "@react-navigation/native";
+import { consultationService } from "@/services/consultations";
+import { useToast } from "@/contexts/ToastContext";
+import { useState } from "react";
 
 type RouteParams = {
+  id: string;
   name: string;
   dateTime: Date;
   status: string;
   patientName: string;
-  professionalName: string;
 };
 
 export default function ConsultationPageProf() {
+  const { showToast } = useToast()
   const route = useRoute();
-  const { name, dateTime, status, patientName, professionalName } =
+  const { id, name, dateTime, status, patientName } =
     route.params as RouteParams;
+
+  const [statusState, setStatusState] = useState(status);
 
   const statusStyle =
     {
@@ -28,6 +34,26 @@ export default function ConsultationPageProf() {
         text: "Finalizada"
       },
     }[status] || {};
+
+    function handleCancelConsultation() {
+        try {
+          consultationService.deleteConsultation(id);
+          setStatusState("CANCELED");
+          showToast("Consulta cancelada com sucesso!", "success");
+        } catch (error) {
+          showToast("Erro ao carregar consultas", "error");
+        }
+      }
+    
+      function handleCompleteConsultation() {
+        try {
+          // consultationService.completeConsultation(id);
+          setStatusState("COMPLETED");
+          showToast("Consulta marcada como finalizada com sucesso", "success");
+        } catch (error) {
+          showToast("Error ao marcar como Finalizado", "error");
+        }
+      }
 
   return (
     <View className="h-full">
@@ -62,13 +88,13 @@ export default function ConsultationPageProf() {
             <Button
               className="mt-4 mb-16"
               title="Marcar como finalizada"
-              onPress={() => {}}
+              onPress={handleCompleteConsultation}
             />
           )}
           {status === "Pendente" && (
             <Button
               title="Cancelar Consulta"
-              onPress={() => {}}
+              onPress={handleCancelConsultation}
               className="bg-app-red mb-16 mt-4"
             />
           )}

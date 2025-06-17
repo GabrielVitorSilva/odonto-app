@@ -30,7 +30,11 @@ export default function SelectDatePatient() {
   const checkProfessionalAvailability = async (professional: any, date: string) => {
     const consultations = await consultationService.listConsultationsByProfessional(professional.professionalId);
     return !consultations.consultations.some(
-      (consultation: any) => consultation.dateTime.split('T')[0] === date
+      (consultation: any) => {
+        const formattedDay = consultation.dateTime.split("T")[0]
+        const formattedTime = consultation.dateTime.split("T")[1].slice(0, 5)
+        return formattedDay === date && formattedTime === selectedHour
+      }
     );
   };
 
@@ -63,13 +67,22 @@ export default function SelectDatePatient() {
     }
 
     setSelectedDay(day.dateString);
-    const availableProfessional = await findAvailableProfessional(day.dateString);
+  };
+
+  const handleButtonPress = async () => {
+    if (!selectedDay) {
+      showToast("Selecione uma data", "error");
+      setShowDrawer(false);
+      return;
+    }
+
+    const availableProfessional = await findAvailableProfessional(selectedDay);
     setProfessionalAvailable(availableProfessional);
     
-    if (!availableProfessional) {
-      showToast('Nenhum profissional disponível para esta data', 'error');
+    if (!availableProfessional) {selectedDay
+      showToast('Nenhum profissional disponível para este horário', 'error');
     }
-  };
+  }
 
   const handleScheduleConsultation = async () => {
     if (!profile || !professionalAvailable || !selectedDay) {
@@ -150,13 +163,7 @@ export default function SelectDatePatient() {
       <Button
         className="mt-auto mb-16 mx-4"
         title="Agendar Consulta"
-        onPress={() => {
-          if (professionalAvailable) {
-            setShowDrawer(true);
-          } else {
-            showToast('Selecione uma data com profissionais disponíveis', 'error');
-          }
-        }}
+        onPress={handleButtonPress}
       />
 
       <BottomDrawer

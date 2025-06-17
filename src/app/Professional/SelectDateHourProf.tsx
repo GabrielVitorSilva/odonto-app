@@ -55,7 +55,11 @@ export default function SelectDateHourProf() {
         professional?.profileData.id
       );
     return !consultations.consultations.some(
-      (consultation: any) => consultation.dateTime.split("T")[0] === date
+      (consultation: any) => {
+        const formattedDay = consultation.dateTime.split("T")[0]
+        const formattedTime = consultation.dateTime.split("T")[1].slice(0, 5)
+        return formattedDay === date && formattedTime === selectedHour
+      }  
     );
   };
 
@@ -69,20 +73,31 @@ export default function SelectDateHourProf() {
       return;
     }
 
+    setSelectedDay(day.dateString);
+  };
+
+  const handleButtonPress = async () => {
+    if (!selectedDay) {
+      showToast("Selecione uma data", "error");
+      setShowDrawer(false);
+      return;
+    }
+
     const isAvailable = await checkProfessionalAvailability(
       profile?.user,
-      day.dateString
+      selectedDay
     );
 
     if (!isAvailable) {
       showToast(
-        "Você não está disponível para esta data",
+        "Você não está disponível neste horário!",
         "error"
       );
       return;
     }
-    setSelectedDay(day.dateString);
-  };
+
+    setShowDrawer(true);
+  }
 
   return (
     <View className="flex-1 bg-gray-100">
@@ -130,9 +145,7 @@ export default function SelectDateHourProf() {
       <Button
         className="mt-30"
         title="Agendar Consulta"
-        onPress={() => {
-          setShowDrawer(true);
-        }}
+        onPress={handleButtonPress}
       />
       <BottomDrawer
         title="Agendar consulta"

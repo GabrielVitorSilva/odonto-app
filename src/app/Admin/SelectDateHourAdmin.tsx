@@ -29,12 +29,6 @@ export default function SelectDateHourAdmin() {
   ];
 
   async function handleSchedule() {
-    if (!selectedDay) {
-      showToast("Selecione uma data", "error");
-      setShowDrawer(false);
-      return;
-    }
-
     const schedule = await consultationService.scheduleConsult({
       clientId: clientSelected?.clientId || "",
       professionalId: professionalSelected?.professionalId || "",
@@ -54,7 +48,11 @@ export default function SelectDateHourAdmin() {
         professional.professionalId
       );
     return !consultations.consultations.some(
-      (consultation: any) => consultation.dateTime.split("T")[0] === date
+      (consultation: any) => {
+        const formattedDay = consultation.dateTime.split("T")[0]
+        const formattedTime = consultation.dateTime.split("T")[1].slice(0, 5)
+        return formattedDay === date && formattedTime === selectedHour
+      }
     );
   };
 
@@ -68,20 +66,31 @@ export default function SelectDateHourAdmin() {
       return;
     }
 
+    setSelectedDay(day.dateString);
+  };
+
+  const handleButtonPress = async () => {
+    if (!selectedDay) {
+      showToast("Selecione uma data", "error");
+      setShowDrawer(false);
+      return;
+    }
+
     const isAvailable = await checkProfessionalAvailability(
       professionalSelected,
-      day.dateString
+      selectedDay
     );
 
     if (!isAvailable) {
       showToast(
-        "Profissional selecionado não está disponível para esta data",
+        "Profissional selecionado não disponível para este horário",
         "error"
       );
       return;
     }
-    setSelectedDay(day.dateString);
-  };
+
+    setShowDrawer(true);
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -132,9 +141,7 @@ export default function SelectDateHourAdmin() {
       <Button
         className="mt-auto mb-16"
         title="Agendar Consulta"
-        onPress={() => {
-          setShowDrawer(true);
-        }}
+        onPress={handleButtonPress}
       />
       <BottomDrawer
         title="Agendar consulta"

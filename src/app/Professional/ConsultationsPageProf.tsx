@@ -78,6 +78,7 @@ export default function ConsultationsPageProf() {
                   status={item.status}
                   handlePress={() =>
                     navigation.navigate("ConsultationPageProf", {
+                      id: item.id,
                       name: item.treatmentName,
                       dateTime: item.dateTime,
                       status: item.status,

@@ -13,7 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { treatmentsService } from "@/services/treatments";
 
 export default function SelectDateHourProf() {
-  const { clientSelected, treatmentSelected } = useAuth();
+  const { profile, clientSelected, treatmentSelected } = useAuth();
   const { showToast } = useToast();
   const navigation = useNavigation();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
@@ -41,10 +41,9 @@ export default function SelectDateHourProf() {
       return;
     }
 
-    const info = await fetchUserInfo();
     const schedule = await consultationService.scheduleConsult({
       clientId: clientSelected?.clientId || "",
-      professionalId: info.user.Professional.id || "",
+      professionalId: profile?.user.profileData.id || "",
       treatmentId: treatmentSelected?.id || "",
       dateTime: `${selectedDay}T${selectedHour}:00.000Z`,
     });
@@ -115,9 +114,7 @@ export default function SelectDateHourProf() {
             ?
           </Text>
         }
-        handlePress={() => {
-          handleSchedule();
-        }}
+        handlePress={handleSchedule}
         showDrawer={showDrawer}
         setShowDrawer={setShowDrawer}
         buttonTitle="Agendar agora"

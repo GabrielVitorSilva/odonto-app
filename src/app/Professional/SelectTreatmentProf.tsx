@@ -1,7 +1,5 @@
 import { View, FlatList, Text } from "react-native";
-import Card from "@/components/Card";
 import Header from "@/components/Header";
-import { Button } from "@/components/Button";
 import { useCallback, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
@@ -14,9 +12,6 @@ import Loading from "@/components/Loading";
 export default function SelectTreatmentProf() {
   const { profile, setTreatmentSelected } = useAuth();
   const { showToast } = useToast();
-  const [selected, setSelected] = useState<{ name: string; id: string } | null>(
-    null
-  );
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
@@ -52,6 +47,11 @@ export default function SelectTreatmentProf() {
     );
   }
 
+  function handleSelect(treatmentSelected: Treatment) {
+    setTreatmentSelected(treatmentSelected || null);
+    navigation.navigate("SelectDateHourProf");
+  }
+
   return (
     <View className="flex-1 bg-gray-50">
       <Header />
@@ -69,25 +69,11 @@ export default function SelectTreatmentProf() {
           ) : (
             <SingleSelectList
               list={treatments}
-              selected={selected}
-              setSelected={setSelected}
+              handlePress={handleSelect}
               ListEmptyComponent={TreatmentsEmpty}
             />
           )}
         </View>
-      </View>
-
-      <View className="mb-4">
-        <Button
-          title="Selecionar"
-          onPress={() => {
-            const treatmentSelected = treatments.find(
-              (p) => p.id === selected?.id
-            );
-            setTreatmentSelected(treatmentSelected || null);
-            navigation.navigate("SelectDateHourProf");
-          }}
-        />
       </View>
     </View>
   );

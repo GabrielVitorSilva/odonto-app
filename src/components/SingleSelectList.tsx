@@ -1,23 +1,15 @@
-import type { ProfessionalUser } from "@/services/types/treatments";
 import React, { ComponentType } from "react";
 import { FlatList, Text, TouchableOpacity } from "react-native";
 
-interface SelectedItem {
-  name: string;
-  id: string;
-}
-
 type SingleSelectListProps = {
-  list: ProfessionalUser[] | {name: string; id: string}[];
-  selected: SelectedItem | null;
-  setSelected: React.Dispatch<React.SetStateAction<SelectedItem | null>>;
+  list: ArrayLike<any>;
+  handlePress: (item: any) => void;
   ListEmptyComponent: ComponentType<any>;
 };
 
 export function SingleSelectList({
   list,
-  selected,
-  setSelected,
+  handlePress,
   ListEmptyComponent,
 }: SingleSelectListProps) {
   return (
@@ -32,12 +24,8 @@ export function SingleSelectList({
         
         return (
           <TouchableOpacity
-            className={`py-5 px-8 rounded-xl ${
-              selected?.id === item.id ? "bg-app-light-blue" : ""
-            }`}
-            onPress={() => {
-              setSelected({ name: item.name, id: item.id });
-            }}
+            className={`py-5 px-8 rounded-xl`}
+            onPress={() => {handlePress(item)}}
           >
             <Text className="text-xl">{item.name}</Text>
           </TouchableOpacity>

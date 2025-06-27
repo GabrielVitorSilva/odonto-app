@@ -17,9 +17,6 @@ export function Menu({ items }: MenuProps) {
   return (
     <>
       <View className="flex-1 p-5">
-        <Text className="text-app-blue mb-5 text-center text-lg font-semibold pb-2 border-b-hairline border-b-gray-300">
-          Menu
-        </Text>
         <FlatList
           data={items}
           keyExtractor={(item, index) => index.toString()}
@@ -29,8 +26,8 @@ export function Menu({ items }: MenuProps) {
               className="flex-row gap-6 items-center mb-3"
               onPress={item.handlePress}
             >
-              <Ionicons name={item.icon} size={48} color="black" />
-              <Text className="font-bold">{item.title}</Text>
+              <Ionicons name={item.icon} size={48} color="#38ABE2" />
+              <Text className="font-bold text-app-blue">{item.title}</Text>
             </TouchableOpacity>
           )}
         />

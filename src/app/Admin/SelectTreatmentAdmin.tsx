@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
@@ -12,10 +11,6 @@ import { useToast } from "@/contexts/ToastContext";
 
 export default function SelectTreatmentAdmin() {
   const { professionalSelected, setTreatmentSelected } = useAuth();
-  const [noSelected, setNoSelected] = useState(false);
-  const [selected, setSelected] = useState<{ name: string; id: string } | null>(
-    null
-  );
   const navigation = useNavigation();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -52,15 +47,9 @@ export default function SelectTreatmentAdmin() {
     );
   }
 
-  function handleSelect() {
-    if (selected === null) {
-      setNoSelected(true);
-    } else {
-      setNoSelected(false);
-      const treatmentSelected = treatments.find((p) => p.id === selected.id);
-      setTreatmentSelected(treatmentSelected || null);
-      navigation.navigate("SelectDateHourAdmin");
-    }
+  function handleSelect(treatmentSelected: Treatment) {
+    setTreatmentSelected(treatmentSelected || null);
+    navigation.navigate("SelectDateHourAdmin");
   }
 
   return (
@@ -80,21 +69,11 @@ export default function SelectTreatmentAdmin() {
           ) : (
             <SingleSelectList
               list={treatments}
-              selected={selected}
-              setSelected={setSelected}
+              handlePress={handleSelect}
               ListEmptyComponent={TreatmentsEmpty}
             />
           )}
         </View>
-      </View>
-
-      <View className="mb-4">
-        <Button title="Selecionar" onPress={handleSelect} />
-        {noSelected && (
-          <Text className="text-lg text-app-red text-center mt-3">
-            Selecione pelo menos um tratamento
-          </Text>
-        )}
       </View>
     </View>
   );

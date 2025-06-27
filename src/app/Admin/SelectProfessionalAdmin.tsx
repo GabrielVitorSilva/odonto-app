@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
-import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { PersonList } from "@/components/PersonList";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
 import { treatmentsService } from "@/services/treatments";
@@ -13,8 +11,6 @@ import Loading from "@/components/Loading";
 
 export default function SelectProfessionalAdmin() {
   const { setProfessionalSelected } = useAuth();
-  const [noSelected, setNoSelected] = useState(false);
-  const [selected, setSelected] = useState<{ name: string; id: string } | null>(null);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
@@ -44,15 +40,9 @@ export default function SelectProfessionalAdmin() {
     );
   }
 
-  function handleSelect() {
-    if (selected === null) {
-      setNoSelected(true);
-    } else {
-      setNoSelected(false);
-      const selectedClient = professionals.find((p) => p.id === selected.id);
+  function handleSelect(selectedClient: ProfessionalUser) {
       setProfessionalSelected(selectedClient || null);
       navigation.navigate("SelectTreatmentAdmin");
-    }
   }
 
   return (
@@ -72,23 +62,11 @@ export default function SelectProfessionalAdmin() {
           ) : (
             <SingleSelectList
               list={professionals}
-              selected={selected}
-              setSelected={setSelected}
               ListEmptyComponent={ProfessionalsEmpty}
+              handlePress={handleSelect}
             />
           )}
         </View>
-      </View>
-      <View className="mb-4">
-      <Button
-        title="Selecionar"
-        onPress={handleSelect}
-      />
-      {noSelected && (
-          <Text className="text-lg text-app-red text-center mt-3">
-            Selecione pelo menos um Odontólogo
-          </Text>
-        )}
       </View>
     </View>
   );

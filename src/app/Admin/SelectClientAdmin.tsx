@@ -3,18 +3,20 @@ import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { PersonList } from "@/components/PersonList";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { treatmentsService } from "@/services/treatments";
 import type { ClientUser, ProfessionalUser } from "@/services/types/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import Loading from "@/components/Loading";
+import Card from "@/components/Card";
 
 export default function SelectClientAdmin() {
   const { setClientSelected } = useAuth();
-  const [noSelected, setNoSelected] = useState(false);
-  const [selected, setSelected] = useState<{ name: string; id: string } | null>(null);
+  const [selected, setSelected] = useState<{ name: string; id: string } | null>(
+    null
+  );
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<ClientUser[]>([]);
@@ -41,16 +43,11 @@ export default function SelectClientAdmin() {
     );
   }
 
-  function handleSelect() {
-    if (selected === null) {
-      setNoSelected(true)
-    } else {
-      setNoSelected(false);
-      const selectedClient = patients.find((p) => p.id === selected.id);
+  function handleSelect(selectedClient: ClientUser) {
       setClientSelected(selectedClient || null);
       navigation.navigate("SelectProfessionalAdmin");
-    }
   }
+  
 
   return (
     <View className="flex-1">
@@ -69,20 +66,11 @@ export default function SelectClientAdmin() {
           ) : (
             <SingleSelectList
               list={patients}
-              selected={selected}
-              setSelected={setSelected}
+              handlePress={handleSelect}
               ListEmptyComponent={PatientsEmpty}
             />
           )}
         </View>
-      </View>
-      <View className="mb-4">
-        <Button title="Selecionar" onPress={handleSelect} />
-        {noSelected && (
-          <Text className="text-lg text-app-red text-center mt-3">
-            Selecione pelo menos um Paciente
-          </Text>
-        )}
       </View>
     </View>
   );

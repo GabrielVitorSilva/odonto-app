@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { Button } from "@/components/Button";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
@@ -12,9 +11,6 @@ import Loading from "@/components/Loading";
 
 export default function SelectPatientProf() {
   const { setClientSelected } = useAuth();
-  const [selected, setSelected] = useState<{ name: string; id: string } | null>(
-    null
-  );
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<ClientUser[]>([]);
@@ -41,6 +37,11 @@ export default function SelectPatientProf() {
     );
   }
 
+  function handleSelect(selectedClient: ClientUser) {
+    setClientSelected(selectedClient || null);
+    navigation.navigate("SelectTreatmentProf");
+  }
+
   return (
     <View className="flex-1">
       <Header />
@@ -58,22 +59,12 @@ export default function SelectPatientProf() {
           ) : (
             <SingleSelectList
               list={patients}
-              selected={selected}
-              setSelected={setSelected}
+              handlePress={handleSelect}
               ListEmptyComponent={PatientsEmpty}
             />
           )}
         </View>
       </View>
-      <Button
-        className="mb-4"
-        title="Selecionar"
-        onPress={() => {
-          const selectedClient = patients.find((p) => p.id === selected?.id);
-          setClientSelected(selectedClient || null);
-          navigation.navigate("SelectTreatmentProf");
-        }}
-      />
     </View>
   );
 }

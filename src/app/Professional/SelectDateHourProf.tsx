@@ -100,8 +100,8 @@ export default function SelectDateHourProf() {
   }
 
   return (
-    <View className="flex-1 bg-gray-100">
-      <Header className="bg-app-blue" contentColor="white" />
+    <View className="flex-1 bg-white">
+      <Header contentColor="white" className="bg-app-blue"/>
       <Calendar
         current={new Date().toISOString().split("T")[0]}
         onDayPress={handleDayPress}
@@ -143,7 +143,7 @@ export default function SelectDateHourProf() {
       </View>
 
       <Button
-        className="mt-30"
+        className="mt-auto mb-4"
         title="Agendar Consulta"
         onPress={handleButtonPress}
       />

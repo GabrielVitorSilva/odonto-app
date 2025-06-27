@@ -3,7 +3,6 @@ import { Calendar } from "react-native-calendars";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useState } from "react";
 import Header from "@/components/Header";
-import { LocaleConfig } from "react-native-calendars";
 import { Button } from "@/components/Button";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
@@ -94,10 +93,7 @@ export default function SelectDateHourAdmin() {
 
   return (
     <View className="flex-1 bg-white">
-      <Header />
-      <Text className="text-4xl text-center mt-6 mb-4">
-        Selecione data e hora
-      </Text>
+      <Header contentColor="white" className="bg-app-blue"/>
       <Calendar
         minDate={new Date().toISOString().split("T")[0]}
         current={new Date().toISOString().split("T")[0]}
@@ -139,7 +135,7 @@ export default function SelectDateHourAdmin() {
       </View>
 
       <Button
-        className="mt-auto mb-16"
+        className="mt-auto mb-4"
         title="Agendar Consulta"
         onPress={handleButtonPress}
       />

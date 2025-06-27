@@ -53,7 +53,7 @@ export default function SelectTreatmentProf() {
   }
 
   return (
-    <View className="flex-1 bg-gray-50">
+    <View className="flex-1">
       <Header />
 
       <View className="flex-1 px-4 py-4">

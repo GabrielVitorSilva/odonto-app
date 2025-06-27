@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
-import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { PersonList } from "@/components/PersonList";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, Text, TouchableOpacity } from "react-native";
 import { treatmentsService } from "@/services/treatments";
@@ -10,7 +8,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import Loading from "@/components/Loading";
-import Card from "@/components/Card";
 
 export default function SelectClientAdmin() {
   const { setClientSelected } = useAuth();

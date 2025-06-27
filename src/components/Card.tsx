@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
+import getImage from "@/theme/image";
 
 type CardProps = {
   name: string;
@@ -48,9 +49,7 @@ export default function Card({
       onLongPress={handleLongPress}
       onPress={handlePress}
     >
-      <View
-        className={`w-12 h-12 rounded-xl bg-app-blue items-center justify-center mr-4`}
-      ></View>
+      <Image source={getImage(name)} style={{width: 48, height: 48, marginRight: 16}} />
       <View className="flex-1">
         <View className="flex-row justify-between">
           <Text className="font-semibold text-lg">{name}</Text>

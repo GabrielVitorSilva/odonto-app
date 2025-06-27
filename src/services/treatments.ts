@@ -1,6 +1,5 @@
 import api from './api/api';
-import type { ClientsResponse, ClientUser, createTreatmentRequest, createTreatmentResponse, IGetUser, IUser, ProfessionalsResponse, ProfessionalUser } from './types/treatments';
-import { Profile } from './auth';
+import type { ClientsResponse, ClientUser, createTreatmentRequest, createTreatmentResponse, editTreatmentRequest, editTreatmentResponse, IGetUser, IUser, ProfessionalsResponse, ProfessionalUser } from './types/treatments';
 
 export interface Professional {
   id: string;
@@ -164,6 +163,31 @@ export const treatmentsService = {
       return;
     } catch (error: any) {
       console.error('Erro ao buscar tratamentos:', error?.response?.data || error.message);
+      throw error;
+    }
+  },
+  async deleteTreatment(treatmentId: string): Promise<void> {
+    try {
+      await api.delete<void>(`/treatments/${treatmentId}`);
+
+      return;
+    } catch(error: any) {
+      console.error('Erro ao remover tratamento(s):', error?.response?.data || error.message);
+      throw error;
+    }
+  },
+  async editTreatment(treatmentId: string, {name, description }: editTreatmentRequest): Promise<editTreatmentResponse> {
+    try {
+      const response = await api.put<editTreatmentResponse>(`/treatments/${treatmentId}`, {
+        name,
+        description,
+        durationMinutes: 60,
+        price: 1,
+      })
+
+      return response.data;
+    } catch (error: any) {
+      console.error('Erro ao editar tratamento:', error?.response?.data || error.message);
       throw error;
     }
   },

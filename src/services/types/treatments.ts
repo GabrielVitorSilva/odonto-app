@@ -87,3 +87,19 @@ export interface IGetUser {
     updatedAt: string,
   }
 }
+
+export interface editTreatmentRequest {
+  name: string,
+  description: string,
+}
+
+export interface editTreatmentResponse {
+  treatment: {
+    id: string,
+    name: string,
+    description: string,
+    durationMinutes: number,
+    price: number,
+    professionalIds: string[] | null,
+  }
+}

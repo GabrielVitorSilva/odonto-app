@@ -15,6 +15,7 @@ import {
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { treatmentsService } from "@/services/treatments";
 import Loading from "@/components/Loading";
+import ProfileHeader from "@/components/ProfileHeader";
 
 type RouteParams = {
   name: string;
@@ -56,11 +57,7 @@ export default function ViewProfessionalsProfile() {
 
   return (
     <View className="w-full">
-      <Header
-        className="bg-app-blue pb-[150px]"
-        contentColor="white"
-        title="Perfil"
-      />
+      <ProfileHeader title="Perfil" />
       <Text className="text-center text-3xl font-semibold my-[25px]">
         {name}
       </Text>

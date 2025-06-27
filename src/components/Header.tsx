@@ -18,8 +18,6 @@ export default function Header({
   hasExit = false,
   handleGoBack = null,
 }: HeaderProps) {
-  const { signOut } = useAuth();
-
   const navigation = useNavigation();
 
   const font = `text-${contentColor}`;
@@ -35,9 +33,8 @@ export default function Header({
           className || ""
         }`}
       >
-        {!hasExit ? (
           <TouchableOpacity
-            className="w-13"
+            className="w-13 flex-1"
             onPress={
               handleGoBack
                 ? handleGoBack
@@ -48,17 +45,13 @@ export default function Header({
           >
             <Ionicons color={contentColor} size={32} name="arrow-back" />
           </TouchableOpacity>
-        ) : (
-          <Text className="w-13"></Text>
-        )}
+        
 
         {title && (
           <Text className={`text-3xl font-semibold ${font}`}>{title}</Text>
         )}
 
-        <TouchableOpacity className="w-13" onPress={() => signOut()}>
-          <Text className={`text-xl ${font} `}>{hasExit && "Sair"}</Text>
-        </TouchableOpacity>
+        <View className="w-13 flex-1"></View>
       </View>
     </>
   );

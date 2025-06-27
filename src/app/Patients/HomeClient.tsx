@@ -1,5 +1,4 @@
 import { View, Text, FlatList } from "react-native";
-import Header from "@/components/Header";
 import Card from "@/components/Card";
 import { Button } from "@/components/Button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,6 +11,7 @@ import {
 } from "@/services/consultations";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useToast } from "@/contexts/ToastContext";
+import HomeHeader from "@/components/HomeHeader";
 
 export default function HomeClient() {
   const navigation = useNavigation();
@@ -59,18 +59,13 @@ export default function HomeClient() {
 
   return (
     <View className="flex-1 w-full">
-      <Header
-        className="bg-app-blue pb-24"
-        contentColor="white"
-        title="Perfil"
-        hasExit={true}
-      />
+      <HomeHeader title="Perfil" />
 
-      <Text className="text-center text-3xl font-semibold my-[25px]">
+      <Text className="text-center text-neutral-700 text-3xl font-semibold">
         {profile?.user.User.name}
       </Text>
 
-      <Text className="text-app-blue ml-5 mb-5 text-lg font-semibold">
+      <Text className="text-app-blue ml-5 my-5 text-lg font-semibold">
         Lista de consultas
       </Text>
 

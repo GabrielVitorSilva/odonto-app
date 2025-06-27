@@ -13,6 +13,7 @@ import {
   ListAllConsultation,
 } from "@/services/consultations";
 import Loading from "@/components/Loading";
+import ProfileHeader from "@/components/ProfileHeader";
 
 type RouteParams = {
   name: string;
@@ -47,11 +48,7 @@ export default function ViewPatientsProfile() {
 
   return (
     <View className="w-full">
-      <Header
-        className="bg-app-blue pb-[150px]"
-        contentColor="white"
-        title="Perfil"
-      />
+      <ProfileHeader title="Perfil" />
       <Text className="text-center text-3xl font-semibold my-[25px]">
         {name}
       </Text>

@@ -42,7 +42,7 @@ export default function ConsultationPageAdmin() {
       setStatusState("CANCELED");
       showToast("Consulta cancelada com sucesso!", "success");
     } catch (error) {
-      showToast("Erro ao carregar consultas", "error");
+      showToast("Erro ao cancelar consulta", "error");
     }
   }
 

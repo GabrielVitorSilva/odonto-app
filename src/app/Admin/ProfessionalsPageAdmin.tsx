@@ -6,21 +6,25 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { ProfessionalUser } from "@/services/types/treatments";
 import { treatmentsService } from "@/services/treatments";
 import Loading from "@/components/Loading";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function ProfessionalsPageAdmin() {
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
 
   async function fetchProfessionals() {
-      try {
-        setLoading(true);
-        const data = await treatmentsService.listProfessionals();
-        setProfessionals(data);
-      } finally {
-        setLoading(false);
-      }
+    try {
+      setLoading(true);
+      const data = await treatmentsService.listProfessionals();
+      setProfessionals(data);
+    } catch (error: any) {
+      showToast("Erro ao carregar profissionais", "error");
+    } finally {
+      setLoading(false);
     }
+  }
 
   useFocusEffect(
     useCallback(() => {

@@ -14,6 +14,7 @@ import {
 } from "@/services/consultations";
 import Loading from "@/components/Loading";
 import ProfileHeader from "@/components/ProfileHeader";
+import { useToast } from "@/contexts/ToastContext";
 
 type RouteParams = {
   name: string;
@@ -24,6 +25,7 @@ export default function ViewPatientsProfile() {
   const [loading, setLoading] = useState(true);
   const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const route = useRoute();
   const { name, clientId } = route.params as RouteParams;
 
@@ -35,6 +37,8 @@ export default function ViewPatientsProfile() {
       );
 
       setConsultations(response.consultations);
+    } catch (error: any) {
+      showToast("Erro ao carregar pacientes", "error");
     } finally {
       setLoading(false);
     }

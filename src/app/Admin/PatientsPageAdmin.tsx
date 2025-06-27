@@ -6,9 +6,11 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { ClientUser } from "@/services/types/treatments";
 import { treatmentsService } from "@/services/treatments";
 import Loading from "@/components/Loading";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function PatientsPage() {
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState<ClientUser[]>([]);
 
@@ -17,6 +19,8 @@ export default function PatientsPage() {
       setLoading(true);
       const data = await treatmentsService.listClients();
       setPatients(data);
+    } catch (error: any) {
+      showToast("Erro ao carregar pacientes", "error");
     } finally {
       setLoading(false);
     }
@@ -41,7 +45,9 @@ export default function PatientsPage() {
     <View className="flex-1 ">
       <Header />
       <View className="flex-1 px-5">
-        <Text className="text-center text-3xl font-semibold mb-5">Pacientes</Text>
+        <Text className="text-center text-3xl font-semibold mb-5">
+          Pacientes
+        </Text>
         <Text className="text-lg text-app-blue font-semibold mb-3">
           Lista de Clientes
         </Text>
@@ -51,7 +57,7 @@ export default function PatientsPage() {
         ) : (
           <FlatList
             data={patients}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
             ListEmptyComponent={PatientsEmpty}
             renderItem={({ item }) => (
               <TouchableOpacity

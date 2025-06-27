@@ -26,7 +26,7 @@ export default function SelectTreatmentProf() {
       const response = await treatmentsService.listAllTreatments();
       setTreatments(response.treatments);
     } catch (error) {
-      console.error("Erro ao carregar tratamentos:", error);
+      showToast("Erro ao carregar tratamentos", "error");
     } finally {
       setLoading(false);
     }

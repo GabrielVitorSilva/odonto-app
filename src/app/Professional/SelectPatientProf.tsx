@@ -8,10 +8,12 @@ import { SingleSelectList } from "@/components/SingleSelectList";
 import { useAuth } from "@/contexts/AuthContext";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import Loading from "@/components/Loading";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function SelectPatientProf() {
   const { setClientSelected } = useAuth();
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<ClientUser[]>([]);
 
@@ -20,6 +22,8 @@ export default function SelectPatientProf() {
       setLoading(true);
       const data = await treatmentsService.listClients();
       setPatients(data);
+    } catch (error: any) {
+      showToast("Erro ao carregar consultas", "error");
     } finally {
       setLoading(false);
     }

@@ -6,9 +6,11 @@ import { useFocusEffect } from "@react-navigation/native";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import Loading from "@/components/Loading";
 import NonPressableCard from "@/components/NonPressableCard";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function TreatmentsPageProf() {
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
   const [treatments, setTreatments] = useState<Treatment[]>([]);
 
   async function loadTreatments() {
@@ -17,7 +19,7 @@ export default function TreatmentsPageProf() {
       const response = await treatmentsService.listAllTreatments();
       setTreatments(response.treatments);
     } catch (error) {
-      console.error("Erro ao carregar tratamentos:", error);
+      showToast("Erro ao carregar tratamentos", "error");
     } finally {
       setLoading(false);
     }

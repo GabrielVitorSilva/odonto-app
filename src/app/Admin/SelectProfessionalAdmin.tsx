@@ -8,10 +8,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import Loading from "@/components/Loading";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function SelectProfessionalAdmin() {
   const { setProfessionalSelected } = useAuth();
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [professionals, setProfessionals] = useState<ProfessionalUser[]>([]);
 
@@ -20,6 +22,8 @@ export default function SelectProfessionalAdmin() {
       setLoading(true);
       const data = await treatmentsService.listProfessionals();
       setProfessionals(data);
+    } catch (error: any) {
+      showToast("Erro ao carregar profissionais", "error");
     } finally {
       setLoading(false);
     }
@@ -41,8 +45,8 @@ export default function SelectProfessionalAdmin() {
   }
 
   function handleSelect(selectedClient: ProfessionalUser) {
-      setProfessionalSelected(selectedClient || null);
-      navigation.navigate("SelectTreatmentAdmin");
+    setProfessionalSelected(selectedClient || null);
+    navigation.navigate("SelectTreatmentAdmin");
   }
 
   return (

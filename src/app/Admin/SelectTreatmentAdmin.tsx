@@ -25,8 +25,8 @@ export default function SelectTreatmentAdmin() {
       }
       const response = await treatmentsService.listAllTreatments();
       setTreatments(response.treatments);
-    } catch (error) {
-      console.error("Erro ao carregar tratamentos:", error);
+    } catch (error: any) {
+      showToast("Erro ao carregar tratamentos", "error");
     } finally {
       setLoading(false);
     }

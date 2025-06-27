@@ -7,9 +7,11 @@ import { Button } from "@/components/Button";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { treatmentsService, Treatment } from "@/services/treatments";
 import Loading from "@/components/Loading";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function TreatmentsAdmin() {
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
 
@@ -18,8 +20,8 @@ export default function TreatmentsAdmin() {
       setLoading(true);
       const response = await treatmentsService.listAllTreatments();
       setTreatments(response.treatments);
-    } catch (error) {
-      console.error("Erro ao carregar tratamentos:", error);
+    } catch (error: any) {
+      showToast("Erro ao carregar tratamentos", "error");
     } finally {
       setLoading(false);
     }

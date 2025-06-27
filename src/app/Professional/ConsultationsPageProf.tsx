@@ -12,9 +12,11 @@ import { useCallback, useState } from "react";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import { useAuth } from "@/contexts/AuthContext";
 import Loading from "@/components/Loading";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function ConsultationsPageProf() {
   const navigation = useNavigation();
+  const { showToast } = useToast();
   const { profile } = useAuth();
   const [loading, setLoading] = useState(false);
   const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
@@ -32,6 +34,8 @@ export default function ConsultationsPageProf() {
         );
 
       setConsultations(response.consultations);
+    } catch (error: any) {
+      showToast("Erro ao carregar consultas", "error");
     } finally {
       setLoading(false);
     }

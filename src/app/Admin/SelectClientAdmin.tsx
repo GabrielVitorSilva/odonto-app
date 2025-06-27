@@ -1,19 +1,18 @@
 import { useCallback, useState } from "react";
 import Header from "@/components/Header";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import { treatmentsService } from "@/services/treatments";
-import type { ClientUser, ProfessionalUser } from "@/services/types/treatments";
+import type { ClientUser } from "@/services/types/treatments";
 import { useAuth } from "@/contexts/AuthContext";
 import { SingleSelectList } from "@/components/SingleSelectList";
 import ListEmptyComponent from "@/components/ListEmptyComponent";
 import Loading from "@/components/Loading";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function SelectClientAdmin() {
   const { setClientSelected } = useAuth();
-  const [selected, setSelected] = useState<{ name: string; id: string } | null>(
-    null
-  );
+  const { showToast } = useToast();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState<ClientUser[]>([]);
@@ -23,6 +22,8 @@ export default function SelectClientAdmin() {
       setLoading(true);
       const data = await treatmentsService.listClients();
       setPatients(data);
+    } catch (error: any) {
+      showToast("Erro ao carregar clientes", "error");
     } finally {
       setLoading(false);
     }
@@ -41,10 +42,9 @@ export default function SelectClientAdmin() {
   }
 
   function handleSelect(selectedClient: ClientUser) {
-      setClientSelected(selectedClient || null);
-      navigation.navigate("SelectProfessionalAdmin");
+    setClientSelected(selectedClient || null);
+    navigation.navigate("SelectProfessionalAdmin");
   }
-  
 
   return (
     <View className="flex-1">

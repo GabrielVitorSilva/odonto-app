@@ -26,7 +26,6 @@ type RouteParams = {
 export default function RegisterNewTreatment() {
   const route = useRoute();
   const { professionals } = route.params as RouteParams;
-  const [boundProfessionals, setBoundProfessionals] = useState(professionals);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const {showToast} = useToast()
@@ -90,38 +89,6 @@ export default function RegisterNewTreatment() {
                 onChangeText={setDescription}
               />
             </View>
-
-            {boundProfessionals.length > 0 && (
-              <View className="mt-4">
-                <Text className="text-xl font-semibold mb-4">
-                  Profissionais Vinculados
-                </Text>
-                <FlatList
-                  data={boundProfessionals}
-                  keyExtractor={item => item}
-                  scrollEnabled={false}
-                  renderItem={({ item }) => (
-                    <View className="py-4 px-6 rounded-xl flex-row justify-between items-center bg-gray-50 mb-2">
-                      <Text className="text-lg">{item}</Text>
-                      <TouchableOpacity 
-                        onPress={() => {
-                          setBoundProfessionals(prevState => 
-                            prevState.filter(name => name != item)
-                          )
-                        }}
-                        className="p-2"
-                      >
-                        <Ionicons
-                          name="remove-circle-outline"
-                          size={28}
-                          color={"#EF4444"}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                />
-              </View>
-            )}
           </View>
         </View>
       </ScrollView>

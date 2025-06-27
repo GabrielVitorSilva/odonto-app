@@ -26,8 +26,8 @@ export function Menu({ items }: MenuProps) {
               className="flex-row gap-6 items-center mb-3"
               onPress={item.handlePress}
             >
-              <Ionicons name={item.icon} size={48} color="#38ABE2" />
-              <Text className="font-bold text-app-blue">{item.title}</Text>
+              <Ionicons name={item.icon} size={48} color="#404040" />
+              <Text className="font-bold text-neutral-700">{item.title}</Text>
             </TouchableOpacity>
           )}
         />

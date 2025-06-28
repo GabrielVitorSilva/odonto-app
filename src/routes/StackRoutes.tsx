@@ -26,12 +26,13 @@ import TreatmentPageAdmin from "@/app/Admin/TreatmentPageAdmin";
 import ViewPatientsProfile from "@/app/Admin/ViewPatientsProfile";
 import ProfessionalsPageAdmin from "@/app/Admin/ProfessionalsPageAdmin";
 import ViewProfessionalsProfile from "@/app/Admin/ViewProfessionalsProfile";
-import SelectDatePatient from "@/app/Patients/SelectDatePatient";
 import ConsultationPageProf from "@/app/Professional/ConsultationPageProf";
 import SelectTreatmentProf from "@/app/Professional/SelectTreatmentProf";
 import SelectDateHourProf from "@/app/Professional/SelectDateHourProf";
 import SelectPatientProf from "@/app/Professional/SelectPatientProf";
 import SelectTreatmentAdmin from "@/app/Admin/SelectTreatmentAdmin";
+import TreatmentsPatient from "@/app/Patients/TreatmentsPatient";
+import TreatmentPagePatient from "@/app/Patients/TreatmentPagePatient";
 
 const Stack = createNativeStackNavigator();
 
@@ -65,7 +66,8 @@ export function StackRoutes() {
       ) : profile?.user?.User.role === "CLIENT" ? (
         <>
           <Stack.Screen name="HomeClient" component={HomeClient} />
-          <Stack.Screen name="SelectDatePatient" component={SelectDatePatient} />
+          <Stack.Screen name="TreatmentsPatient" component={TreatmentsPatient} />
+          <Stack.Screen name="TreatmentPagePatient" component={TreatmentPagePatient} />
           <Stack.Screen name="ConsultationPage" component={ConsultationPage} />
         </>
       ) : profile?.user?.User.role === "ADMIN" ? (

@@ -103,8 +103,8 @@ export default function HomeClient() {
 
       <Button
         className="mb-4"
-        title="Agendar Triagem"
-        onPress={() => navigation.navigate("SelectDatePatient")}
+        title="Ver tratamentos disponíveis"
+        onPress={() => navigation.navigate("TreatmentsPatient")}
       />
 
       <BottomDrawer

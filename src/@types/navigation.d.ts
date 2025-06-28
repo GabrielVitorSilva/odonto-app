@@ -3,7 +3,13 @@ export type RootStackParamList = {
   Register: undefined;
   UseTerms: undefined;
   HomeClient: undefined;
-  SelectDatePatient: undefined
+  TreatmentsPatient: undefined;
+  TreatmentPagePatient: {
+    name: string;
+    description: string;
+    duration: number;
+    price: number;
+  };
   ConsultationPage: {
     name: string;
     date: string;

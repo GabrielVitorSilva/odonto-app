@@ -83,6 +83,8 @@ export default function TreatmentsAdmin() {
             name: item.name,
             treatment_id: item.id,
             description: item.description,
+            duration: item.durationMinutes,
+            price: item.price,
             professionals: item.professionals.map((p) => p.userId),
           });
     }

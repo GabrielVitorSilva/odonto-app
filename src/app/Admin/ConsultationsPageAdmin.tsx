@@ -83,7 +83,7 @@ export default function ConsultationsPageAdmin() {
                 />
               );
             }}
-            className="w-full px-5 mx-auto flex-1"
+            className="w-full mx-auto flex-1"
           />
         )}
       </View>

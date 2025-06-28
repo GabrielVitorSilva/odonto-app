@@ -28,13 +28,13 @@ export interface TreatmentResponse {
 }
 
 export const treatmentsService = {
-  async createTreatment({ description, name, professionalIds }: createTreatmentRequest): Promise<createTreatmentResponse> {
+  async createTreatment({  name, description, duration, price, professionalIds }: createTreatmentRequest): Promise<createTreatmentResponse> {
     try {
       const response = await api.post<createTreatmentResponse>('/treatments', {
         name,
         description,
-        durationMinutes: 60,
-        price: 1,
+        durationMinutes: duration,
+        price,
         professionalIds: professionalIds || [],
       });
 
@@ -176,13 +176,13 @@ export const treatmentsService = {
       throw error;
     }
   },
-  async editTreatment(treatmentId: string, {name, description }: editTreatmentRequest): Promise<editTreatmentResponse> {
+  async editTreatment(treatmentId: string, {name, description, duration, price }: editTreatmentRequest): Promise<editTreatmentResponse> {
     try {
       const response = await api.put<editTreatmentResponse>(`/treatments/${treatmentId}`, {
         name,
         description,
-        durationMinutes: 60,
-        price: 1,
+        durationMinutes: duration,
+        price,
       })
 
       return response.data;

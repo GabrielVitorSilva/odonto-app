@@ -3,6 +3,8 @@ import type { Profile } from "../auth";
 export interface createTreatmentRequest {
   name: string,
   description: string,
+  duration: number,
+  price: number,
   professionalIds: string[] | null,
 }
 
@@ -91,6 +93,8 @@ export interface IGetUser {
 export interface editTreatmentRequest {
   name: string,
   description: string,
+  duration: number,
+  price: number,
 }
 
 export interface editTreatmentResponse {

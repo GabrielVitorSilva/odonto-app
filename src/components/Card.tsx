@@ -57,7 +57,7 @@ export default function Card({
 
   return (
     <TouchableOpacity
-      className={`flex-row gap-3 mb-5 min-h-20 ${className || " "}`}
+      className={`flex-row mb-5 min-h-20 items-center ${className || " "}`}
       onLongPress={handleLongPress}
       onPress={handlePress}
     >

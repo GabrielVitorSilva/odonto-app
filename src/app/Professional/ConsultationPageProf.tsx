@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { consultationService } from "@/services/consultations";
 import { useToast } from "@/contexts/ToastContext";
 import { useState } from "react";
@@ -15,7 +15,8 @@ type RouteParams = {
 };
 
 export default function ConsultationPageProf() {
-  const { showToast } = useToast()
+  const { showToast } = useToast();
+  const navigation = useNavigation();
   const route = useRoute();
   const { id, name, dateTime, status, patientName } =
     route.params as RouteParams;
@@ -25,35 +26,35 @@ export default function ConsultationPageProf() {
   const statusStyle =
     {
       SCHEDULED: {
-        text: "Agendada"
+        text: "Agendada",
       },
       CANCELED: {
-        text: "Cancelada"
+        text: "Cancelada",
       },
       COMPLETED: {
-        text: "Finalizada"
+        text: "Finalizada",
       },
     }[status] || {};
 
-    function handleCancelConsultation() {
-        try {
-          consultationService.deleteConsultation(id);
-          setStatusState("CANCELED");
-          showToast("Consulta cancelada com sucesso!", "success");
-        } catch (error) {
-          showToast("Erro ao carregar consultas", "error");
-        }
-      }
-    
-      function handleCompleteConsultation() {
-        try {
-          // consultationService.completeConsultation(id);
-          setStatusState("COMPLETED");
-          showToast("Consulta marcada como finalizada com sucesso", "success");
-        } catch (error) {
-          showToast("Error ao marcar como Finalizado", "error");
-        }
-      }
+  async function handleCancelConsultation() {
+    try {
+      await consultationService.deleteConsultation(id);
+      navigation.goBack();
+      showToast("Consulta cancelada com sucesso!", "success");
+    } catch (error) {
+      showToast("Erro ao carregar consultas", "error");
+    }
+  }
+
+  function handleCompleteConsultation() {
+    try {
+      // consultationService.completeConsultation(id);
+      setStatusState("COMPLETED");
+      showToast("Consulta marcada como finalizada com sucesso", "success");
+    } catch (error) {
+      showToast("Error ao marcar como Finalizado", "error");
+    }
+  }
 
   return (
     <View className="h-full">
@@ -104,3 +105,4 @@ export default function ConsultationPageProf() {
     </View>
   );
 }
+

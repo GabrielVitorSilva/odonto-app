@@ -12,18 +12,21 @@ import {
 import BottomDrawer from "@/components/BottomDrawer";
 import { useToast } from "@/contexts/ToastContext";
 import HomeHeader from "@/components/HomeHeader";
+import ListEmptyComponent from "@/components/ListEmptyComponent";
+import Loading from "@/components/Loading";
 
 export default function HomeClient() {
   const navigation = useNavigation();
   const { profile } = useAuth();
   const { showToast } = useToast();
-
+  const [loading, setLoading] = useState(false);
   const [consultations, setConsultations] = useState<ListAllConsultation[]>([]);
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [idToCancel, setIdToCancel] = useState<string>("");
 
   const fetchConsultations = async () => {
     try {
+      setLoading(true);
       if (!profile) return;
 
       const data = await consultationService.listConsultationsByClient(
@@ -32,8 +35,16 @@ export default function HomeClient() {
       setConsultations(data.consultations);
     } catch (error) {
       showToast("Erro ao carregar consultas", "error");
+    } finally {
+      setLoading(false);
     }
   };
+
+  function ConsultationsEmpty() {
+    return (
+      <ListEmptyComponent iconName="clipboard" text="Não há consultas ainda" />
+    );
+  }
 
   const handleCancelConsultation = async () => {
     try {
@@ -70,35 +81,41 @@ export default function HomeClient() {
       </Text>
 
       <View className="flex-1">
-        <FlatList
-          data={consultations}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => {
-            const { date, time } = formatDateTime(item.dateTime.toString());
+        {loading ? (
+          <Loading />
+        ) : (
+          <FlatList
+            data={consultations}
+            ListEmptyComponent={ConsultationsEmpty}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => {
+              const { date, time } = formatDateTime(item.dateTime.toString());
 
-            return (
-              <Card
-                handleLongPress={() => handleLongPressCard(item.id)}
-                name={item.treatmentName}
-                upperText={item.professionalName}
-                date={date}
-                hour={time}
-                status={item.status}
-                handlePress={() =>
-                  navigation.navigate("ConsultationPage", {
-                    name: item.treatmentName,
-                    date: date,
-                    hour: time,
-                    professionalName: item.professionalName,
-                    status: item.status
-                  })
-                }
-              />
-            );
-          }}
-          className="w-full px-5 mx-auto"
-          contentContainerStyle={{ paddingBottom: 100 }}
-        />
+              return (
+                <Card
+                  handleLongPress={() => handleLongPressCard(item.id)}
+                  name={item.treatmentName}
+                  upperText={item.professionalName}
+                  date={date}
+                  hour={time}
+                  status={item.status}
+                  handlePress={() =>
+                    navigation.navigate("ConsultationPage", {
+                      id: item.id,
+                      name: item.treatmentName,
+                      date: date,
+                      hour: time,
+                      professionalName: item.professionalName,
+                      status: item.status,
+                    })
+                  }
+                />
+              );
+            }}
+            className="w-full px-5 mx-auto"
+            contentContainerStyle={{ paddingBottom: 100 }}
+          />
+        )}
       </View>
 
       <Button

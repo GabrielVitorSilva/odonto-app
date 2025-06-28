@@ -83,7 +83,7 @@ export default function ViewProfessionalsProfile() {
             return (
               <Card
                 name={item.treatmentName}
-                upperText={`Paciente: ${"Ainda a fazer"}`}
+                upperText={`Paciente: ${item.clientName}`}
                 date={date}
                 hour={time}
                 status={item.status}

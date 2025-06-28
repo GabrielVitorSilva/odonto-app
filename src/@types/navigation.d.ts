@@ -11,6 +11,7 @@ export type RootStackParamList = {
     price: number;
   };
   ConsultationPage: {
+    id: string;
     name: string;
     date: string;
     hour: string;

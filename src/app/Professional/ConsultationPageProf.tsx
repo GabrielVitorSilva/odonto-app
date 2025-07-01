@@ -8,17 +8,18 @@ import { useState } from "react";
 
 type RouteParams = {
   id: string;
-  name: string;
   dateTime: Date;
   status: string;
   patientName: string;
+  professionalName: string;
+  treatmentName: string;
 };
 
 export default function ConsultationPageProf() {
   const { showToast } = useToast();
   const navigation = useNavigation();
   const route = useRoute();
-  const { id, name, dateTime, status, patientName } =
+  const { id, dateTime, status, patientName, professionalName, treatmentName } =
     route.params as RouteParams;
 
   const [statusState, setStatusState] = useState(status);
@@ -48,7 +49,12 @@ export default function ConsultationPageProf() {
 
   function handleCompleteConsultation() {
     try {
-      // consultationService.completeConsultation(id);
+      consultationService.completeConsultation(id, {
+        patientName,
+        professionalName,
+        treatmentName,
+        dateTime,
+      });
       setStatusState("COMPLETED");
       showToast("Consulta marcada como finalizada com sucesso", "success");
     } catch (error) {
@@ -61,7 +67,7 @@ export default function ConsultationPageProf() {
       <Header className="bg-app-blue" contentColor="white" />
       <View className="px-5 flex-1 justify-between">
         <View>
-          <Text className="text-3xl font-semibold my-3">{name}</Text>
+          <Text className="text-3xl font-semibold my-3">{treatmentName}</Text>
           <Text></Text>
         </View>
 

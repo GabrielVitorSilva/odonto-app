@@ -101,15 +101,40 @@ export const consultationService = {
     }
   },
 
-  async completeConsultation(consultationId: string, newData: UpdateConsultationRequest): Promise<void> {
+  async completeConsultation(consultationId: string, newData: { patientName: string, professionalName: string, treatmentName: string, dateTime: Date }): Promise<void> {
     try {
-      this.updateConsultation(consultationId, {...newData, status: "COMPLETED"});
+      const {patientName, professionalName, treatmentName, dateTime} = newData;
+
+      const [clientId, professionalId, treatmentId] = await Promise.all([
+        this.findClient(patientName),
+        this.findProfessional(professionalName),
+        this.findTreatment(treatmentName)
+      ]);
+
+      if (clientId && professionalId && treatmentId){
+        const updatedConsultationData = {clientId, professionalId, treatmentId, dateTime}
+        this.updateConsultation(consultationId, {...updatedConsultationData, status: "COMPLETED"});
+      }
     } catch (error: any){
       console.error('Error update consultations', error?.response?.data);
       throw error;
     }
   },
-
+  async findClient(name: string) {
+    const clients = await treatmentsService.listClients();
+    const client = clients.find(client => client.name == name)
+    return client?.clientId;
+  },
+  async findProfessional(name: string) {
+    const professionals = await treatmentsService.listProfessionals();
+    const professional = professionals.find(professional => professional.name == name)
+    return professional?.professionalId;
+  },
+  async findTreatment(name: string) {
+    const { treatments } = await treatmentsService.listAllTreatments();
+    const treatment = treatments.find(treatment => treatment.name == name)
+    return treatment?.id;
+  },
   async deleteConsultation(consultationId: string): Promise<void> {
     try {
       const response = await api.delete(`/consultations/${consultationId}`)

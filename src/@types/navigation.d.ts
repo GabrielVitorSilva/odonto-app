@@ -20,11 +20,11 @@ export type RootStackParamList = {
   };
   ConsultationPageAdmin: {
     id: string;
-    name: string;
     dateTime: Date;
     status: string;
     patientName: string;
     professionalName: string;
+    treatmentName: string;
   };
   HomeAdmin: undefined;
   RegisterAnotherUser: undefined;
@@ -64,10 +64,11 @@ export type RootStackParamList = {
   SelectTreatmentProf: undefined;
   ConsultationPageProf: {
     id: string;
-    name: string;
     dateTime: Date;
     status: string;
     patientName: string;
+    professionalName: string,
+    treatmentName: string,
   };
 };
 

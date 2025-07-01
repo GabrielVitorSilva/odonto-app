@@ -1,25 +1,32 @@
 import { View, Text } from "react-native";
 import { Button } from "@/components/Button";
 import Header from "@/components/Header";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { consultationService } from "@/services/consultations";
 import { useState } from "react";
 import { useToast } from "@/contexts/ToastContext";
 
 type RouteParams = {
   id: string;
-  name: string;
   dateTime: Date;
   status: string;
   patientName: string;
   professionalName: string;
+  treatmentName: string;
 };
 
 export default function ConsultationPageAdmin() {
   const { showToast } = useToast();
+  const navigation = useNavigation();
   const route = useRoute();
-  const { id, name, dateTime, status, patientName, professionalName } =
-    route.params as RouteParams;
+  const {
+    id,
+    dateTime,
+    status,
+    patientName,
+    professionalName,
+    treatmentName,
+  } = route.params as RouteParams;
 
   const [statusState, setStatusState] = useState(status);
 
@@ -41,6 +48,7 @@ export default function ConsultationPageAdmin() {
       consultationService.deleteConsultation(id);
       setStatusState("CANCELED");
       showToast("Consulta cancelada com sucesso!", "success");
+      navigation.goBack();
     } catch (error) {
       showToast("Erro ao cancelar consulta", "error");
     }
@@ -48,7 +56,12 @@ export default function ConsultationPageAdmin() {
 
   function handleCompleteConsultation() {
     try {
-      // consultationService.completeConsultation(id);
+      consultationService.completeConsultation(id, {
+        patientName,
+        professionalName,
+        treatmentName,
+        dateTime,
+      });
       setStatusState("COMPLETED");
       showToast("Consulta marcada como finalizada com sucesso", "success");
     } catch (error) {
@@ -61,7 +74,7 @@ export default function ConsultationPageAdmin() {
       <Header className="bg-app-blue" contentColor="white" />
       <View className="px-5 flex-1 justify-between">
         <View>
-          <Text className="text-3xl font-semibold my-3">{name}</Text>
+          <Text className="text-3xl font-semibold my-3">{treatmentName}</Text>
           <Text></Text>
         </View>
 

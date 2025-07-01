@@ -73,11 +73,11 @@ export default function ConsultationsPageAdmin() {
                   handlePress={() =>
                     navigation.navigate("ConsultationPageAdmin", {
                       id: item.id,
-                      name: item.treatmentName,
                       dateTime: item.dateTime,
                       status: item.status,
                       patientName: item.clientName,
                       professionalName: item.professionalName,
+                      treatmentName: item.treatmentName,
                     })
                   }
                 />

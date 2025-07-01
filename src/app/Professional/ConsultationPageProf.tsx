@@ -90,7 +90,7 @@ export default function ConsultationPageProf() {
           </View>
         </View>
 
-        <View>
+        <View className="mb-4">
           {statusState === "SCHEDULED" && (
             <>
               <Button

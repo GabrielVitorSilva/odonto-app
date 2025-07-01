@@ -259,7 +259,8 @@ export default function RegisterAnotherUser() {
                       setRole(value);
                       validateField('role', value);
                     }}
-                    style={{ height: 50 }}
+                    style={{ height: 50, color: "#111" }}
+                    dropdownIconColor="#111"
                   >
                     <Picker.Item label="Cliente" value={Profile.CLIENT} />
                     <Picker.Item label="Profissional" value={Profile.PROFESSIONAL} />

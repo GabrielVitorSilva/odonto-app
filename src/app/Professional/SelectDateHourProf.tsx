@@ -54,13 +54,11 @@ export default function SelectDateHourProf() {
       await consultationService.listConsultationsByProfessional(
         professional?.profileData.id
       );
-    return !consultations.consultations.some(
-      (consultation: any) => {
-        const formattedDay = consultation.dateTime.split("T")[0]
-        const formattedTime = consultation.dateTime.split("T")[1].slice(0, 5)
-        return formattedDay === date && formattedTime === selectedHour
-      }  
-    );
+    return !consultations.consultations.some((consultation: any) => {
+      const formattedDay = consultation.dateTime.split("T")[0];
+      const formattedTime = consultation.dateTime.split("T")[1].slice(0, 5);
+      return formattedDay === date && formattedTime === selectedHour;
+    });
   };
 
   const handleDayPress = async (day: any) => {
@@ -89,57 +87,61 @@ export default function SelectDateHourProf() {
     );
 
     if (!isAvailable) {
-      showToast(
-        "Você não está disponível neste horário!",
-        "error"
-      );
+      showToast("Você não está disponível neste horário!", "error");
       return;
     }
 
     setShowDrawer(true);
-  }
+  };
 
   return (
     <View className="flex-1 bg-white">
-      <Header contentColor="white" className="bg-app-blue"/>
-      <Calendar
-        current={new Date().toISOString().split("T")[0]}
-        onDayPress={handleDayPress}
-        minDate={new Date().toISOString().split("T")[0]}
-        markedDates={
-          selectedDay
-            ? {
-                [selectedDay]: {
-                  selected: true,
-                  selectedColor: "#3B82F6",
-                },
-              }
-            : {}
-        }
-        theme={{
-          arrowColor: "#3B82F6",
-          selectedDayBackgroundColor: "#3B82F6",
-        }}
-      />
-
-      <View className="mt-10 mx-4 border border-app-blue rounded-md p-4 shadow">
-        <Text className="text-app-blue text-sm -mt-5 mb-2 px-1 bg-white rounded w-fit">
-          Horário
+      <Header />
+      <View className="flex-1 px-4 py-4">
+        <Text className="text-center text-3xl font-semibold mb-8">
+          Selecione data e horário
         </Text>
-        <Text className="mb-4">Selecione um horário:</Text>
-
-        <Picker
-          selectedValue={selectedHour}
-          onValueChange={(value) => {
-            setSelectedHour(value);
+        
+        <Calendar
+          current={new Date().toISOString().split("T")[0]}
+          onDayPress={handleDayPress}
+          minDate={new Date().toISOString().split("T")[0]}
+          markedDates={
+            selectedDay
+              ? {
+                  [selectedDay]: {
+                    selected: true,
+                    selectedColor: "#3B82F6",
+                  },
+                }
+              : {}
+          }
+          theme={{
+            arrowColor: "#3B82F6",
+            selectedDayBackgroundColor: "#3B82F6",
           }}
-          style={{ height: 50, backgroundColor: "#f3f4f6" }}
-          itemStyle={{ backgroundColor: "#f3f4f6" }}
-        >
-          {availableHours.map((hour, index) => (
-            <Picker.Item label={hour} key={index} value={hour} />
-          ))}
-        </Picker>
+        />
+
+        <View className="mt-10 border border-app-blue bg-white rounded-md px-4 py-2 shadow">
+          <Text className="text-app-blue text-base font-semibold mb-2 rounded w-fit">
+            Horário
+          </Text>
+          <Text className="mb-4">Selecione um horário:</Text>
+
+          <Picker
+            selectedValue={selectedHour}
+            onValueChange={(value) => {
+              setSelectedHour(value);
+            }}
+            style={{ height: 50, backgroundColor: "#FFFFFF", color: "#111" }}
+            itemStyle={{ backgroundColor: "#111" }}
+            dropdownIconColor="#111"
+          >
+            {availableHours.map((hour, index) => (
+              <Picker.Item label={hour} key={index} value={hour} />
+            ))}
+          </Picker>
+        </View>
       </View>
 
       <Button

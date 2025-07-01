@@ -150,7 +150,7 @@ export default function LoginScreen() {
                       validateField('password', text);
                     }}
                     secureTextEntry={!passwordVisible}
-                    className={`bg-gray-100 p-4 rounded-2xl text-base mb-1 font-roboto ${
+                    className={`bg-gray-100 p-4 rounded-2xl text-base text-black mb-1 font-roboto ${
                       errors.password ? 'border-2 border-red-500' : ''
                     }`}
                     placeholderTextColor="#999"

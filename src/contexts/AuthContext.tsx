@@ -67,10 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signOut() {
     try {
-      await Promise.all([
-        AsyncStorage.removeItem('@OdontoApp:token'),
-        AsyncStorage.removeItem('@OdontoApp:profile')
-      ]);
+      AsyncStorage.clear();
       setToken(null);
       setProfile(null);
     } catch (error) {

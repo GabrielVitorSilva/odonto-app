@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ScrollView, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '@/components/Button';
 import { useToast } from '@/contexts/ToastContext';
 import { registerAnotherUserSchema, type RegisterAnotherUserFormData } from '@/schemas/registerAnotherUserSchema';
 import { authService, Profile } from '@/services/auth';
 import { useAuth } from '@/contexts/AuthContext';
-import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 
 interface FieldErrors {
@@ -33,6 +32,18 @@ export default function RegisterAnotherUser() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showRoleModal, setShowRoleModal] = useState(false);
+
+  const roleOptions = [
+    { label: 'Cliente', value: Profile.CLIENT },
+    { label: 'Profissional', value: Profile.PROFESSIONAL },
+    { label: 'Administrador', value: Profile.ADMIN }
+  ];
+
+  const getRoleLabel = (roleValue: Profile) => {
+    const option = roleOptions.find(opt => opt.value === roleValue);
+    return option ? option.label : 'Selecione um tipo';
+  };
 
   function formatCPF(value: string) {
     const numbers = value.replace(/\D/g, '');
@@ -164,7 +175,7 @@ export default function RegisterAnotherUser() {
               <Ionicons name="arrow-back" size={24} color="#000" />
             </TouchableOpacity>
 
-            <Text className="text-4xl font-roboto-bold text-center mb-32">Cadastrar</Text>
+            <Text className="text-4xl font-roboto-bold text-center mb-32 mt-8">Cadastrar</Text>
 
             <View className="space-y-4 mx-4">
               <View>
@@ -250,30 +261,23 @@ export default function RegisterAnotherUser() {
               </View>
 
               <View>
-                <View className={`bg-gray-100 rounded-2xl mb-1 ${
-                  errors.role ? 'border-2 border-red-500' : ''
-                }`}>
-                  <Picker
-                    selectedValue={role}
-                    onValueChange={(value) => {
-                      setRole(value);
-                      validateField('role', value);
-                    }}
-                    style={{ height: 50, color: "#111" }}
-                    dropdownIconColor="#111"
-                  >
-                    <Picker.Item label="Cliente" value={Profile.CLIENT} />
-                    <Picker.Item label="Profissional" value={Profile.PROFESSIONAL} />
-                    <Picker.Item label="Administrador" value={Profile.ADMIN} />
-                  </Picker>
-                </View>
+                <Text className="text-gray-600 text-sm mb-2 ml-2">Tipo de usuário:</Text>
+                <TouchableOpacity
+                  onPress={() => setShowRoleModal(true)}
+                  className={`bg-gray-100 rounded-2xl p-4 flex-row items-center justify-between ${
+                    errors.role ? 'border-2 border-red-500' : ''
+                  }`}
+                >
+                  <Text className="text-base font-roboto">{getRoleLabel(role)}</Text>
+                  <Ionicons name="chevron-down" size={20} color="#111" />
+                </TouchableOpacity>
                 {errors.role && (
                   <Text className="text-red-500 text-sm ml-2">{errors.role}</Text>
                 )}
               </View>
 
               <View>
-                <View className="relative">
+                <View className="relative mt-4">
                   <TextInput
                     placeholder="Senha (mín 6 e 1 maiúsculo)"
                     value={password}
@@ -313,6 +317,41 @@ export default function RegisterAnotherUser() {
             </View>
           </View>
         </TouchableWithoutFeedback>
+
+        <Modal
+          visible={showRoleModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowRoleModal(false)}
+        >
+          <TouchableWithoutFeedback onPress={() => setShowRoleModal(false)}>
+            <View className="flex-1 justify-center items-center bg-transparent bg-opacity-50">
+              <View className="bg-white p-6 rounded-2xl w-full max-w-md">
+                <ScrollView className="space-y-3">
+                  {roleOptions.map((option) => (
+                    <TouchableOpacity
+                      key={option.value}
+                      onPress={() => {
+                        setRole(option.value);
+                        validateField('role', option.value);
+                        setShowRoleModal(false);
+                      }}
+                      className={`p-4 rounded-2xl m-2${
+                        role === option.value ? 'bg-app-light-blue' : 'bg-gray-100'
+                      }`}
+                    >
+                      <Text className={`text-base font-roboto ${
+                        role === option.value ? 'text-app-blue font-roboto-medium' : 'text-gray-700'
+                      }`}>
+                        {option.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -35,6 +35,7 @@ export default function SelectDateHourAdmin() {
       dateTime: `${selectedDay}T${selectedHour}:00.000Z`,
     });
     showToast("Consulta agendada com sucesso!", "success");
+    setShowDrawer(false);
     navigation.navigate("HomeAdmin");
   }
 
@@ -116,11 +117,6 @@ export default function SelectDateHourAdmin() {
           }}
         />
 
-        <View className="mt-10 mx-4 border border-app-blue bg-white rounded-md px-4 py-2 shadow">
-          <Text className="text-app-blue text-sm mb-2 px-1 rounded w-fit">
-            Horário
-          </Text>
-          <Text className="mb-4">Selecione um horário:</Text>
 
           <Picker
             selectedValue={selectedHour}
@@ -128,18 +124,17 @@ export default function SelectDateHourAdmin() {
               setSelectedHour(value);
             }}
             style={{ height: 50, backgroundColor: "#FFFFFF", color: "#111" }}
-            itemStyle={{ backgroundColor: "#111" }}
+            itemStyle={{ color: "#000" }}
             dropdownIconColor="#111"
           >
             {availableHours.map((hour, index) => (
               <Picker.Item label={hour} key={index} value={hour} />
             ))}
           </Picker>
-        </View>
       </View>
 
       <Button
-        className="mt-auto mb-4"
+        className="mt-auto mb-10"
         title="Agendar Consulta"
         onPress={handleButtonPress}
       />

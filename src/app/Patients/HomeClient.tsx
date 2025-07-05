@@ -119,7 +119,7 @@ export default function HomeClient() {
       </View>
 
       <Button
-        className="mb-4"
+        className="mb-16"
         title="Ver tratamentos disponíveis"
         onPress={() => navigation.navigate("TreatmentsPatient")}
       />
